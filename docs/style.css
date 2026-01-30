@@ -72,6 +72,8 @@ body {
   font-family: myText;
   color: var(--color-text);
   background: var(--color-background1);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body:before,
@@ -99,8 +101,12 @@ body:after {
   background-position: right;
 }
 
+html {
+  font-size: 16px;
+}
+
 * {
-  font-size: 14pt;
+  font-size: inherit;
 }
 
 a {
@@ -1224,8 +1230,8 @@ button.delete-all:focus {
 
 /* Responsive: Mobile */
 @media (max-width: 600px) {
-  * {
-    font-size: 12pt;
+  html {
+    font-size: 14px;
   }
 
   .app-container {
@@ -1327,8 +1333,8 @@ button.delete-all:focus {
 
 /* Responsive: Small mobile */
 @media (max-width: 400px) {
-  * {
-    font-size: 11pt;
+  html {
+    font-size: 13px;
   }
 
   #sizes label {
