@@ -6,8 +6,61 @@ const RUNTIME = "runtime";
 
 // A list of local resources we always want to be cached.
 const OFFLINE_URL = "./";
-const PRECACHE_CORE_URLS = ["index.html", "main.js", "style.css", "fonts/font-title.css", "fonts/font-specials.css", "fonts/font-text.css", "favicon/favicon.ico", "favicon/site.webmanifest", "assets/spear-left.png", "assets/spear-right.png", "assets/spinner.png", OFFLINE_URL];
-const PRECACHE_CARD_URLS = ["card-resources/BaseCardBrown.png", "card-resources/BaseCardColorOne.png", "card-resources/BaseCardGray.png", "card-resources/BaseCardIcon.png", "card-resources/CardBrown.png", "card-resources/CardColorOne.png", "card-resources/CardColorTwo.png", "card-resources/CardColorThree.png", "card-resources/CardColorTwoNight.png", "card-resources/CardColorTwoBig.png", "card-resources/CardColorTwoSmall.png", "card-resources/CardGray.png", "card-resources/CardPortraitIcon.png", "card-resources/DoubleColorOne.png", "card-resources/DoubleUncoloredDetails.png", "card-resources/EventBrown.png", "card-resources/EventBrown2.png", "card-resources/EventColorOne.png", "card-resources/EventColorTwo.png", "card-resources/EventHeirloom.png", "card-resources/Heirloom.png", "card-resources/DescriptionFocus.png", "card-resources/MatBannerBottom.png", "card-resources/MatBannerTop.png", "card-resources/MatIcon.png", "card-resources/PileMarkerColorOne.png", "card-resources/PileMarkerGrey.png", "card-resources/PileMarkerIcon.png", "card-resources/TraitBrown.png", "card-resources/TraitBrownSide.png", "card-resources/TraitColorOne.png", "card-resources/TraitColorOneSide.png", "card-resources/Coin.png", "card-resources/Debt.png", "card-resources/Potion.png", "card-resources/VP.png", "card-resources/VP-Token.png", "card-resources/Sun.png", "card-resources/Traveller.png"];
+const PRECACHE_CORE_URLS = [
+  "index.html",
+  "main.js",
+  "style.css",
+  "fonts/font-title.css",
+  "fonts/font-specials.css",
+  "fonts/font-text.css",
+  "favicon/favicon.ico",
+  "favicon/site.webmanifest",
+  "assets/spear-left.png",
+  "assets/spear-right.png",
+  "assets/spinner.png",
+  OFFLINE_URL,
+];
+const PRECACHE_CARD_URLS = [
+  "card-resources/BaseCardBrown.png",
+  "card-resources/BaseCardColorOne.png",
+  "card-resources/BaseCardGray.png",
+  "card-resources/BaseCardIcon.png",
+  "card-resources/CardBrown.png",
+  "card-resources/CardColorOne.png",
+  "card-resources/CardColorTwo.png",
+  "card-resources/CardColorThree.png",
+  "card-resources/CardColorTwoNight.png",
+  "card-resources/CardColorTwoBig.png",
+  "card-resources/CardColorTwoSmall.png",
+  "card-resources/CardGray.png",
+  "card-resources/CardPortraitIcon.png",
+  "card-resources/DoubleColorOne.png",
+  "card-resources/DoubleUncoloredDetails.png",
+  "card-resources/EventBrown.png",
+  "card-resources/EventBrown2.png",
+  "card-resources/EventColorOne.png",
+  "card-resources/EventColorTwo.png",
+  "card-resources/EventHeirloom.png",
+  "card-resources/Heirloom.png",
+  "card-resources/DescriptionFocus.png",
+  "card-resources/MatBannerBottom.png",
+  "card-resources/MatBannerTop.png",
+  "card-resources/MatIcon.png",
+  "card-resources/PileMarkerColorOne.png",
+  "card-resources/PileMarkerGrey.png",
+  "card-resources/PileMarkerIcon.png",
+  "card-resources/TraitBrown.png",
+  "card-resources/TraitBrownSide.png",
+  "card-resources/TraitColorOne.png",
+  "card-resources/TraitColorOneSide.png",
+  "card-resources/Coin.png",
+  "card-resources/Debt.png",
+  "card-resources/Potion.png",
+  "card-resources/VP.png",
+  "card-resources/VP-Token.png",
+  "card-resources/Sun.png",
+  "card-resources/Traveller.png",
+];
 
 // The install handler takes care of precaching the resources we always need.
 self.addEventListener("install", (event) => {
@@ -61,7 +114,12 @@ self.addEventListener("fetch", (event) => {
           return fetch(event.request)
             .then((response) => {
               // Put a copy of the response in the runtime cache.
-              if (event.request.url.startsWith("http://127.0.0.1:5500/docs/?") || event.request.url.startsWith("http://127.0.0.1:5500/docs/index.html?")) {
+              if (
+                event.request.url.startsWith("https://wamei.github.io/dominion-card-generator/?") ||
+                event.request.url.startsWith(
+                  "https://wamei.github.io/dominion-card-generator/index.html?",
+                )
+              ) {
                 // do not cache these, because they are redundant
                 return response;
               } else {
