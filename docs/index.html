@@ -108,13 +108,19 @@
                     <a id="favorites" title="お気に入りを開く"><button type="button" onclick="myFavorites.open()"><img src="assets/icon-favorites.png" />お気に入り</button></a>
                     <div id="manage-favorites" class="popup hidden">
                         <div class="menu">
-                            <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><img src="assets/icon-delete.png" />すべて削除</button>
-                            <button type="button" class="" onclick="myFavorites.export()" title="Export"><img alt="Export" src="assets/icon-download.png" />Export</button>
-                            <button type="button" class="" onclick="myFavorites.import()" title="Import"><img alt="Import" src="assets/icon-upload.png" />Import</button>
-                            <button type="button" class="close" onclick="myFavorites.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
                             <input id="favorites-search" type="search" class="search" placeholder="Search..." oninput="myFavorites.search(this.value)" />
+                            <button type="button" id="favorites-view-toggle" class="view-toggle" onclick="myFavorites.toggleView()" title="表示切替">
+                                <span class="view-list">サムネイル</span>
+                                <span class="view-thumbnail hidden">リスト</span>
+                            </button>
+                            <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><img src="assets/icon-delete.png" />すべて削除</button>
+                            <span class="menu-spacer"></span>
+                            <button type="button" class="" onclick="myFavorites.export()" title="Export"><img alt="Export" src="assets/icon-download.png" /></button>
+                            <button type="button" class="" onclick="myFavorites.import()" title="Import"><img alt="Import" src="assets/icon-upload.png" /></button>
+                            <button type="button" class="close" onclick="myFavorites.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
                         </div>
                         <table id="favorites-list" class="popup-content"></table>
+                        <div id="favorites-thumbnails" class="popup-content hidden"></div>
                     </div>
                     <a id="openFontSettings" title="フォント設定を開く" class="hidden"><button type="button" onclick="myFontSettings.open()"><img src="assets/icon-settings.png" />フォント</button></a>
                     <div id="manage-fonts" class="popup hidden">

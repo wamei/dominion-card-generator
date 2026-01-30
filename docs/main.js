@@ -1791,9 +1791,26 @@ function initCardImageGenerator() {
     const el = document.getElementById(fieldId);
     if (el && el.value === "[local image]") {
       const database = db || myFavorites.getDB();
-      const storedData = await database.getLiveImage(imageId);
-      if (storedData) {
-        setImageSource(imageId, storedData);
+      try {
+        const storedData = await database.getLiveImage(imageId);
+        if (storedData) {
+          setImageSource(imageId, storedData);
+        } else {
+          console.warn(`Local image not found in IndexedDB for ${fieldId}`);
+          el.value = "";
+          if (el.onchange) {
+            el.onchange();
+          }
+        }
+      } catch (e) {
+        console.error(
+          `Failed to load local image from IndexedDB for ${fieldId}:`,
+          e,
+        );
+        el.value = "";
+        if (el.onchange) {
+          el.onchange();
+        }
       }
     } else if (el && el.onchange) {
       el.onchange();
@@ -2045,10 +2062,13 @@ function Favorites(name) {
   var name = name;
   var fav = document.getElementById("manage-favorites");
   var favList = document.getElementById("favorites-list");
+  var favThumbnails = document.getElementById("favorites-thumbnails");
+  var viewToggleBtn = document.getElementById("favorites-view-toggle");
   var db = new CardDatabase();
   var data = [];
   var ascending = true;
   var sortState = []; // Array of {column: string, direction: 'asc'|'desc'}
+  var viewMode = localStorage.getItem("favoritesViewMode") || "thumbnail"; // "list" or "thumbnail"
 
   // Sort data based on current sortState
   const sortData = (data) => {
@@ -2104,6 +2124,53 @@ function Favorites(name) {
       }
       return 0;
     });
+  };
+
+  // Generate thumbnail from current canvas
+  const generateThumbnail = () => {
+    const canvases = document.getElementsByClassName("myCanvas");
+
+    // Select canvas based on templateSize (matching draw() logic)
+    let canvasIndex;
+    if (templateSize === 0 || templateSize === 2 || templateSize === 3) {
+      canvasIndex = 0;
+    } else if (templateSize === 1 || templateSize === 4) {
+      canvasIndex = 1;
+    } else {
+      canvasIndex = 2;
+    }
+
+    const canvas = canvases[canvasIndex];
+    if (!canvas) return null;
+
+    try {
+      // Create a smaller thumbnail
+      const maxSize = 800;
+      const scale = Math.min(maxSize / canvas.width, maxSize / canvas.height);
+      const thumbCanvas = document.createElement("canvas");
+      thumbCanvas.width = canvas.width * scale;
+      thumbCanvas.height = canvas.height * scale;
+      const ctx = thumbCanvas.getContext("2d");
+      ctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
+      return thumbCanvas.toDataURL("image/png", 0.8);
+    } catch (e) {
+      console.error("Failed to generate thumbnail:", e);
+      return null;
+    }
+  };
+
+  // Update view toggle button text
+  const updateViewToggleButton = () => {
+    if (!viewToggleBtn) return;
+    const listSpan = viewToggleBtn.querySelector(".view-list");
+    const thumbSpan = viewToggleBtn.querySelector(".view-thumbnail");
+    if (viewMode === "list") {
+      listSpan.classList.remove("hidden");
+      thumbSpan.classList.add("hidden");
+    } else {
+      listSpan.classList.add("hidden");
+      thumbSpan.classList.remove("hidden");
+    }
   };
 
   this.sortBy = function (column, event) {
@@ -2249,6 +2316,7 @@ function Favorites(name) {
   };
 
   this.open = function () {
+    this.initViewMode();
     this.refresh();
     fav.classList.remove("hidden");
     document.getElementById("favorites-search").focus();
@@ -2273,14 +2341,17 @@ function Favorites(name) {
     }
   };
   this.add = async function (params) {
+    const q = getQueryParams(params);
     const card = {
       params: params,
-      title: getQueryParams(params).title || "Untitled",
+      title: q.title || "Untitled",
       images: {
         illustration: await db.getLiveImage(5),
         expansion: await db.getLiveImage(17),
         customIcon: await db.getLiveImage(images.length - 1),
       },
+      thumbnail: generateThumbnail(),
+      size: q.size || "0",
       timestamp: Date.now(),
     };
     await db.add(card);
@@ -2329,6 +2400,7 @@ function Favorites(name) {
         return;
     }
 
+    const q = getQueryParams(document.location.search);
     const card = {
       id: id,
       params: document.location.search,
@@ -2338,6 +2410,8 @@ function Favorites(name) {
         expansion: await db.getLiveImage(17),
         customIcon: await db.getLiveImage(images.length - 1),
       },
+      thumbnail: generateThumbnail(),
+      size: q.size || "0",
       timestamp: Date.now(),
     };
     await db.update(card);
@@ -2374,6 +2448,8 @@ function Favorites(name) {
       .toUpperCase()
       .split(/\s+/)
       .filter((k) => k.length > 0);
+
+    // Search in list view
     let rows = favList.getElementsByTagName("tr");
     for (let i = 0; i < rows.length; i++) {
       let tr = rows[i];
@@ -2387,15 +2463,44 @@ function Favorites(name) {
         tr.classList.add("hidden");
       }
     }
+
+    // Search in thumbnail view
+    let cards = favThumbnails.getElementsByClassName("thumbnail-card");
+    for (let i = 0; i < cards.length; i++) {
+      let card = cards[i];
+      let matchText = (
+        (card.dataset.title || "") +
+        " " +
+        (card.dataset.type || "") +
+        " " +
+        (card.dataset.expansion || "") +
+        " " +
+        (card.dataset.size || "") +
+        " " +
+        (card.dataset.price || "") +
+        " " +
+        card.textContent
+      ).toUpperCase();
+      let allMatch = keywords.every((k) => matchText.includes(k));
+      if (allMatch) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
+    }
   };
 
   this.refresh = async function () {
     const allData = await db.getAll();
     const sortedData = sortData(allData);
 
+    // Refresh both views
     while (favList.firstChild) {
       favList.removeChild(favList.firstChild);
     }
+
+    // Also refresh thumbnails view
+    await this.refreshThumbnails(sortedData);
 
     // Table Header
     let thead = document.createElement("thead");
@@ -2406,8 +2511,6 @@ function Favorites(name) {
       { label: "コスト", key: "cost" },
       { label: "カード名", key: "title" },
       { label: "種別", key: "type" },
-      { label: "", key: null },
-      { label: "", key: null },
     ];
 
     columns.forEach((col) => {
@@ -2503,17 +2606,20 @@ function Favorites(name) {
       tdTitle.appendChild(document.createTextNode(displayName));
       tr.appendChild(tdTitle);
 
-      // 5. Type
+      // 5. Type (with hover actions)
       let tdType = document.createElement("td");
       tdType.setAttribute("class", "type");
+
+      let typeSpan = document.createElement("span");
       let typeText = type;
       if (type2 !== "") typeText += " | " + type2;
-      tdType.appendChild(document.createTextNode(typeText));
-      tr.appendChild(tdType);
+      typeSpan.appendChild(document.createTextNode(typeText));
+      tdType.appendChild(typeSpan);
 
-      // 6. Update Button Column
-      let tdUpdate = document.createElement("td");
-      tdUpdate.setAttribute("class", "action");
+      // Hover actions
+      let actions = document.createElement("div");
+      actions.setAttribute("class", "row-actions");
+
       let bttnUpdate = document.createElement("button");
       bttnUpdate.setAttribute("class", "update");
       bttnUpdate.onclick = (e) => {
@@ -2521,27 +2627,173 @@ function Favorites(name) {
         this.update(item.id);
       };
       bttnUpdate.appendChild(document.createTextNode("Update"));
-      tdUpdate.appendChild(bttnUpdate);
-      tr.appendChild(tdUpdate);
+      actions.appendChild(bttnUpdate);
 
-      // 7. Delete Button Column
-      let tdDel = document.createElement("td");
-      tdDel.setAttribute("class", "action");
       let bttnDel = document.createElement("button");
       bttnDel.setAttribute("class", "delete");
       bttnDel.onclick = (e) => {
         e.stopPropagation();
         this.delete(item.id);
       };
-      let imgDel = document.createElement("img");
-      imgDel.setAttribute("src", "assets/icon-delete.png");
-      bttnDel.appendChild(imgDel);
       bttnDel.appendChild(document.createTextNode("Delete"));
-      tdDel.appendChild(bttnDel);
-      tr.appendChild(tdDel);
+      actions.appendChild(bttnDel);
+
+      tdType.appendChild(actions);
+      tr.appendChild(tdType);
 
       tbody.appendChild(tr);
     });
+
+    // Re-apply search filter if there's a search term
+    const searchInput = document.getElementById("favorites-search");
+    if (searchInput && searchInput.value) {
+      this.search(searchInput.value);
+    }
+  };
+
+  // Render thumbnail view
+  this.refreshThumbnails = async function (sortedData) {
+    while (favThumbnails.firstChild) {
+      favThumbnails.removeChild(favThumbnails.firstChild);
+    }
+
+    const myFavs = this;
+
+    sortedData.forEach((item) => {
+      const params = item.params;
+      const q = getQueryParams(params);
+      const title = (q.title || "").trim() || "<名称未決定>";
+      const title2 = (q.title2 || "").trim();
+      const type = (q.type || "").trim();
+      const type2 = (q.type2 || "").trim();
+      const size = item.size || q.size || "0";
+      const price = (q.price || "").replace("^", "P").trim();
+      const isLandscape = size === "1" || size === "5"; // Landscape or Mat
+
+      let sizeText = "";
+      switch (size) {
+        case "0":
+          sizeText = "カード";
+          break;
+        case "1":
+          sizeText = "ランドスケープ";
+          break;
+        case "2":
+          sizeText = "ダブル";
+          break;
+        case "3":
+          sizeText = "ベース";
+          break;
+        case "4":
+          sizeText = "マーカー";
+          break;
+        case "5":
+          sizeText = "マット";
+          break;
+      }
+
+      const card = document.createElement("div");
+      card.className = "thumbnail-card";
+      card.dataset.title = title;
+      card.dataset.type = type;
+      card.dataset.expansion = (q.expansionName || "").trim();
+      card.dataset.size = sizeText;
+      card.dataset.price = price;
+      card.onclick = () => myFavs.load(item.id);
+
+      if (params === document.location.search) {
+        card.classList.add("active");
+      }
+
+      // Thumbnail image or placeholder with card info
+      if (item.thumbnail) {
+        const img = document.createElement("img");
+        img.className = "thumbnail-image" + (isLandscape ? " landscape" : "");
+        img.src = item.thumbnail;
+        img.alt = title;
+        card.appendChild(img);
+      } else {
+        // No thumbnail: show expansion, title, and type
+        const placeholder = document.createElement("div");
+        placeholder.className =
+          "thumbnail-loading" + (isLandscape ? " landscape" : "");
+
+        const expansionName = (q.expansionName || "").trim();
+        if (expansionName) {
+          const expEl = document.createElement("div");
+          expEl.className = "thumbnail-placeholder-expansion";
+          expEl.textContent = expansionName;
+          placeholder.appendChild(expEl);
+        }
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "thumbnail-placeholder-title";
+        let displayName = title;
+        if (title2 !== "") displayName += " | " + title2;
+        titleEl.textContent = displayName;
+        placeholder.appendChild(titleEl);
+
+        const typeEl = document.createElement("div");
+        typeEl.className = "thumbnail-placeholder-type";
+        let typeText = type;
+        if (type2 !== "") typeText += " | " + type2;
+        typeEl.textContent = typeText;
+        placeholder.appendChild(typeEl);
+
+        card.appendChild(placeholder);
+      }
+
+      // Action buttons
+      const actions = document.createElement("div");
+      actions.className = "thumbnail-actions";
+
+      const updateBtn = document.createElement("button");
+      updateBtn.className = "update";
+      updateBtn.textContent = "Update";
+      updateBtn.onclick = (e) => {
+        e.stopPropagation();
+        myFavs.update(item.id);
+      };
+      actions.appendChild(updateBtn);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "delete";
+      deleteBtn.textContent = "Delete";
+      deleteBtn.onclick = (e) => {
+        e.stopPropagation();
+        myFavs.delete(item.id);
+      };
+      actions.appendChild(deleteBtn);
+
+      card.appendChild(actions);
+      favThumbnails.appendChild(card);
+    });
+  };
+
+  // Toggle between list and thumbnail view
+  this.toggleView = function () {
+    viewMode = viewMode === "list" ? "thumbnail" : "list";
+    localStorage.setItem("favoritesViewMode", viewMode);
+    updateViewToggleButton();
+    this.applyViewMode();
+    this.refresh();
+  };
+
+  // Apply current view mode
+  this.applyViewMode = function () {
+    if (viewMode === "list") {
+      favList.classList.remove("thumbnail-mode");
+      favThumbnails.classList.add("hidden");
+    } else {
+      favList.classList.add("thumbnail-mode");
+      favThumbnails.classList.remove("hidden");
+    }
+  };
+
+  // Initialize view mode on startup
+  this.initViewMode = function () {
+    updateViewToggleButton();
+    this.applyViewMode();
   };
 }
 
