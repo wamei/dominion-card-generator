@@ -623,7 +623,7 @@ label[for="type"] {
 #legend li {
   flex-shrink: 1;
   display: block;
-  width: 140px;
+  width: 150px;
   margin-right: 0;
   text-align: left;
   font-size: 10pt;
@@ -762,11 +762,21 @@ button.delete-all:focus {
   background: var(--color-background3);
 }
 
-.table-header .col-expansion { flex: 0 0 100px; }
-.table-header .col-size { flex: 0 0 80px; }
-.table-header .col-cost { flex: 0 0 70px; }
-.table-header .col-title { flex: 0 0 120px; }
-.table-header .col-type { flex: 1; }
+.table-header .col-expansion {
+  flex: 0 0 100px;
+}
+.table-header .col-size {
+  flex: 0 0 80px;
+}
+.table-header .col-cost {
+  flex: 0 0 70px;
+}
+.table-header .col-title {
+  flex: 0 0 120px;
+}
+.table-header .col-type {
+  flex: 1;
+}
 
 .popup-content {
   width: 100%;
@@ -1237,7 +1247,7 @@ button.delete-all:focus {
   }
 
   #legend {
-    width: 300px;
+    width: 340px;
     font-size: 0.8em;
   }
 
@@ -1291,11 +1301,22 @@ button.delete-all:focus {
     font-size: 0.8em;
   }
 
-  .table-header .col-expansion { flex: 0 0 70px; }
-  .table-header .col-size { flex: 0 0 60px; }
-  .table-header .col-cost { flex: 0 0 50px; }
-  .table-header .col-title { flex: 0 0 80px; }
-  .table-header .col-type { flex: 1; min-width: 60px; }
+  .table-header .col-expansion {
+    flex: 0 0 70px;
+  }
+  .table-header .col-size {
+    flex: 0 0 60px;
+  }
+  .table-header .col-cost {
+    flex: 0 0 50px;
+  }
+  .table-header .col-title {
+    flex: 0 0 80px;
+  }
+  .table-header .col-type {
+    flex: 1;
+    min-width: 60px;
+  }
 
   #favorites-list {
     min-width: 400px;
@@ -1355,10 +1376,18 @@ button.delete-all:focus {
     padding: 0.3em 0.5em;
   }
 
-  .table-header .col-expansion { flex: 0 0 60px; }
-  .table-header .col-size { flex: 0 0 50px; }
-  .table-header .col-cost { flex: 0 0 45px; }
-  .table-header .col-title { flex: 0 0 70px; }
+  .table-header .col-expansion {
+    flex: 0 0 60px;
+  }
+  .table-header .col-size {
+    flex: 0 0 50px;
+  }
+  .table-header .col-cost {
+    flex: 0 0 45px;
+  }
+  .table-header .col-title {
+    flex: 0 0 70px;
+  }
 }
 
 /* PDF Export Progress Indicator */
