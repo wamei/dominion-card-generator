@@ -2214,9 +2214,23 @@ function Favorites(name) {
       // Remove progress indicator
       document.body.removeChild(progressEl);
 
-      // Open PDF in new window
-      const pdfUrl = pdf.output("bloburl");
-      window.open(pdfUrl, "_blank");
+      // Detect iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+      if (isIOS) {
+        // iOS: Download directly since blob URLs don't work well
+        const timestamp = new Date().toISOString().slice(0, 10);
+        const filename = `dominion-cards-${timestamp}.pdf`;
+        pdf.save(filename);
+      } else {
+        // PC/Android: Open in new tab
+        const pdfBlob = pdf.output("blob");
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        window.open(blobUrl, "_blank");
+
+        // Clean up blob URL after a delay
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+      }
 
       if (pdfBtn) pdfBtn.disabled = false;
     } catch (error) {
