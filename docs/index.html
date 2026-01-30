@@ -54,6 +54,7 @@
       });
     </script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jszip@3/dist/jszip.min.js"></script>
     <script src="main.js"></script>
     <style type="text/css" id="fontLocal"></style>
     <link rel="stylesheet" type="text/css" href="./fonts/font-title.css" id="fontDefaultTitle" />
@@ -115,6 +116,18 @@
                   title="PDF出力"
                 >
                   <i class="fa-solid fa-print"></i>
+                </button>
+                <button
+                  type="button"
+                  id="images-export-btn"
+                  onclick="
+                    event.preventDefault();
+                    myFavorites.exportImages();
+                    return false;
+                  "
+                  title="画像一括ダウンロード"
+                >
+                  <i class="fa-solid fa-images"></i>
                 </button>
                 <button type="button" class="" onclick="myFavorites.export()" title="Export">
                   <i class="fa-solid fa-cloud-arrow-down"></i>

@@ -2243,6 +2243,242 @@ function Favorites(name) {
     }
   };
 
+  // Sanitize filename - remove characters not allowed in filenames
+  const sanitizeFilename = (name) => {
+    if (!name) return "";
+    // Remove characters not allowed in Windows/Mac/Linux filenames
+    return name
+      .replace(/[\/\\:*?"<>|]/g, "")
+      .replace(/^\s+|\s+$/g, "")
+      .replace(/^\.+|\.+$/g, "");
+  };
+
+  this.exportImages = async function () {
+    const exportBtn = document.getElementById("images-export-btn");
+    if (exportBtn) exportBtn.disabled = true;
+
+    try {
+      // Get visible thumbnail cards (not hidden by search filter)
+      const thumbnailCards = favThumbnails.querySelectorAll(".thumbnail-card:not(.hidden)");
+      if (thumbnailCards.length === 0) {
+        alert("出力するカードがありません");
+        if (exportBtn) exportBtn.disabled = false;
+        return;
+      }
+
+      // Collect card IDs
+      const cardIds = [];
+      for (const card of thumbnailCards) {
+        const id = parseInt(card.dataset.id);
+        if (id) {
+          cardIds.push(id);
+        }
+      }
+
+      if (cardIds.length === 0) {
+        alert("出力するカードがありません");
+        if (exportBtn) exportBtn.disabled = false;
+        return;
+      }
+
+      // Create progress indicator
+      const progressEl = document.createElement("div");
+      progressEl.className = "pdf-progress";
+      progressEl.innerHTML = `
+        <div class="pdf-progress-title">画像をダウンロード中...</div>
+        <div class="pdf-progress-bar"><div class="pdf-progress-bar-fill" style="width: 0%"></div></div>
+        <div class="pdf-progress-text">0 / ${cardIds.length}</div>
+      `;
+      document.body.appendChild(progressEl);
+
+      const updateProgress = (current, total) => {
+        const percent = Math.round((current / total) * 100);
+        progressEl.querySelector(".pdf-progress-bar-fill").style.width = percent + "%";
+        progressEl.querySelector(".pdf-progress-text").textContent = `${current} / ${total}`;
+      };
+
+      // Create hidden iframe for background rendering
+      const iframe = document.createElement("iframe");
+      iframe.style.cssText = "position:fixed;left:-9999px;top:0;width:1600px;height:2400px;visibility:hidden;";
+      document.body.appendChild(iframe);
+
+      // Wait for iframe to load
+      await new Promise((resolve) => {
+        iframe.onload = resolve;
+        iframe.src = location.pathname;
+      });
+
+      // Helper function to render card in iframe
+      const renderCardInIframe = (cardData) => {
+        return new Promise((resolve) => {
+          const iframeWindow = iframe.contentWindow;
+          const iframeDoc = iframe.contentDocument;
+
+          const waitForReady = () => {
+            if (iframeWindow.applyQueryParams && iframeWindow.myFavorites) {
+              const loadImagesInIframe = async () => {
+                const iframeImages = iframeWindow.images;
+                const customIconIndex = iframeImages.length - 1;
+
+                const loadImage = (id, src) => {
+                  return new Promise((res) => {
+                    const newImg = new Image();
+                    let resolved = false;
+                    const done = () => {
+                      if (!resolved) {
+                        resolved = true;
+                        iframeImages[id] = newImg;
+                        res();
+                      }
+                    };
+
+                    if (src) {
+                      newImg.onload = done;
+                      newImg.onerror = done;
+                      newImg.crossOrigin = "Anonymous";
+                      newImg.src = src;
+                      setTimeout(done, 2000);
+                    } else {
+                      done();
+                    }
+                  });
+                };
+
+                await Promise.all([
+                  loadImage(5, cardData.images?.illustration),
+                  loadImage(17, cardData.images?.expansion),
+                  loadImage(customIconIndex, cardData.images?.customIcon),
+                ]);
+
+                // Apply params and wait for render
+                iframeWindow.applyQueryParams(cardData.params);
+
+                // Wait for rendering
+                const waitForRender = () => {
+                  return new Promise((res) => {
+                    const check = () => {
+                      const canvasWrapper = iframeDoc.querySelector(".canvas-wrapper");
+                      if (canvasWrapper && !canvasWrapper.hasAttribute("data-status")) {
+                        setTimeout(res, 500);
+                      } else {
+                        setTimeout(check, 100);
+                      }
+                    };
+                    setTimeout(check, 200);
+                  });
+                };
+
+                await waitForRender();
+
+                // Get size from params
+                const q = getQueryParams(cardData.params);
+                const size = q.size || "0";
+                const isMat = size === "5";
+                const isLandscape = size === "1" || size === "4";
+
+                // Capture canvas
+                const canvases = iframeDoc.getElementsByClassName("myCanvas");
+                let canvasIndex = 0;
+                if (isMat) canvasIndex = 2;
+                else if (isLandscape) canvasIndex = 1;
+
+                const canvas = canvases[canvasIndex];
+                if (canvas) {
+                  try {
+                    const dataUrl = canvas.toDataURL("image/png");
+                    resolve({ dataUrl, params: q });
+                  } catch (e) {
+                    console.error("Failed to capture canvas:", e);
+                    resolve(null);
+                  }
+                } else {
+                  resolve(null);
+                }
+              };
+
+              loadImagesInIframe();
+            } else {
+              setTimeout(waitForReady, 100);
+            }
+          };
+          waitForReady();
+        });
+      };
+
+      // Create ZIP file
+      const zip = new JSZip();
+      const usedFilenames = new Set();
+
+      // Process each card
+      for (let i = 0; i < cardIds.length; i++) {
+        const cardId = cardIds[i];
+        const cardData = await db.get(cardId);
+
+        if (cardData) {
+          const result = await renderCardInIframe(cardData);
+
+          if (result) {
+            // Generate filename
+            const expansionName = sanitizeFilename(result.params.expansionName || "");
+            const cardName = sanitizeFilename(result.params.title || "card");
+            let baseFilename;
+            if (expansionName) {
+              baseFilename = `${expansionName}_${cardName}`;
+            } else {
+              baseFilename = cardName;
+            }
+
+            // Ensure unique filename
+            let filename = `${baseFilename}.png`;
+            let counter = 1;
+            while (usedFilenames.has(filename)) {
+              filename = `${baseFilename}_${counter}.png`;
+              counter++;
+            }
+            usedFilenames.add(filename);
+
+            // Convert data URL to binary and add to ZIP
+            const base64Data = result.dataUrl.split(",")[1];
+            zip.file(filename, base64Data, { base64: true });
+          }
+        }
+
+        updateProgress(i + 1, cardIds.length);
+      }
+
+      // Clean up iframe
+      document.body.removeChild(iframe);
+
+      // Generate and download ZIP
+      progressEl.querySelector(".pdf-progress-title").textContent = "ZIPを作成中...";
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const zipFilename = `dominion-cards-${timestamp}.zip`;
+
+      const link = document.createElement("a");
+      link.download = zipFilename;
+      link.href = URL.createObjectURL(zipBlob);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      // Clean up
+      document.body.removeChild(progressEl);
+
+      if (exportBtn) exportBtn.disabled = false;
+    } catch (error) {
+      console.error("Image export error:", error);
+      const progressEl = document.querySelector(".pdf-progress");
+      if (progressEl) document.body.removeChild(progressEl);
+      const iframe = document.querySelector("iframe[style*='-9999px']");
+      if (iframe) document.body.removeChild(iframe);
+      if (exportBtn) exportBtn.disabled = false;
+      alert("画像出力中にエラーが発生しました: " + error.message);
+    }
+  };
+
   this.import = function () {
     let myFavs = this;
 
