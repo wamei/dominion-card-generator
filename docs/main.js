@@ -494,7 +494,10 @@ function initCardImageGenerator() {
                 if (isItalic && k === 0) {
                   line += " [i] ";
                 }
-                if (!["、", "。", ",", ".", "！", "？", "!", "?", "）", "」", "】", "』", ")", "ー", "っ", "ゃ", "ゅ", "ょ", "ッ", "ャ", "ュ", "ョ"].includes(block[k]) && progressiveWidth + width > maxWidth) {
+                if (
+                  !["、", "。", ",", ".", "！", "？", "!", "?", "）", "」", "】", "』", ")", "ー", "っ", "ゃ", "ゅ", "ょ", "ッ", "ャ", "ュ", "ョ"].includes(block[k]) &&
+                  progressiveWidth + width > maxWidth
+                ) {
                   var lineToAdd = line;
                   var widthToAdd = progressiveWidth;
                   if (["（", "「", "【", "『", "(", "+", "-"].includes(block[k - 1])) {
@@ -625,9 +628,11 @@ function initCardImageGenerator() {
       isEachColorDark[i] =
         i == 1 && normalColorCurrentIndices[1] == 0
           ? isEachColorDark[0]
-          : (normalColorCurrentIndices[i] >= normalColorCustomIndices[i] ? recolorFactorList[i] : normalColorFactorLists[normalColorCurrentIndices[i] - i][1]).slice(0, 3).reduce(function getSum(total, num) {
-              return total + parseFloat(num);
-            }) <= 1.5;
+          : (normalColorCurrentIndices[i] >= normalColorCustomIndices[i] ? recolorFactorList[i] : normalColorFactorLists[normalColorCurrentIndices[i] - i][1])
+              .slice(0, 3)
+              .reduce(function getSum(total, num) {
+                return total + parseFloat(num);
+              }) <= 1.5;
     var differentIntensities = isEachColorDark[0] != isEachColorDark[1];
 
     if (!(differentIntensities || parseInt(normalColorCurrentIndices[1]) == 0 || parseInt(normalColorCurrentIndices[0]) + 1 == parseInt(normalColorCurrentIndices[1]))) {
@@ -986,7 +991,8 @@ function initCardImageGenerator() {
       } else {
         queries += simpleOnChangeInputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeInputFieldIDs[i]).value) + "&";
       }
-      if (templateSize == 2 && i < simpleOnChangeButOnlyForSize2InputFieldIDs.length) queries += simpleOnChangeButOnlyForSize2InputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value) + "&";
+      if (templateSize == 2 && i < simpleOnChangeButOnlyForSize2InputFieldIDs.length)
+        queries += simpleOnChangeButOnlyForSize2InputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value) + "&";
     }
     queries += "picture=" + encodeURIComponent(document.getElementById("picture").value) + "&";
     queries += "expansion=" + encodeURIComponent(document.getElementById("expansion").value) + "&";
@@ -1099,7 +1105,22 @@ function initCardImageGenerator() {
   }
 
   var simpleOnChangeInputCheckboxIDs = ["traveller", "trait"];
-  var simpleOnInputInputFieldIDs = ["title", "description", "credit", "creator", "price", "preview", "type", "type2", "picture-x", "picture-y", "picture-zoom", "descriptionFontSize", "color2split", "boldkeys"];
+  var simpleOnInputInputFieldIDs = [
+    "title",
+    "description",
+    "credit",
+    "creator",
+    "price",
+    "preview",
+    "type",
+    "type2",
+    "picture-x",
+    "picture-y",
+    "picture-zoom",
+    "descriptionFontSize",
+    "color2split",
+    "boldkeys",
+  ];
   var simpleOnChangeInputFieldIDs = ["expansionName"];
   simpleOnChangeInputFieldIDs = simpleOnChangeInputFieldIDs.concat(simpleOnInputInputFieldIDs, simpleOnChangeInputCheckboxIDs);
   var simpleOnChangeButOnlyForSize2InputFieldIDs = ["title2", "description2"];
@@ -1343,7 +1364,11 @@ function initCardImageGenerator() {
         }
         break;
     }
-    for (var i = 0; i < simpleOnChangeButOnlyForSize2InputFieldIDs.length; ++i) if (!document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value) document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value = document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i].substr(0, simpleOnChangeButOnlyForSize2InputFieldIDs[i].length - 1)).value;
+    for (var i = 0; i < simpleOnChangeButOnlyForSize2InputFieldIDs.length; ++i)
+      if (!document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value)
+        document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value = document.getElementById(
+          simpleOnChangeButOnlyForSize2InputFieldIDs[i].substr(0, simpleOnChangeButOnlyForSize2InputFieldIDs[i].length - 1),
+        ).value;
   }
   //set the illustration's Source properly and also call queueDraw.
   const handleLocalImageRestore = async (fieldId, imageId, db) => {
@@ -2234,7 +2259,9 @@ function Favorites(name) {
     this.initViewMode();
     this.refresh();
     fav.classList.remove("hidden");
-    document.getElementById("favorites-search").focus();
+    if (window.innerWidth > 600) {
+      document.getElementById("favorites-search").focus();
+    }
   };
   this.close = function () {
     fav.classList.add("hidden");
@@ -2414,7 +2441,19 @@ function Favorites(name) {
     let cards = favThumbnails.getElementsByClassName("thumbnail-card");
     for (let i = 0; i < cards.length; i++) {
       let card = cards[i];
-      let matchText = ((card.dataset.title || "") + " " + (card.dataset.type || "") + " " + (card.dataset.expansion || "") + " " + (card.dataset.size || "") + " " + (card.dataset.price || "") + " " + card.textContent).toUpperCase();
+      let matchText = (
+        (card.dataset.title || "") +
+        " " +
+        (card.dataset.type || "") +
+        " " +
+        (card.dataset.expansion || "") +
+        " " +
+        (card.dataset.size || "") +
+        " " +
+        (card.dataset.price || "") +
+        " " +
+        card.textContent
+      ).toUpperCase();
       let allMatch = keywords.every((k) => matchText.includes(k));
       if (allMatch) {
         card.classList.remove("hidden");
@@ -2761,7 +2800,9 @@ class FontHandler {
 
   open() {
     this.dialog.classList.remove("hidden");
-    document.getElementById("fontInputTitle").focus();
+    if (window.innerWidth > 600) {
+      document.getElementById("fontInputTitle").focus();
+    }
   }
 
   close() {

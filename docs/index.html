@@ -26,13 +26,9 @@
     <script>
       function setThemeColor(e) {
         if (e.matches) {
-          document.head
-            .querySelector("[name=theme-color][content]")
-            .setAttribute("content", "#000000");
+          document.head.querySelector("[name=theme-color][content]").setAttribute("content", "#000000");
         } else {
-          document.head
-            .querySelector("[name=theme-color][content]")
-            .setAttribute("content", "#ffffff");
+          document.head.querySelector("[name=theme-color][content]").setAttribute("content", "#ffffff");
         }
       }
       setThemeColor(window.matchMedia("(prefers-color-scheme: dark)"));
@@ -61,19 +57,9 @@
     <script src="main.js"></script>
     <style type="text/css" id="fontLocal"></style>
     <link rel="stylesheet" type="text/css" href="./fonts/font-title.css" id="fontDefaultTitle" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="./fonts/font-specials.css"
-      id="fontDefaultSpecials"
-    />
+    <link rel="stylesheet" type="text/css" href="./fonts/font-specials.css" id="fontDefaultSpecials" />
     <link rel="stylesheet" type="text/css" href="./fonts/font-text.css" id="fontDefaultText" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="./fonts/font-text-bold.css"
-      id="fontDefaultTextBold"
-    />
+    <link rel="stylesheet" type="text/css" href="./fonts/font-text-bold.css" id="fontDefaultTextBold" />
   </head>
 
   <body class="size0">
@@ -82,9 +68,7 @@
         <div class="canvas-header">
           <span class="heading-credits"
             >(<a class="linkToOriginal" href="https://shemitz.net/static/dominion3/">Original</a>,
-            <a class="linkToOriginal" href="https://shardofhonor.github.io/dominion-card-generator/"
-              >Original2</a
-            >) 日本語対応版 (<a
+            <a class="linkToOriginal" href="https://shardofhonor.github.io/dominion-card-generator/">Original2</a>) 日本語対応版 (<a
               target="_blank"
               rel="nofollow"
               href="https://github.com/wamei/dominion-card-generator"
@@ -94,141 +78,56 @@
           <h1 class="canvas-title">Dominion Card Image Generator</h1>
         </div>
         <div class="canvas-wrapper" data-status="Loading...">
-          <canvas
-            class="myCanvas"
-            id="portraitCanvas"
-            width="1403"
-            height="2151"
-            title="Right-Click this image for options to save it."
-            >Your browser does not support the &lt;CANVAS&gt; tag.</canvas
-          >
-          <canvas
-            class="myCanvas"
-            id="landscapeCanvas"
-            width="2151"
-            height="1403"
-            title="Right-Click this image for options to save it."
-            >Your browser does not support the &lt;CANVAS&gt; tag.</canvas
-          >
-          <canvas
-            class="myCanvas"
-            id="matCanvas"
-            width="928"
-            height="684"
-            title="Right-Click this image for options to save it."
-            >Your browser does not support the &lt;CANVAS&gt; tag.</canvas
-          >
+          <canvas class="myCanvas" id="portraitCanvas" width="1403" height="2151" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
+          <canvas class="myCanvas" id="landscapeCanvas" width="2151" height="1403" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
+          <canvas class="myCanvas" id="matCanvas" width="928" height="684" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
           <img id="load-indicator" src="assets/spinner.png" alt="Loading..." />
         </div>
         <menu id="sizes">
           <input type="radio" name="size" id="size0" value="0" checked />
           <label for="size0">
-            <img
-              src="card-resources/CardPortraitIcon.png"
-              width="30"
-              height="46"
-              alt=""
-              title="Portrait"
-            />
+            <img src="card-resources/CardPortraitIcon.png" width="30" height="46" alt="" title="Portrait" />
           </label>
           <input type="radio" name="size" id="size1" value="1" />
           <label for="size1">
-            <img
-              src="card-resources/EventBrown.png"
-              width="46"
-              height="30"
-              alt=""
-              title="Landscape"
-            />
+            <img src="card-resources/EventBrown.png" width="46" height="30" alt="" title="Landscape" />
           </label>
           <input style="display: none" type="radio" name="size" id="size2" value="2" />
           <label style="display: none" for="size2">
-            <img
-              src="card-resources/DoubleUncoloredDetails.png"
-              width="30"
-              height="46"
-              alt=""
-              title="Double"
-            />
+            <img src="card-resources/DoubleUncoloredDetails.png" width="30" height="46" alt="" title="Double" />
           </label>
           <input type="radio" name="size" id="size3" value="3" />
           <label for="size3">
-            <img
-              src="card-resources/BaseCardIcon.png"
-              width="30"
-              height="46"
-              alt=""
-              title="Base Card"
-            />
+            <img src="card-resources/BaseCardIcon.png" width="30" height="46" alt="" title="Base Card" />
           </label>
           <input type="radio" name="size" id="size4" value="4" />
           <label for="size4">
-            <img
-              src="card-resources/PileMarkerIcon.png"
-              width="46"
-              height="30"
-              alt=""
-              title="Pile Marker"
-            />
+            <img src="card-resources/PileMarkerIcon.png" width="46" height="30" alt="" title="Pile Marker" />
           </label>
           <input type="radio" name="size" id="size5" value="5" />
           <label for="size5" style="margin-left: 0.5em">
-            <img
-              src="card-resources/MatIcon.png"
-              width="62"
-              height="46"
-              alt=""
-              title="Player Mat"
-            />
+            <img src="card-resources/MatIcon.png" width="62" height="46" alt="" title="Player Mat" />
           </label>
         </menu>
         <div id="tools">
-          <a
-            id="download"
-            target="_blank"
-            title="画像ファイルとしてダウンロード"
-            download="card.png"
-            ><button type="button" onclick="downloadPicture()">
-              <i class="fa-solid fa-image"></i>ダウンロード
-            </button></a
+          <a id="download" target="_blank" title="画像ファイルとしてダウンロード" download="card.png"
+            ><button type="button" onclick="downloadPicture()"><i class="fa-solid fa-image"></i>ダウンロード</button></a
           >
           <div class="flex-1"></div>
           <a id="add-favorite" title="お気に入りに追加または更新"
-            ><button type="button" onclick="myFavorites.addOrUpdate()">
-              <i class="fa-solid fa-floppy-disk"></i>保存
-            </button></a
+            ><button type="button" onclick="myFavorites.addOrUpdate()"><i class="fa-solid fa-floppy-disk"></i>保存</button></a
           >
           <a id="favorites" title="お気に入りを開く"
-            ><button type="button" onclick="myFavorites.open()">
-              <i class="fa-solid fa-star"></i>お気に入り
-            </button></a
+            ><button type="button" onclick="myFavorites.open()"><i class="fa-solid fa-star"></i>お気に入り</button></a
           >
           <div id="manage-favorites" class="popup hidden">
             <div class="menu">
-              <input
-                id="favorites-search"
-                type="search"
-                class="search"
-                placeholder="検索..."
-                oninput="myFavorites.search(this.value)"
-              />
-              <button
-                type="button"
-                id="favorites-view-toggle"
-                class="view-toggle"
-                onclick="myFavorites.toggleView()"
-                title="表示切替"
-              >
+              <input id="favorites-search" type="search" class="search" placeholder="検索..." oninput="myFavorites.search(this.value)" />
+              <button type="button" id="favorites-view-toggle" class="view-toggle" onclick="myFavorites.toggleView()" title="表示切替">
                 <span class="view-list"><i class="fa-solid fa-image"></i></span>
                 <span class="view-thumbnail hidden"><i class="fa-solid fa-list"></i></span>
               </button>
-              <button
-                type="button"
-                class="delete-all delete hidden"
-                onclick="myFavorites.deleteAll()"
-              >
-                <i class="fa-solid fa-trash"></i>すべて削除
-              </button>
+              <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><i class="fa-solid fa-trash"></i>すべて削除</button>
               <span class="menu-spacer"></span>
               <button
                 type="button"
@@ -256,18 +155,12 @@
             <div id="favorites-thumbnails" class="popup-content hidden"></div>
           </div>
           <a id="openFontSettings" title="フォント設定を開く" class="hidden"
-            ><button type="button" onclick="myFontSettings.open()">
-              <i class="fa-solid fa-gear"></i>フォント
-            </button></a
+            ><button type="button" onclick="myFontSettings.open()"><i class="fa-solid fa-gear"></i>フォント</button></a
           >
           <div id="manage-fonts" class="popup hidden">
             <div class="menu">
-              <button type="button" class="confirm" onclick="myFontSettings.save()">
-                <i class="fa-solid fa-floppy-disk"></i>保存
-              </button>
-              <button type="button" class="reset" onclick="myFontSettings.reset()">
-                <i class="fa-solid fa-rotate-left"></i>リセット
-              </button>
+              <button type="button" class="confirm" onclick="myFontSettings.save()"><i class="fa-solid fa-floppy-disk"></i>保存</button>
+              <button type="button" class="reset" onclick="myFontSettings.reset()"><i class="fa-solid fa-rotate-left"></i>リセット</button>
               <span class="menu-spacer"></span>
               <button type="button" class="close" onclick="myFontSettings.close()" title="Close">
                 <i class="fa-solid fa-xmark"></i>
@@ -283,9 +176,7 @@
               <label for="fontInputTextBold">テキスト用フォント名 (太字)</label>
               <input id="fontInputTextBold" type="text" placeholder="(例: HiraMinProN-W6)" />
             </div>
-            <p class="remark">
-              ここに記載したフォントは、デバイスにインストールされている必要があります。
-            </p>
+            <p class="remark">ここに記載したフォントは、デバイスにインストールされている必要があります。</p>
           </div>
         </div>
       </section>
@@ -302,10 +193,7 @@
                 <label for="expansion">拡張アイコン</label>
                 <div class="input-with-upload">
                   <input id="expansion" type="url" placeholder="http://example.com/expansion.png" />
-                  <label class="image-upload" title="ローカル画像を使用"
-                    ><i class="fa-solid fa-arrow-up-from-bracket"></i>
-                    <input id="expansion-upload" type="file" accept="image/*"
-                  /></label>
+                  <label class="image-upload" title="ローカル画像を使用"><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="expansion-upload" type="file" accept="image/*" /></label>
                 </div>
               </div>
             </div>
@@ -359,8 +247,7 @@
             <div class="input-with-upload">
               <input id="custom-icon" type="url" placeholder="http://example.com/icon.png" />
               <label class="image-upload" title="ローカル画像ファイルを使用する"
-                ><i class="fa-solid fa-arrow-up-from-bracket"></i>
-                <input id="custom-icon-upload" type="file" accept="image/*"
+                ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="custom-icon-upload" type="file" accept="image/*"
               /></label>
             </div>
           </div>
@@ -369,9 +256,7 @@
         <div class="form-row">
           <div class="form-group hideForPileMarker hideForMats">
             <label for="type">カード種別</label>
-            <span
-              class="type-checkboxes hideForBaseCards hideForPileMarker hideForMats hideForDoubleCard"
-            >
+            <span class="type-checkboxes hideForBaseCards hideForPileMarker hideForMats hideForDoubleCard">
               <span class="checkbox hideForLandscape">
                 <input id="traveller" type="checkbox" placeholder="Action" />
                 <label for="traveller">トラベラー</label>
@@ -395,10 +280,7 @@
               <label for="picture">イラスト</label>
               <div class="input-with-upload">
                 <input id="picture" type="url" placeholder="http://example.com/image.jpg" />
-                <label class="image-upload" title="ローカル画像ファイルを使用する"
-                  ><i class="fa-solid fa-arrow-up-from-bracket"></i>
-                  <input id="picture-upload" type="file" accept="image/*"
-                /></label>
+                <label class="image-upload" title="ローカル画像ファイルを使用する"><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="picture-upload" type="file" accept="image/*" /></label>
               </div>
               <div class="position-controls">
                 <div class="position-input">
@@ -454,56 +336,52 @@
         </div>
 
         <div class="form-row">
-          <div
-            class="form-group hideForMats doubledForBaseCards doubledForPileMarkers doubledForTraits"
-          >
+          <div class="form-group hideForMats doubledForBaseCards doubledForPileMarkers doubledForTraits">
             <label for="normalcolor1">カラー</label>
             <span id="color-switch"
-              ><button id="color-switch-button" alt="Switch Colors">
-                <i class="fa-solid fa-repeat"></i>入れ替え
-              </button></span
+              ><button id="color-switch-button" alt="Switch Colors"><i class="fa-solid fa-repeat"></i>入れ替え</button></span
             >
             <select name="normalcolor" id="normalcolor1"></select>
             <div style="display: none" title="Card color">
-              <input type="number" name="recolor" min="0" max="10" step=".05" value="0.75" /><input
+              <input type="number" name="recolor" min="0" max="10" step=".05" value="0.75" /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.1" /><input
                 type="number"
                 name="recolor"
                 min="0"
                 max="10"
                 step=".05"
-                value="1.1"
-              /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.35" />
+                value="1.35"
+              />
             </div>
             <div style="display: none">
               <div title="Card fade color">
-                <input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input
+                <input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input
                   type="number"
                   name="recolor"
                   min="0"
                   max="10"
                   step=".05"
                   value="0"
-                /><input type="number" name="recolor" min="0" max="10" step=".05" value="0" />
+                />
               </div>
               <div title="Accent color 1">
-                <input type="number" name="recolor" min="0" max="10" step=".05" value="1" /><input
+                <input type="number" name="recolor" min="0" max="10" step=".05" value="1" /><input type="number" name="recolor" min="0" max="10" step=".05" value="2" /><input
                   type="number"
                   name="recolor"
                   min="0"
                   max="10"
                   step=".05"
-                  value="2"
-                /><input type="number" name="recolor" min="0" max="10" step=".05" value="3" />
+                  value="3"
+                />
               </div>
               <div title="Accent color 2">
-                <input type="number" name="recolor" min="0" max="10" step=".05" value="4" /><input
+                <input type="number" name="recolor" min="0" max="10" step=".05" value="4" /><input type="number" name="recolor" min="0" max="10" step=".05" value="5" /><input
                   type="number"
                   name="recolor"
                   min="0"
                   max="10"
                   step=".05"
-                  value="5"
-                /><input type="number" name="recolor" min="0" max="10" step=".05" value="6" />
+                  value="6"
+                />
               </div>
             </div>
           </div>
@@ -513,24 +391,24 @@
               <option>メインと同じ</option>
             </select>
             <div style="display: none" title="Card color">
-              <input type="number" name="recolor" min="0" max="10" step=".05" value="0.75" /><input
+              <input type="number" name="recolor" min="0" max="10" step=".05" value="0.75" /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.1" /><input
                 type="number"
                 name="recolor"
                 min="0"
                 max="10"
                 step=".05"
-                value="1.1"
-              /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.35" />
+                value="1.35"
+              />
             </div>
             <div style="display: none" title="Card fade color">
-              <input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input
+              <input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input type="number" name="recolor" min="0" max="10" step=".05" value="0" /><input
                 type="number"
                 name="recolor"
                 min="0"
                 max="10"
                 step=".05"
                 value="0"
-              /><input type="number" name="recolor" min="0" max="10" step=".05" value="0" />
+              />
             </div>
             <div id="color2splitselector" class="hideForLandscape" style="display: none">
               <label for="color2split">Split Position</label>
@@ -545,13 +423,8 @@
           </div>
         </div>
         <div id="reset">
-          <a
-            href="?"
-            title="click to reset all fields"
-            onclick="return confirm('入力内容をリセットしてもよろしいですか？');"
-            ><button type="button" class="delete">
-              <i class="fa-solid fa-rotate-left"></i>リセット
-            </button></a
+          <a href="?" title="click to reset all fields" onclick="return confirm('入力内容をリセットしてもよろしいですか？');"
+            ><button type="button" class="delete"><i class="fa-solid fa-rotate-left"></i>リセット</button></a
           >
         </div>
       </section>
