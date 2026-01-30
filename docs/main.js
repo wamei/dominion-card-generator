@@ -2654,7 +2654,8 @@ function Favorites(name) {
       const type2 = (q.type2 || "").trim();
       const size = item.size || q.size || "0";
       const price = (q.price || "").replace("^", "P").trim();
-      const isLandscape = size === "1" || size === "5"; // Landscape or Mat
+      const isLandscape = size === "1" || size === "4"; // Landscape or Pile Marker
+      const isMat = size === "5"; // Mat
 
       let sizeText = "";
       switch (size) {
@@ -2679,7 +2680,7 @@ function Favorites(name) {
       }
 
       const card = document.createElement("div");
-      card.className = "thumbnail-card";
+      card.className = "thumbnail-card" + (isMat ? " mat" : "");
       card.dataset.title = title;
       card.dataset.type = type;
       card.dataset.expansion = (q.expansionName || "").trim();
@@ -2694,7 +2695,7 @@ function Favorites(name) {
       // Thumbnail image or placeholder with card info
       if (item.thumbnail) {
         const img = document.createElement("img");
-        img.className = "thumbnail-image" + (isLandscape ? " landscape" : "");
+        img.className = "thumbnail-image" + (isLandscape ? " landscape" : "") + (isMat ? " mat" : "");
         img.src = item.thumbnail;
         img.alt = title;
         card.appendChild(img);
@@ -2702,7 +2703,7 @@ function Favorites(name) {
         // No thumbnail: show expansion, title, and type
         const placeholder = document.createElement("div");
         placeholder.className =
-          "thumbnail-loading" + (isLandscape ? " landscape" : "");
+          "thumbnail-loading" + (isLandscape ? " landscape" : "") + (isMat ? " mat" : "");
 
         const expansionName = (q.expansionName || "").trim();
         if (expansionName) {

@@ -900,7 +900,7 @@ button.delete-all:focus {
 .thumbnail-card {
   position: relative;
   border: 2px solid var(--color-background1);
-  border-radius: 8px;
+  border-radius: 25px;
   overflow: hidden;
   cursor: pointer;
   background: var(--color-background2);
@@ -909,10 +909,14 @@ button.delete-all:focus {
     box-shadow 0.2s;
 }
 
+.thumbnail-card.mat {
+  border-radius: 8px;
+}
+
 .thumbnail-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border-color: var(--color-button1-background);
+  border-color: var(--color-background-attention);
 }
 
 .thumbnail-card.active {
@@ -922,19 +926,23 @@ button.delete-all:focus {
 
 .thumbnail-card .thumbnail-image {
   width: 100%;
-  aspect-ratio: 296 / 473;
+  aspect-ratio: 1403 / 2151;
   object-fit: contain;
   background: var(--color-background1);
   display: block;
 }
 
 .thumbnail-card .thumbnail-image.landscape {
-  aspect-ratio: 473 / 296;
+  aspect-ratio: 2151 / 1403;
+}
+
+.thumbnail-card .thumbnail-image.mat {
+  aspect-ratio: 928 / 684;
 }
 
 .thumbnail-card .thumbnail-loading {
   width: 100%;
-  aspect-ratio: 296 / 473;
+  aspect-ratio: 1403 / 2151;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -948,7 +956,11 @@ button.delete-all:focus {
 }
 
 .thumbnail-card .thumbnail-loading.landscape {
-  aspect-ratio: 473 / 296;
+  aspect-ratio: 2151 / 1403;
+}
+
+.thumbnail-card .thumbnail-loading.mat {
+  aspect-ratio: 928 / 684;
 }
 
 .thumbnail-card .thumbnail-placeholder-expansion {
