@@ -1,6 +1,6 @@
 @font-face {
   font-family: "myText";
   font-display: auto;
-  font-weight: normal;
-  src: local("HiraMinProN-W3"), serif;
+  font-weight: bold;
+  src: local("HiraMinProN-W6"), serif;
 }

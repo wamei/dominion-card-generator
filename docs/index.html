@@ -52,18 +52,23 @@
     <link rel="stylesheet" type="text/css" href="./fonts/font-title.css" id="fontDefaultTitle">
     <link rel="stylesheet" type="text/css" href="./fonts/font-specials.css" id="fontDefaultSpecials">
     <link rel="stylesheet" type="text/css" href="./fonts/font-text.css" id="fontDefaultText">
+    <link rel="stylesheet" type="text/css" href="./fonts/font-text-bold.css" id="fontDefaultTextBold">
 </head>
 
 <body class="size0">
+    <header>
+        Dominion Card Image Generator (<a class="linkToOriginal" href="https://shemitz.net/static/dominion3/">Original</a>, <a class="linkToOriginal" href="https://shardofhonor.github.io/dominion-card-generator/">Original2</a>) <span class="heading-credits">日本語対応版 (<a target="_blank" rel="nofollow" href="https://github.com/wamei/dominion-card-generator">Github</a>)</span>
+        <a id="reset" href="?" title="click to reset all fields" onclick="return confirm('入力内容をリセットしてもよろしいですか？')"><button type="button" class="delete">Reset</button></a>
+    </header>
     <table id="table">
         <colgroup>
             <col>
         </colgroup>
         <tr>
-            <th rowspan="10" data-status="Loading...">
+            <td rowspan="11" data-status="Loading...">
                 <canvas class="myCanvas" id="portraitCanvas" width="1403" height="2151" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
                 <canvas class="myCanvas" id="landscapeCanvas" width="2151" height="1403" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
-                <canvas class="myCanvas" id="matCanvas" width="928" height="684" style="transform:scale(0.49);" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
+                <canvas class="myCanvas" id="matCanvas" width="928" height="684" style="transform:scale(0.9);" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
                 <img id="load-indicator" src="assets/spinner.png" alt="Loading..." />
                 <menu id="sizes">
                     <input type="radio" name="size" id="size0" value="0" checked />
@@ -91,62 +96,74 @@
                         <img src="card-resources/MatIcon.png" width="62" height="46" alt="" title="Player Mat" />
                     </label>
                 </menu>
-                <ul id="legend">
-                    <li><span class="def">-</span>: Horizontal Bar</li>
-                    <li><span class="def">[i]</span>: Italic Line</li>
-                </ul>
-                <a id="download" target="_blank" title="click to download card image file" download="card.png"><button type="button" onclick="downloadPicture()"><img src="assets/icon-download.png" />Download Card</button></a>
-                <a id="reset" href="?" title="click to reset all fields"><button type="button">Reset</button></a>
-                <script>
-                    if (navigator.share) {
-                        document.write('<a id="share" rel="nofollow" href="#share" onclick="if(navigator.vibrate){navigator.vibrate(50);};navigator.share({ title: document.title, text: document.title, url: window.location.href, }).catch((error) => console.log(\'Error sharing\', error));" title="Share Link"><button type="button"><img src="assets/icon-share.png" /></button></a>');
-                    }
-                </script>
-                <a id="favorites" title="click to open saved cards"><button type="button" onclick="myFavorites.open()"><img src="assets/icon-favorites.png" />Favorites</button></a>
-                <div id="manage-favorites" class="popup hidden">
-                    <div class="menu">
-                        <button type="button" onclick="myFavorites.add( document.location.search )"><img src="assets/icon-favorites.png" />Add Current Card</button>
-                        <button type="button" class="delete-all hidden" onclick="myFavorites.deleteAll()"><img src="assets/icon-delete.png" />Delete All</button>
-                        <button type="button" class="sort" onclick="myFavorites.sort()" title="Sort"><img alt="Sort" src="assets/icon-sort.png" /></button>
-                        <button type="button" class="" onclick="myFavorites.export()" title="Export"><img alt="Export" src="assets/icon-download.png" /></button>
-                        <button type="button" class="" onclick="myFavorites.import()" title="Import"><img alt="Import" src="assets/icon-upload.png" /></button>
-                        <button type="button" class="close" onclick="myFavorites.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
-                        <input id="favorites-search" type="search" class="search" placeholder="Search..." oninput="myFavorites.search(this.value)" />
+                <div id="tools">
+                    <a id="download" target="_blank" title="画像ファイルとしてダウンロード" download="card.png"><button type="button" onclick="downloadPicture()"><img src="assets/icon-download.png" />ダウンロード</button></a>
+                    <!-- <script>
+                        if (navigator.share) {
+                            document.write('<a id="share" rel="nofollow" href="#share" onclick="if(navigator.vibrate){navigator.vibrate(50);};navigator.share({ title: document.title, text: document.title, url: window.location.href, }).catch((error) => console.log(\'Error sharing\', error));" title="Share Link"><button type="button"><img src="assets/icon-share.png" /></button></a>');
+                        }
+                    </script> -->
+                    <div class="flex-1"></div>
+                    <a id="add-favorite" title="お気に入りに追加または更新"><button type="button" onclick="myFavorites.addOrUpdate()"><img src="assets/icon-upload.png" />追加/更新</button></a>
+                    <a id="favorites" title="お気に入りを開く"><button type="button" onclick="myFavorites.open()"><img src="assets/icon-favorites.png" />お気に入り</button></a>
+                    <div id="manage-favorites" class="popup hidden">
+                        <div class="menu">
+                            <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><img src="assets/icon-delete.png" />すべて削除</button>
+                            <button type="button" class="" onclick="myFavorites.export()" title="Export"><img alt="Export" src="assets/icon-download.png" />Export</button>
+                            <button type="button" class="" onclick="myFavorites.import()" title="Import"><img alt="Import" src="assets/icon-upload.png" />Import</button>
+                            <button type="button" class="close" onclick="myFavorites.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
+                            <input id="favorites-search" type="search" class="search" placeholder="Search..." oninput="myFavorites.search(this.value)" />
+                        </div>
+                        <table id="favorites-list" class="popup-content"></table>
                     </div>
-                    <ul id="favorites-list" class="popup-content"></ul>
+                    <a id="openFontSettings" title="フォント設定を開く" class="hidden"><button type="button" onclick="myFontSettings.open()"><img src="assets/icon-settings.png" />フォント</button></a>
+                    <div id="manage-fonts" class="popup hidden">
+                        <div class="menu">
+                            <button type="button" class="confirm" onclick="myFontSettings.save()">Save</button>
+                            <button type="button" onclick="myFontSettings.reset()">Reset</button>
+                            <button type="button" class="close" onclick="myFontSettings.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
+                        </div>
+                        <div class="popup-content">
+                            <label for="fontInputTitle">タイトル用フォント名</label>
+                            <input id="fontInputTitle" type="text" placeholder="(例: MFW-PMaruFoProN-Bold)" />
+                            <label for="fontInputSpecials">特殊要素用フォント名 (アイコンテキストなど)</label>
+                            <input id="fontInputSpecials" type="text" placeholder="(例: Minion Std Black)" />
+                            <label for="fontInputText">テキスト用フォント名</label>
+                            <input id="fontInputText" type="text" placeholder="(例: HiraMinProN-W3)" />
+                            <label for="fontInputTextBold">テキスト用フォント名 (太字)</label>
+                            <input id="fontInputTextBold" type="text" placeholder="(例: HiraMinProN-W6)" />
+                        </div>
+                        <p class="remark">ここに記載したフォントは、デバイスにインストールされている必要があります。</p>
+                    </div>
                 </div>
-
-                <a id="openFontSettings" title="click to open font settings" class="hidden"><button type="button" onclick="myFontSettings.open()"><img src="assets/icon-settings.png" />Fonts</button></a>
-                <div id="manage-fonts" class="popup hidden">
-                    <div class="menu">
-                        <button type="button" class="confirm" onclick="myFontSettings.save()">Save</button>
-                        <button type="button" onclick="myFontSettings.reset()">Reset</button>
-                        <button type="button" class="close" onclick="myFontSettings.close()" title="Close"><img alt="Close" src="assets/icon-close.png" /></button>
+            </td>
+        </tr>
+        <tr>
+            <td class="doubledForDoubleCards">
+                <div class="flex">
+                    <div class="flex-1">
+                        <label for="expansionName">拡張名</label>
+                        <input id="expansionName" placeholder="基本" />
                     </div>
-                    <div class="popup-content">
-                        <label for="fontInputTitle">Font Name for Titles</label>
-                        <input id="fontInputTitle" type="text" placeholder="(e.g. Trajan Pro)" />
-                        <label for="fontInputSpecials">Font Name for Special Elements (like icon-texts)</label>
-                        <input id="fontInputSpecials" type="text" placeholder="(e.g. Minion Std Black)" />
-                        <label for="fontInputText">Font Name for Texts</label>
-                        <input id="fontInputText" type="text" placeholder="(e.g. Times New Roman)" />
-                    </div>
-                    <p class="remark">Any font entered here has to be installed locally on your device.</p>
+                    <div>
+                        <label for="expansion">拡張アイコン</label>
+                        <input id="expansion" type="url" placeholder="http://example.com/expansion.png" />
+                        <label class="image-upload" title="ローカル画像を使用"><img src="assets/icon-upload-image.png" alt="Upload" />
+                            <input id="expansion-upload" type="file" accept="image/*" /></label>
+                    </div>   
                 </div>
-
-            </th>
-            <th colspan="2">Dominion Card Image Generator (<a id="linkToOriginal" href="https://shemitz.net/static/dominion3/" title="click to pass inputs to the original version">Original</a> &amp; <a target="_blank" rel="nofollow" href="http://forum.dominionstrategy.com/index.php?topic=16622.0" title="show discussion, description and announcements in the forum">Discussion</a>) <span class="heading-credits">Extended Version (<a target="_blank" rel="nofollow" href="https://github.com/shardofhonor/dominion-card-generator" title="view source on github and contribute code">Join Development</a>)</span></th>
+            </td>
         </tr>
         <tr>
             <td class="doubledForDoubleCards">
                 <div>
-                    <label for="title">Title</label>
-                    <input id="title" placeholder="Village" />
+                    <label for="title">タイトル</label>
+                    <input id="title" placeholder="村" />
                 </div>
             </td>
             <td>
                 <div>
-                    <label for="title2">Title</label>
+                    <label for="title2">タイトル</label>
                     <input id="title2" />
                 </div>
             </td>
@@ -154,30 +171,42 @@
         <tr>
             <td class="doubledForDoubleCards hideForPileMarker">
                 <div>
-                    <label for="description">Description</label>
-                    <textarea rows="5" id="description" placeholder="+1 Card
-+2 Actions"></textarea>
+                     <div class="flex">
+                        <label for="description">テキスト</label>
+                        <div class="flex-1">
+                            <ul id="legend">
+                                <li><span class="def">-</span>: 水平線</li>
+                                <li><span class="def">[i]</span>: 斜め文字</li>
+                            </ul>
+                        </div>
+                     </div>
+                    <textarea rows="10" id="description" placeholder="+1 カードを引く
++2 アクション"></textarea>
+                    <div class="hidden">
+                        <label for="descriptionFontSize">フォントサイズ</label>
+                        <input type="number" id="descriptionFontSize" value="40" />
+                    </div>
                 </div>
             </td>
             <td class="hideForPileMarker hideForMats">
                 <div>
-                    <label for="description2">Description</label>
-                    <textarea rows="5" id="description2"></textarea>
+                    <label for="description2">テキスト</label>
+                    <textarea rows="8" id="description2"></textarea>
                 </div>
             </td>
         </tr>
         <tr>
             <td class="hideForPileMarker">
                 <div>
-                    <label for="boldkeys">Additional Bold Keywords</label>
-                    <input id="boldkeys" placeholder="Additional boldable keywords; separated by semicolons" />
+                    <label for="boldkeys">追加の太字キーワード</label>
+                    <input id="boldkeys" placeholder="キーワード1;キーワード2; セミコロンで区切る" />
                 </div>
             </td>
             <td class="hideForPileMarker">
                 <div>
-                    <label for="custom-icon">Custom Icon</label>
+                    <label for="custom-icon">カスタムアイコン</label>
                     <input id="custom-icon" type="url" placeholder="http://example.com/icon.png" />
-                    <label class="image-upload" title="Use Local Image File"><img src="assets/icon-upload-image.png" alt="Upload" />
+                    <label class="image-upload" title="ローカル画像ファイルを使用する"><img src="assets/icon-upload-image.png" alt="Upload" />
                         <input id="custom-icon-upload" type="file" accept="image/*" /></label>
 
                 </div>
@@ -186,15 +215,15 @@
         <tr>
             <td class="hideForPileMarker hideForMats">
                 <div>
-                    <label for="type">Type</label>
+                    <label for="type">カード種別</label>
                     <span class="type-checkboxes hideForBaseCards hideForPileMarker hideForMats hideForDoubleCard">
                         <span class="checkbox hideForLandscape">
                             <input id="traveller" type="checkbox" placeholder="Action">
-                            <label for="traveller">Traveller</label>
+                            <label for="traveller">トラベラー</label>
                         </span>
                         <span class="checkbox hideForDefaultCard hideForDoubleCard">
                             <input id="trait" type="checkbox" placeholder="Action">
-                            <label for="trait">Trait</label>
+                            <label for="trait">特性</label>
                         </span>
                     </span>
                     <input id="type" placeholder="Action">
@@ -210,40 +239,29 @@
         <tr>
             <td rowspan="3" class="doubledForPileMarkers">
                 <div id="image-positioning">
-                    <label for="picture">URL of Illustration</label>
+                    <label for="picture">イラスト</label>
                     <input id="picture" type="url" placeholder="http://example.com/image.jpg" />
-                    <label class="image-upload" title="Use Local Image File"><img src="assets/icon-upload-image.png" alt="Upload" />
+                    <label class="image-upload" title="ローカル画像ファイルを使用する"><img src="assets/icon-upload-image.png" alt="Upload" />
                         <input id="picture-upload" type="file" accept="image/*" /></label>
-                    <table>
-                        <tr>
-                            <td><label for="picture-x">Position X:</label></td>
-                            <td colspan="2"><input id="picture-x" type="range" min="-1" max="1" value="0" step="0.01"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="picture-y">Position Y:</label></td>
-                            <td colspan="2"><input id="picture-y" type="range" min="-1" max="1" value="0" step="0.01"></td>
-                        </tr>
-                        <tr>
-                            <td><label for="picture-zoom">Zoom:</label></td>
-                            <td colspan="2"><input id="picture-zoom" type="range" min="0" max="3" value="1" step="0.1"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3"><button onclick="(function(){
-                                     document.getElementById('picture-x').value=0;
-                                     document.getElementById('picture-y').value=0;
-                                     let z = document.getElementById('picture-zoom');z.value=1;
-                                     z.onchange();})();">Reset Position</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-            <td class="hideForPileMarker">
-                <div>
-                    <label for="expansion">URL of Expansion Icon</label>
-                    <input id="expansion" type="url" placeholder="http://example.com/expansion.png" />
-                    <label class="image-upload" title="Use Local Image File"><img src="assets/icon-upload-image.png" alt="Upload" />
-                        <input id="expansion-upload" type="file" accept="image/*" /></label>
+                    <div class="flex gap-0">
+                        <div class="flex gap-0">
+                            <label for="picture-x">X:</label>
+                            <input class="flex-1" id="picture-x" type="number" min="-10" max="10" value="0" step="0.01">
+                        </div>
+                        <div class="flex gap-0">
+                            <label for="picture-y">Y:</label>
+                            <input class="flex-1" id="picture-y" type="number" min="-10" max="10" value="0" step="0.01">
+                        </div>
+                        <div class="flex gap-0">
+                            <label for="picture-zoom">Z:</label>
+                            <input class="flex-1" id="picture-zoom" type="number" min="0" max="3" value="1" step="0.1">
+                        </div>
+                    </div>
+                    <button onclick="(function(){
+                        document.getElementById('picture-x').value=0;
+                        document.getElementById('picture-y').value=0;
+                        let z = document.getElementById('picture-zoom');z.value=1;
+                        z.onchange();})();">位置をリセット</button>
                 </div>
             </td>
         </tr>
@@ -266,7 +284,7 @@
         <tr>
             <td id="priceCell" class="hideForPileMarker hideForMats">
                 <div>
-                    <label for="price">Price</label>
+                    <label for="price">購入コスト</label>
                     <input id="price" placeholder="$3" />
             </td>
             <td id="previewCell" class="hideForPileMarker hideForMats">
@@ -279,7 +297,7 @@
         <tr>
             <td class="hideForMats doubledForBaseCards doubledForPileMarkers doubledForTraits">
                 <div>
-                    <label for="normalcolor1">Color</label>
+                    <label for="normalcolor1">カラー</label>
                     <select name="normalcolor" id="normalcolor1">
                     </select>
                     <div style="display:none;" title="Card color">
@@ -294,10 +312,10 @@
             </td>
             <td class="hideForBaseCards hideForPileMarker hideForMats hideForTraits">
                 <div>
-                    <label for="normalcolor2">Color</label>
+                    <label for="normalcolor2">カラー</label>
                     <span id="color-switch"><button id="color-switch-button" alt="Switch Colors"><img src="assets/icon-switch.png" />Switch</button></span>
                     <select name="normalcolor" id="normalcolor2">
-                        <option>SAME</option>
+                        <option>メインと同じ</option>
                     </select>
                     <div style="display:none;" title="Card color">
                         <input type="number" name="recolor" min="0" max="10" step=".05" value="0.75" /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.1" /><input type="number" name="recolor" min="0" max="10" step=".05" value="1.35" />
