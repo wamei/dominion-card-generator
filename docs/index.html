@@ -121,38 +121,43 @@
             ><button type="button" onclick="myFavorites.open()"><i class="fa-solid fa-star"></i>お気に入り</button></a
           >
           <div id="manage-favorites" class="popup hidden">
-            <div class="menu">
-              <input id="favorites-search" type="search" class="search" placeholder="検索..." oninput="myFavorites.search(this.value)" />
-              <button type="button" id="favorites-view-toggle" class="view-toggle" onclick="myFavorites.toggleView()" title="表示切替">
-                <span class="view-list"><i class="fa-solid fa-image"></i></span>
-                <span class="view-thumbnail hidden"><i class="fa-solid fa-list"></i></span>
-              </button>
-              <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><i class="fa-solid fa-trash"></i>すべて削除</button>
-              <span class="menu-spacer"></span>
-              <button
-                type="button"
-                id="pdf-export-btn"
-                onclick="
-                  event.preventDefault();
-                  myFavorites.exportPDF();
-                  return false;
-                "
-                title="PDF出力"
-              >
-                <i class="fa-solid fa-print"></i>
-              </button>
-              <button type="button" class="" onclick="myFavorites.export()" title="Export">
-                <i class="fa-solid fa-cloud-arrow-down"></i>
-              </button>
-              <button type="button" class="" onclick="myFavorites.import()" title="Import">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-              </button>
-              <button type="button" class="close" onclick="myFavorites.close()" title="Close">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
+            <div class="popup-header">
+              <div class="menu">
+                <input id="favorites-search" type="search" class="search" placeholder="検索..." oninput="myFavorites.search(this.value)" />
+                <button type="button" id="favorites-view-toggle" class="view-toggle" onclick="myFavorites.toggleView()" title="表示切替">
+                  <span class="view-list"><i class="fa-solid fa-image"></i></span>
+                  <span class="view-thumbnail hidden"><i class="fa-solid fa-list"></i></span>
+                </button>
+                <button type="button" class="delete-all delete hidden" onclick="myFavorites.deleteAll()"><i class="fa-solid fa-trash"></i>すべて削除</button>
+                <span class="menu-spacer"></span>
+                <button
+                  type="button"
+                  id="pdf-export-btn"
+                  onclick="
+                    event.preventDefault();
+                    myFavorites.exportPDF();
+                    return false;
+                  "
+                  title="PDF出力"
+                >
+                  <i class="fa-solid fa-print"></i>
+                </button>
+                <button type="button" class="" onclick="myFavorites.export()" title="Export">
+                  <i class="fa-solid fa-cloud-arrow-down"></i>
+                </button>
+                <button type="button" class="" onclick="myFavorites.import()" title="Import">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </button>
+                <button type="button" class="close" onclick="myFavorites.close()" title="Close">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+              <div id="favorites-table-header" class="table-header"></div>
             </div>
-            <table id="favorites-list" class="popup-content"></table>
-            <div id="favorites-thumbnails" class="popup-content hidden"></div>
+            <div class="popup-body">
+              <table id="favorites-list"></table>
+              <div id="favorites-thumbnails" class="hidden"></div>
+            </div>
           </div>
           <a id="openFontSettings" title="フォント設定を開く" class="hidden"
             ><button type="button" onclick="myFontSettings.open()"><i class="fa-solid fa-gear"></i>フォント</button></a
@@ -221,7 +226,7 @@
               </ul>
             </div>
             <textarea
-              rows="8"
+              rows="10"
               id="description"
               placeholder="+1 カードを引く
 +2 アクション"
@@ -233,7 +238,7 @@
           </div>
           <div class="form-group second-column hideForPileMarker hideForMats">
             <label for="description2">テキスト</label>
-            <textarea rows="8" id="description2"></textarea>
+            <textarea rows="10" id="description2"></textarea>
           </div>
         </div>
 

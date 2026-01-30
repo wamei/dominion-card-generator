@@ -2478,19 +2478,20 @@ function Favorites(name) {
     // Also refresh thumbnails view
     await this.refreshThumbnails(sortedData);
 
-    // Table Header
-    let thead = document.createElement("thead");
-    let headerRow = document.createElement("tr");
+    // Table Header (in fixed header area)
+    const tableHeader = document.getElementById("favorites-table-header");
+    tableHeader.innerHTML = "";
     const columns = [
-      { label: "拡張名", key: "expansion" },
-      { label: "種類", key: "size" },
-      { label: "コスト", key: "cost" },
-      { label: "カード名", key: "title" },
-      { label: "種別", key: "type" },
+      { label: "拡張名", key: "expansion", class: "col-expansion" },
+      { label: "種類", key: "size", class: "col-size" },
+      { label: "コスト", key: "cost", class: "col-cost" },
+      { label: "カード名", key: "title", class: "col-title" },
+      { label: "種別", key: "type", class: "col-type" },
     ];
 
     columns.forEach((col) => {
-      let th = document.createElement("th");
+      let th = document.createElement("span");
+      th.className = "table-header-cell " + col.class;
       if (col.key) {
         th.style.cursor = "pointer";
         th.onclick = (e) => this.sortBy(col.key, e);
@@ -2506,10 +2507,8 @@ function Favorites(name) {
       } else {
         th.appendChild(document.createTextNode(col.label));
       }
-      headerRow.appendChild(th);
+      tableHeader.appendChild(th);
     });
-    thead.appendChild(headerRow);
-    favList.appendChild(thead);
 
     let tbody = document.createElement("tbody");
     favList.appendChild(tbody);
@@ -2760,10 +2759,10 @@ function Favorites(name) {
   // Apply current view mode
   this.applyViewMode = function () {
     if (viewMode === "list") {
-      favList.classList.remove("thumbnail-mode");
+      favList.classList.remove("hidden");
       favThumbnails.classList.add("hidden");
     } else {
-      favList.classList.add("thumbnail-mode");
+      favList.classList.add("hidden");
       favThumbnails.classList.remove("hidden");
     }
   };
