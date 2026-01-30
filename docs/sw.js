@@ -1,7 +1,8 @@
 // Names of the caches used in this version of the service worker.
 // Increase chache number when you update any of the local resources, which will in turn trigger the install event again.
-const PRECACHE_CORE = "precache-core-v30";
+const PRECACHE_CORE = "precache-core-v31";
 const PRECACHE_CARD = "precache-card-v6";
+const PRECACHE_LIBS = "precache-libs-v1";
 const RUNTIME = "runtime";
 
 // A list of local resources we always want to be cached.
@@ -19,6 +20,10 @@ const PRECACHE_CORE_URLS = [
   "assets/spear-right.png",
   "assets/spinner.png",
   OFFLINE_URL,
+];
+const PRECACHE_LIBS_URLS = [
+  "https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js",
+  "https://unpkg.com/jszip@3/dist/jszip.min.js",
 ];
 const PRECACHE_CARD_URLS = [
   "card-resources/BaseCardBrown.png",
@@ -76,11 +81,17 @@ self.addEventListener("install", (event) => {
       .then((cache) => cache.addAll(PRECACHE_CARD_URLS))
       .then(self.skipWaiting()),
   );
+  event.waitUntil(
+    caches
+      .open(PRECACHE_LIBS)
+      .then((cache) => cache.addAll(PRECACHE_LIBS_URLS))
+      .then(self.skipWaiting()),
+  );
 });
 
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener("activate", (event) => {
-  const currentCaches = [PRECACHE_CORE, PRECACHE_CARD, RUNTIME];
+  const currentCaches = [PRECACHE_CORE, PRECACHE_CARD, PRECACHE_LIBS, RUNTIME];
   event.waitUntil(
     caches
       .keys()
@@ -98,10 +109,36 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Check if URL is a precached library
+const isLibraryUrl = (url) => {
+  return PRECACHE_LIBS_URLS.some((libUrl) => url === libUrl);
+};
+
 // The fetch handler uses "Stale While Revalidate" strategy for core files.
 // Returns cached response immediately, then updates cache in background.
 self.addEventListener("fetch", (event) => {
-  // Skip cross-origin requests, like those for Google Analytics.
+  // Handle library URLs (external CDN)
+  if (isLibraryUrl(event.request.url)) {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(PRECACHE_LIBS).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        });
+      }),
+    );
+    return;
+  }
+
+  // Skip other cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
