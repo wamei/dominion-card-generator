@@ -1814,7 +1814,7 @@ function Favorites(name) {
 
     try {
       // Create a smaller thumbnail for display
-      const maxSize = 400;
+      const maxSize = 600;
       const scale = Math.min(maxSize / canvas.width, maxSize / canvas.height);
       const thumbCanvas = document.createElement("canvas");
       thumbCanvas.width = canvas.width * scale;
