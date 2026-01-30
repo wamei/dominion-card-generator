@@ -236,39 +236,42 @@
         </div>
 
         <div class="form-row">
-          <div class="form-group doubledForPileMarkers" id="image-positioning">
-            <label for="picture">イラスト</label>
-            <div class="input-with-upload">
-              <input id="picture" type="url" placeholder="http://example.com/image.jpg" />
-              <label class="image-upload" title="ローカル画像ファイルを使用する"><img src="assets/icon-upload-image.png" alt="Upload" /> <input id="picture-upload" type="file" accept="image/*" /></label>
+          <div class="form-group-stack" id="image-positioning">
+            <div class="form-group doubledForPileMarkers">
+              <label for="picture">イラスト</label>
+              <div class="input-with-upload">
+                <input id="picture" type="url" placeholder="http://example.com/image.jpg" />
+                <label class="image-upload" title="ローカル画像ファイルを使用する"><img src="assets/icon-upload-image.png" alt="Upload" /> <input id="picture-upload" type="file" accept="image/*" /></label>
+              </div>
+              <div class="position-controls">
+                <div class="position-input">
+                  <label for="picture-x">X:</label>
+                  <input id="picture-x" type="number" min="-10" max="10" value="0" step="0.01" />
+                </div>
+                <div class="position-input">
+                  <label for="picture-y">Y:</label>
+                  <input id="picture-y" type="number" min="-10" max="10" value="0" step="0.01" />
+                </div>
+                <div class="position-input">
+                  <label for="picture-zoom">Z:</label>
+                  <input id="picture-zoom" type="number" min="0" max="3" value="1" step="0.1" />
+                </div>
+              </div>
+              <button
+                class="reset-position"
+                onclick="
+                  (function () {
+                    document.getElementById('picture-x').value = 0;
+                    document.getElementById('picture-y').value = 0;
+                    let z = document.getElementById('picture-zoom');
+                    z.value = 1;
+                    z.onchange();
+                  })()
+                "
+              >
+                位置をリセット
+              </button>
             </div>
-            <div class="position-controls">
-              <div class="position-input">
-                <label for="picture-x">X:</label>
-                <input id="picture-x" type="number" min="-10" max="10" value="0" step="0.01" />
-              </div>
-              <div class="position-input">
-                <label for="picture-y">Y:</label>
-                <input id="picture-y" type="number" min="-10" max="10" value="0" step="0.01" />
-              </div>
-              <div class="position-input">
-                <label for="picture-zoom">Z:</label>
-                <input id="picture-zoom" type="number" min="0" max="3" value="1" step="0.1" />
-              </div>
-            </div>
-            <button
-              onclick="
-                (function () {
-                  document.getElementById('picture-x').value = 0;
-                  document.getElementById('picture-y').value = 0;
-                  let z = document.getElementById('picture-zoom');
-                  z.value = 1;
-                  z.onchange();
-                })()
-              "
-            >
-              位置をリセット
-            </button>
           </div>
           <div class="form-group-stack">
             <div class="form-group hideForPileMarker">

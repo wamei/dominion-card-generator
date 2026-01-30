@@ -241,7 +241,7 @@ body.size5 .canvas-wrapper {
 
 .form-row > .form-group,
 .form-row > .form-group-stack {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
 }
 
@@ -506,7 +506,7 @@ label.image-upload input[type="file"] {
 
 label.image-upload,
 #color-switch button,
-#image-positioning button {
+#image-positioning .form-group button {
   margin-top: 0.9em;
   margin-bottom: 0.5em;
   border-radius: 5px;
@@ -522,9 +522,14 @@ label.image-upload:hover,
 label.image-upload:focus,
 #color-switch button:hover,
 #color-switch button:focus,
-#image-positioning button:hover,
-#image-positioning button:focus {
+#image-positioning .form-group button:hover,
+#image-positioning .form-group button:focus {
   background-color: var(--color-button2-background-hover);
+}
+
+#image-positioning .form-group .reset-position {
+  margin-top: 0.6em;
+  margin-bottom: 0;
 }
 
 #color-switch {
