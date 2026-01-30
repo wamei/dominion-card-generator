@@ -87,19 +87,7 @@ function initCardImageGenerator() {
     "münzen",
   ];
   var specialBoldableKeywords = ["favor", "gefallen"];
-  var travellerTypesPattern = new RegExp(
-    [
-      "Traveller",
-      "Traveler",
-      "Reisender",
-      "Reisende",
-      "Reiziger",
-      "Matkaaja",
-      "Itinérant",
-      "Путешественник",
-      "Приключенец",
-    ].join("|"),
-  );
+  var travellerTypesPattern = new RegExp(["Traveller", "Traveler", "Reisender", "Reisende", "Reiziger", "Matkaaja", "Itinérant", "Путешественник", "Приключенец"].join("|"));
 
   var normalColorCustomIndices = [0, 0];
   var normalColorDropdowns = document.getElementsByName("normalcolor");
@@ -123,25 +111,13 @@ function initCardImageGenerator() {
 
   function rebuildBoldLinePatternWords() {
     let elemBoldkeys = document.getElementById("boldkeys");
-    let customBoldableKeywords =
-      elemBoldkeys !== null ? elemBoldkeys.value : "";
-    let boldableKeywordsFull =
-      customBoldableKeywords.length > 0
-        ? boldableKeywords.concat(customBoldableKeywords.split(";"))
-        : boldableKeywords;
+    let customBoldableKeywords = elemBoldkeys !== null ? elemBoldkeys.value : "";
+    let boldableKeywordsFull = customBoldableKeywords.length > 0 ? boldableKeywords.concat(customBoldableKeywords.split(";")) : boldableKeywords;
     boldableKeywordsFull.forEach(function (word, index) {
       this[index] = word.trim();
     }, boldableKeywordsFull);
-    boldLinePatternWords = RegExp(
-      "(?:([-+]\\d+)\\s+|(\\+))(" + boldableKeywordsFull.join("|") + "s?)",
-      "ig",
-    );
-    boldLinePatternWordsSpecial = RegExp(
-      "(?:([-+]\\d+)\\s+|(?:(\\d+)\\s+)|(\\+)|)(" +
-        specialBoldableKeywords.join("|") +
-        "s?)",
-      "ig",
-    );
+    boldLinePatternWords = RegExp("(?:([-+]\\d+)\\s+|(\\+))(" + boldableKeywordsFull.join("|") + "s?)", "ig");
+    boldLinePatternWordsSpecial = RegExp("(?:([-+]\\d+)\\s+|(?:(\\d+)\\s+)|(\\+)|)(" + specialBoldableKeywords.join("|") + "s?)", "ig");
   }
   var boldLinePatternWords;
   var boldLinePatternWordsSpecial;
@@ -150,11 +126,8 @@ function initCardImageGenerator() {
   var iconList = "[" + Object.keys(icons).join("") + "]";
   //var boldLinePatternIcons = RegExp("[-+]\\d+\\s" + iconList + "\\d+", "ig");
   var iconWithNumbersPattern = "[-+]?(" + iconList + ")([\\d\\?]*[-+\\*]?)";
-  var iconWithNumbersPatternSingle = RegExp(
-    "^([-+]?\\d+)?" + iconWithNumbersPattern + "(\\S*)$",
-  );
-  var iconWithNumbersPatternRep =
-    "[-+]?[\\d\\?]*(" + iconList + ")([\\d\\?]*[-+\\*]?)";
+  var iconWithNumbersPatternSingle = RegExp("^([-+]?\\d+)?" + iconWithNumbersPattern + "(\\S*)$");
+  var iconWithNumbersPatternRep = "[-+]?[\\d\\?]*(" + iconList + ")([\\d\\?]*[-+\\*]?)";
   iconWithNumbersPattern = RegExp(iconWithNumbersPattern, "g");
   iconWithNumbersPatternRep = RegExp(iconWithNumbersPatternRep, "g");
 
@@ -162,14 +135,8 @@ function initCardImageGenerator() {
   var boldEndMarkerPattern = "\\[/b\\]";
   var italicStartMarkerPattern = "\\[i\\]";
   var italicEndMarkerPattern = "\\[/i\\]";
-  var boldMarkerPattern = RegExp(
-    boldStartMarkerPattern + "|" + boldEndMarkerPattern,
-    "g",
-  );
-  var italicMarkerPattern = RegExp(
-    italicStartMarkerPattern + "|" + italicEndMarkerPattern,
-    "g",
-  );
+  var boldMarkerPattern = RegExp(boldStartMarkerPattern + "|" + boldEndMarkerPattern, "g");
+  var italicMarkerPattern = RegExp(italicStartMarkerPattern + "|" + italicEndMarkerPattern, "g");
   var boldStartMarkerPattern = RegExp(boldStartMarkerPattern, "g");
   var boldEndMarkerPattern = RegExp(boldEndMarkerPattern, "g");
   var italicStartMarkerPattern = RegExp(italicStartMarkerPattern, "g");
@@ -204,55 +171,22 @@ function initCardImageGenerator() {
 
         offset = offset || 0;
         var recolorFactors;
-        if (
-          normalColorCurrentIndices[colorID] ===
-          normalColorCustomIndices[colorID]
-        )
-          recolorFactors = recolorFactorList[colorID].slice(0, 3);
-        else if (
-          normalColorCurrentIndices[colorID] > normalColorCustomIndices[colorID]
-        )
-          recolorFactors = recolorFactorList[colorID];
-        else
-          recolorFactors =
-            normalColorFactorLists[
-              normalColorCurrentIndices[colorID] - colorID
-            ][1];
+        if (normalColorCurrentIndices[colorID] === normalColorCustomIndices[colorID]) recolorFactors = recolorFactorList[colorID].slice(0, 3);
+        else if (normalColorCurrentIndices[colorID] > normalColorCustomIndices[colorID]) recolorFactors = recolorFactorList[colorID];
+        else recolorFactors = normalColorFactorLists[normalColorCurrentIndices[colorID] - colorID][1];
         recolorFactors = recolorFactors.slice();
 
         while (recolorFactors.length < 6) recolorFactors.push(0);
 
         if (offset == 0) {
-          for (var ch = 0; ch < 3; ++ch)
-            recolorFactors[ch] -= recolorFactors[ch + 3];
+          for (var ch = 0; ch < 3; ++ch) recolorFactors[ch] -= recolorFactors[ch + 3];
           for (var px = 0, ct = w * h * 4; px < ct; px += 4)
             if (rgba[px + 3])
               //no need to recolor pixels that are fully transparent
-              for (var ch = 0; ch < 3; ++ch)
-                rgba[px + ch] = Math.max(
-                  0,
-                  Math.min(
-                    255,
-                    Math.round(
-                      recolorFactors[ch + 3] * 255 +
-                        rgba[px + ch] * recolorFactors[ch],
-                    ),
-                  ),
-                );
+              for (var ch = 0; ch < 3; ++ch) rgba[px + ch] = Math.max(0, Math.min(255, Math.round(recolorFactors[ch + 3] * 255 + rgba[px + ch] * recolorFactors[ch])));
         } else {
-          while (recolorFactors.length < 12)
-            recolorFactors.push(
-              genericCustomAccentColors[templateSize & 1][
-                recolorFactors.length
-              ],
-            );
-          for (var px = 0, ct = w * h * 4; px < ct; px += 4)
-            if (rgba[px + 3])
-              for (var ch = 0; ch < 3; ++ch)
-                rgba[px + ch] = Math.max(
-                  0,
-                  Math.min(255, rgba[px + ch] * recolorFactors[ch + offset]),
-                );
+          while (recolorFactors.length < 12) recolorFactors.push(genericCustomAccentColors[templateSize & 1][recolorFactors.length]);
+          for (var px = 0, ct = w * h * 4; px < ct; px += 4) if (rgba[px + 3]) for (var ch = 0; ch < 3; ++ch) rgba[px + ch] = Math.max(0, Math.min(255, rgba[px + ch] * recolorFactors[ch + offset]));
         }
 
         ctx.putImageData(imgdata, 0, 0);
@@ -264,9 +198,7 @@ function initCardImageGenerator() {
     var iconReplacedWithSpaces = "   ";
 
     function getWidthOfLineWithIconsReplacedWithSpaces(line) {
-      return context.measureText(
-        line.replace(iconWithNumbersPattern, iconReplacedWithSpaces),
-      ).width;
+      return context.measureText(line.replace(iconWithNumbersPattern, iconReplacedWithSpaces)).width;
     }
 
     function getIconListing(icon) {
@@ -275,14 +207,7 @@ function initCardImageGenerator() {
     var shadowDistance = 10;
     var italicSubstrings = ["Heirloom: ", "家宝: ", "Erbstück: "];
 
-    function writeLineWithIconsReplacedWithSpaces(
-      line,
-      x,
-      y,
-      scale,
-      family,
-      boldSize,
-    ) {
+    function writeLineWithIconsReplacedWithSpaces(line, x, y, scale, family, boldSize) {
       boldSize = boldSize || 64;
       context.textAlign = "left";
 
@@ -341,8 +266,7 @@ function initCardImageGenerator() {
                 x = x + 128 * scale;
               }
             }
-            var halfWidthOfSpaces =
-              context.measureText(iconReplacedWithSpaces).width / 2 + 2;
+            var halfWidthOfSpaces = context.measureText(iconReplacedWithSpaces).width / 2 + 2;
 
             var image = false;
             var iconKeys = Object.keys(icons);
@@ -354,24 +278,17 @@ function initCardImageGenerator() {
             }
 
             context.save();
-            if (
-              !match[1] &&
-              (match[0].charAt(0) === "+" || match[0].charAt(0) === "-")
-            ) {
+            if (!match[1] && (match[0].charAt(0) === "+" || match[0].charAt(0) === "-")) {
               match[1] = match[0].charAt(0);
             }
             if (match[1]) {
-              if (context.font[0] !== "b")
-                context.font = "bold " + context.font;
+              if (context.font[0] !== "b") context.font = "bold " + context.font;
               var plus = match[1];
               context.fillText(plus, x, localY);
               x += context.measureText(plus).width + 10 * localScale;
               x += context.measureText(" ").width;
             } else {
-              if (
-                !isSingle(words) &&
-                !(words.length === 2 && words[1] === "")
-              ) {
+              if (!isSingle(words) && !(words.length === 2 && words[1] === "")) {
                 x += context.measureText(" ").width;
               }
             }
@@ -396,14 +313,7 @@ function initCardImageGenerator() {
               let cost = match[3];
               let bigNumberScale = 1;
               let nx = localScale > 1.4 ? 0 : (-5 * localScale) ^ 2;
-              let ny =
-                localScale > 1
-                  ? 6 * localScale
-                  : localScale > 0.7
-                    ? 12 * localScale
-                    : localScale > 0.5
-                      ? 24 * localScale
-                      : 48 * localScale;
+              let ny = localScale > 1 ? 6 * localScale : localScale > 0.7 ? 12 * localScale : localScale > 0.5 ? 24 * localScale : 48 * localScale;
               if (localScale > 3) {
                 bigNumberScale = 0.8;
                 ny -= (115 * 0.2) / 2;
@@ -433,12 +343,8 @@ function initCardImageGenerator() {
                 if (specialCost != null) {
                   cost = cost.slice(0, -1) + " ";
                   context.font = "bold " + specialCostSize + "pt " + family;
-                  let sx =
-                    localScale > 1 ? (45 / 2) * localScale : 45 * localScale;
-                  let sy =
-                    localScale > 1
-                      ? -20 * localScale
-                      : 12 * localScale - 35 * localScale;
+                  let sx = localScale > 1 ? (45 / 2) * localScale : 45 * localScale;
+                  let sy = localScale > 1 ? -20 * localScale : 12 * localScale - 35 * localScale;
                   if (cost.length >= 3) {
                     nx -= (specialCostSize * 1) / 3;
                     sx += (specialCostSize * 1) / 3;
@@ -485,27 +391,11 @@ function initCardImageGenerator() {
       var size = (initialSize || 85) + 2;
       do {
         context.font = (size -= 2) + "pt " + family;
-      } while (
-        maxWidth &&
-        getWidthOfLineWithIconsReplacedWithSpaces(line) > maxWidth
-      );
-      writeLineWithIconsReplacedWithSpaces(
-        line,
-        x - getWidthOfLineWithIconsReplacedWithSpaces(line) / 2,
-        y,
-        size / 90,
-        family,
-      );
+      } while (maxWidth && getWidthOfLineWithIconsReplacedWithSpaces(line) > maxWidth);
+      writeLineWithIconsReplacedWithSpaces(line, x - getWidthOfLineWithIconsReplacedWithSpaces(line) / 2, y, size / 90, family);
     }
 
-    function writeDescription(
-      elementID,
-      xCenter,
-      yCenter,
-      maxWidth,
-      maxHeight,
-      boldSize,
-    ) {
+    function writeDescription(elementID, xCenter, yCenter, maxWidth, maxHeight, boldSize) {
       rebuildBoldLinePatternWords();
       var description =
         document
@@ -521,8 +411,7 @@ function initCardImageGenerator() {
       var heightsPerLine;
       var centeredLines;
       var overallHeight;
-      var size =
-        parseInt(document.getElementById("descriptionFontSize").value) + 1;
+      var size = parseInt(document.getElementById("descriptionFontSize").value) + 1;
       var heightSize = 10;
       var descriptions = description.split("\n");
 
@@ -547,12 +436,7 @@ function initCardImageGenerator() {
           } else if (blocks.length === 1 && blocks[0] === "-") {
             heightToAdd = (size + heightSize) * 0.75;
             line = "-";
-          } else if (
-            blocks.length === 1 &&
-            (blocks[0].match(iconWithNumbersPattern) ||
-              blocks[0].match(boldLinePatternWords) ||
-              blocks[0].match(boldLinePatternWordsSpecial))
-          ) {
+          } else if (blocks.length === 1 && (blocks[0].match(iconWithNumbersPattern) || blocks[0].match(boldLinePatternWords) || blocks[0].match(boldLinePatternWordsSpecial))) {
             line = blocks[0];
             centered = true;
             if (line.startsWith("+")) {
@@ -565,8 +449,7 @@ function initCardImageGenerator() {
               heightToAdd = 275;
               var properFont = context.font;
               context.font = "bold 192pt myText";
-              progressiveWidth =
-                getWidthOfLineWithIconsReplacedWithSpaces(line); //=, not +=
+              progressiveWidth = getWidthOfLineWithIconsReplacedWithSpaces(line); //=, not +=
               context.font = properFont;
             }
             line = `[b] ${line} [/b]`;
@@ -593,12 +476,7 @@ function initCardImageGenerator() {
                 context.font = properFont;
                 continue;
               }
-              if (
-                isBoldMarker ||
-                block.match(boldLinePatternWords) ||
-                block.match(boldLinePatternWordsSpecial) ||
-                block.match(iconWithNumbersPattern)
-              ) {
+              if (isBoldMarker || block.match(boldLinePatternWords) || block.match(boldLinePatternWordsSpecial) || block.match(iconWithNumbersPattern)) {
                 isBold = true;
                 heightToAdd = (size + heightSize) * 1.433;
                 context.font = "bold " + size + "pt myText";
@@ -616,40 +494,10 @@ function initCardImageGenerator() {
                 if (isItalic && k === 0) {
                   line += " [i] ";
                 }
-                if (
-                  ![
-                    "、",
-                    "。",
-                    ",",
-                    ".",
-                    "！",
-                    "？",
-                    "!",
-                    "?",
-                    "）",
-                    "」",
-                    "】",
-                    "』",
-                    ")",
-                    "ー",
-                    "っ",
-                    "ゃ",
-                    "ゅ",
-                    "ょ",
-                    "ッ",
-                    "ャ",
-                    "ュ",
-                    "ョ",
-                  ].includes(block[k]) &&
-                  progressiveWidth + width > maxWidth
-                ) {
+                if (!["、", "。", ",", ".", "！", "？", "!", "?", "）", "」", "】", "』", ")", "ー", "っ", "ゃ", "ゅ", "ょ", "ッ", "ャ", "ュ", "ョ"].includes(block[k]) && progressiveWidth + width > maxWidth) {
                   var lineToAdd = line;
                   var widthToAdd = progressiveWidth;
-                  if (
-                    ["（", "「", "【", "『", "(", "+", "-"].includes(
-                      block[k - 1],
-                    )
-                  ) {
+                  if (["（", "「", "【", "『", "(", "+", "-"].includes(block[k - 1])) {
                     lineToAdd = line.slice(0, -1);
                     var prevWidth = context.measureText(block[k - 1]).width;
                     widthToAdd -= prevWidth;
@@ -701,17 +549,7 @@ function initCardImageGenerator() {
         if (line === "-")
           //horizontal bar
           context.fillRect(xCenter / 2, y - size * 0.375 - 5, xCenter, 10);
-        else if (line.length)
-          writeLineWithIconsReplacedWithSpaces(
-            line,
-            centeredLines[i]
-              ? xCenter - widthsPerLine[i] / 2
-              : xCenter - maxWidth / 2,
-            y,
-            size / 96,
-            "myText",
-            boldSize,
-          );
+        else if (line.length) writeLineWithIconsReplacedWithSpaces(line, centeredLines[i] ? xCenter - widthsPerLine[i] / 2 : xCenter - maxWidth / 2, y, size / 96, "myText", boldSize);
         //else empty line with nothing to draw
         y += heightsPerLine[i];
       }
@@ -756,10 +594,7 @@ function initCardImageGenerator() {
     canvases[0].parentNode.setAttribute("data-status", "Redrawing...");
 
     // clear
-    for (var i = 0; i < canvases.length; ++i)
-      canvases[i]
-        .getContext("2d")
-        .clearRect(0, 0, canvases[i].width, canvases[i].height);
+    for (var i = 0; i < canvases.length; ++i) canvases[i].getContext("2d").clearRect(0, 0, canvases[i].width, canvases[i].height);
 
     var context;
     if (templateSize === 0 || templateSize === 2 || templateSize === 3) {
@@ -783,40 +618,22 @@ function initCardImageGenerator() {
     var heirloomLine = document.getElementById("type2").value;
     var previewLine = document.getElementById("preview").value;
     var priceLine = document.getElementById("price").value;
-    var numberPriceIcons = (
-      priceLine.match(
-        new RegExp("[" + Object.keys(iconsInPrice).join("") + "]", "g"),
-      ) || []
-    ).length;
+    var numberPriceIcons = (priceLine.match(new RegExp("[" + Object.keys(iconsInPrice).join("") + "]", "g")) || []).length;
 
     var isEachColorDark = [false, false];
     for (var i = 0; i < 2; ++i)
       isEachColorDark[i] =
         i == 1 && normalColorCurrentIndices[1] == 0
           ? isEachColorDark[0]
-          : (normalColorCurrentIndices[i] >= normalColorCustomIndices[i]
-              ? recolorFactorList[i]
-              : normalColorFactorLists[normalColorCurrentIndices[i] - i][1]
-            )
-              .slice(0, 3)
-              .reduce(function getSum(total, num) {
-                return total + parseFloat(num);
-              }) <= 1.5;
+          : (normalColorCurrentIndices[i] >= normalColorCustomIndices[i] ? recolorFactorList[i] : normalColorFactorLists[normalColorCurrentIndices[i] - i][1]).slice(0, 3).reduce(function getSum(total, num) {
+              return total + parseFloat(num);
+            }) <= 1.5;
     var differentIntensities = isEachColorDark[0] != isEachColorDark[1];
 
-    if (
-      !(
-        differentIntensities ||
-        parseInt(normalColorCurrentIndices[1]) == 0 ||
-        parseInt(normalColorCurrentIndices[0]) + 1 ==
-          parseInt(normalColorCurrentIndices[1])
-      )
-    ) {
+    if (!(differentIntensities || parseInt(normalColorCurrentIndices[1]) == 0 || parseInt(normalColorCurrentIndices[0]) + 1 == parseInt(normalColorCurrentIndices[1]))) {
       document.getElementById("color2splitselector").removeAttribute("style");
     } else {
-      document
-        .getElementById("color2splitselector")
-        .setAttribute("style", "display:none");
+      document.getElementById("color2splitselector").setAttribute("style", "display:none");
     }
 
     function drawPicture(xCenter, yCenter, width, height) {
@@ -863,11 +680,7 @@ function initCardImageGenerator() {
         context.save();
         context.translate(xCenter, yCenter);
         context.scale(scale, scale);
-        context.drawImage(
-          expansion,
-          expansion.width / -2,
-          expansion.height / -2,
-        );
+        context.drawImage(expansion, expansion.width / -2, expansion.height / -2);
         context.restore();
       }
     }
@@ -885,27 +698,16 @@ function initCardImageGenerator() {
           context.drawImage(getRecoloredImage(1, 1), 0, 0); //CardColorTwo - Half
           context.drawImage(images[27], 0, 0); //CardColorThree
         } else {
-          context.drawImage(
-            getRecoloredImage(!differentIntensities ? splitPosition : 12, 1),
-            0,
-            0,
-          ); //CardColorTwo
+          context.drawImage(getRecoloredImage(!differentIntensities ? splitPosition : 12, 1), 0, 0); //CardColorTwo
         }
       }
       context.drawImage(getRecoloredImage(2, 0, 6), 0, 0); //CardGray
       context.drawImage(getRecoloredImage(16, 0, 9), 0, 0); //CardBrown
-      if (
-        normalColorCurrentIndices[0] > 0 &&
-        !isEachColorDark[0] &&
-        normalColorCurrentIndices[1] == 0
-      )
+      if (normalColorCurrentIndices[0] > 0 && !isEachColorDark[0] && normalColorCurrentIndices[1] == 0)
         //single (non-Action, non-Night) color
         context.drawImage(images[3], 44, 1094); //DescriptionFocus
 
-      if (
-        travellerTypesPattern.test(typeLine) ||
-        document.getElementById("traveller").checked
-      ) {
+      if (travellerTypesPattern.test(typeLine) || document.getElementById("traveller").checked) {
         context.save();
         context.globalCompositeOperation = "luminosity";
         if (isEachColorDark[0]) context.globalAlpha = 0.33;
@@ -921,13 +723,7 @@ function initCardImageGenerator() {
         writeSingleLine(heirloomLine, 701, 1799, 1040, 40, "myTitle");
       }
       if (isEachColorDark[1]) context.fillStyle = "white";
-      writeSingleLine(
-        document.getElementById("title").value,
-        701,
-        215,
-        previewLine ? 800 : 1180,
-        75,
-      );
+      writeSingleLine(document.getElementById("title").value, 701, 215, previewLine ? 800 : 1180, 75);
       if (typeLine.split(" - ").length >= 4) {
         let types2 = typeLine.split(" - ");
         let types1 = types2.splice(0, Math.ceil(types2.length / 2));
@@ -940,21 +736,13 @@ function initCardImageGenerator() {
         let right = priceLine ? 800 - 65 * (numberPriceIcons - 1) : 900;
         writeSingleLine(typeLine, left, 1922, right, 64);
       }
-      if (priceLine)
-        writeLineWithIconsReplacedWithSpaces(
-          priceLine + " ",
-          153,
-          1940,
-          85 / 90,
-          "mySpecials",
-        ); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
+      if (priceLine) writeLineWithIconsReplacedWithSpaces(priceLine + " ", 153, 1940, 85 / 90, "mySpecials"); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
       if (previewLine) {
         writeSingleLine((previewLine += " "), 223, 210, 0, 0, "mySpecials");
         writeSingleLine(previewLine, 1203, 210, 0, 0, "mySpecials");
       }
       context.fillStyle = isEachColorDark[0] ? "white" : "black";
-      if (!heirloomLine)
-        writeDescription("description", 701, 1520, 960, 660, 40);
+      if (!heirloomLine) writeDescription("description", 701, 1520, 960, 660, 40);
       else writeDescription("description", 701, 1470, 960, 560, 40);
       writeIllustrationCredit(150, 2038, "white", "");
       writeCreatorCredit(1253, 2038, "white", "");
@@ -989,8 +777,7 @@ function initCardImageGenerator() {
       context.textAlign = "center";
       context.textBaseline = "middle";
       //context.font = "small-caps" + context.font;
-      if (heirloomLine)
-        writeSingleLine(heirloomLine, 1074, 900, 1600, 40, "myTitle");
+      if (heirloomLine) writeSingleLine(heirloomLine, 1074, 900, 1600, 40, "myTitle");
       if (isEachColorDark[0]) context.fillStyle = "white";
 
       if (document.getElementById("trait").checked) {
@@ -1000,32 +787,14 @@ function initCardImageGenerator() {
 
         context.save();
         context.rotate((Math.PI * 3) / 2);
-        writeSingleLine(
-          document.getElementById("title").value,
-          -700,
-          2030,
-          750,
-          70,
-        );
+        writeSingleLine(document.getElementById("title").value, -700, 2030, 750, 70);
         context.restore();
         context.save();
         context.rotate(Math.PI / 2);
-        writeSingleLine(
-          document.getElementById("title").value,
-          700,
-          -120,
-          750,
-          70,
-        );
+        writeSingleLine(document.getElementById("title").value, 700, -120, 750, 70);
         context.restore();
       } else {
-        writeSingleLine(
-          document.getElementById("title").value,
-          1075,
-          165,
-          780,
-          70,
-        );
+        writeSingleLine(document.getElementById("title").value, 1075, 165, 780, 70);
 
         if (typeLine) {
           context.save();
@@ -1037,14 +806,7 @@ function initCardImageGenerator() {
         }
       }
 
-      if (priceLine)
-        writeLineWithIconsReplacedWithSpaces(
-          priceLine + " ",
-          130,
-          205,
-          85 / 90,
-          "mySpecials",
-        ); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
+      if (priceLine) writeLineWithIconsReplacedWithSpaces(priceLine + " ", 130, 205, 85 / 90, "mySpecials"); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
       writeDescription("description", 1075, 1107, 1600, 283, 40);
       writeIllustrationCredit(181, 1272, "black", "bold ");
       writeCreatorCredit(1969, 1272, "black", "bold ");
@@ -1057,29 +819,11 @@ function initCardImageGenerator() {
 
       if (!recoloredImages[9]) recoloredImages[10] = false;
       context.drawImage(getRecoloredImage(9, 0), 0, 0); //DoubleColorOne
-      if (!isEachColorDark[0])
-        context.drawImage(
-          images[3],
-          44,
-          1330,
-          images[3].width,
-          (images[3].height * 2) / 3,
-        ); //DescriptionFocus
+      if (!isEachColorDark[0]) context.drawImage(images[3], 44, 1330, images[3].width, (images[3].height * 2) / 3); //DescriptionFocus
       context.save();
       context.rotate(Math.PI);
-      context.drawImage(
-        getRecoloredImage(10, normalColorCurrentIndices[1] > 0 ? 1 : 0),
-        -1403,
-        -2151,
-      ); //DoubleColorOne again, but rotated
-      if (!isEachColorDark[1])
-        context.drawImage(
-          images[3],
-          44 - 1403,
-          1330 - 2151,
-          images[3].width,
-          (images[3].height * 2) / 3,
-        ); //DescriptionFocus
+      context.drawImage(getRecoloredImage(10, normalColorCurrentIndices[1] > 0 ? 1 : 0), -1403, -2151); //DoubleColorOne again, but rotated
+      if (!isEachColorDark[1]) context.drawImage(images[3], 44 - 1403, 1330 - 2151, images[3].width, (images[3].height * 2) / 3); //DescriptionFocus
       context.restore();
       context.drawImage(images[11], 0, 0); //DoubleUncoloredDetails //todo
 
@@ -1090,16 +834,8 @@ function initCardImageGenerator() {
         //writeSingleLine(document.getElementById(l).value, 701, 215, 1180, 75);
 
         var recolorFactors;
-        if (
-          normalColorCurrentIndices[colorID] >=
-          normalColorCustomIndices[colorID]
-        )
-          recolorFactors = recolorFactorList[colorID];
-        else
-          recolorFactors =
-            normalColorFactorLists[
-              normalColorCurrentIndices[colorID] - colorID
-            ][1];
+        if (normalColorCurrentIndices[colorID] >= normalColorCustomIndices[colorID]) recolorFactors = recolorFactorList[colorID];
+        else recolorFactors = normalColorFactorLists[normalColorCurrentIndices[colorID] - colorID][1];
 
         context.save();
         var title = document.getElementById(l).value;
@@ -1108,14 +844,7 @@ function initCardImageGenerator() {
           context.font = (size -= 2) + "pt myTitle";
         } while (context.measureText(title).width > 750);
         context.textAlign = "left";
-        context.fillStyle =
-          "rgb(" +
-          Math.round(recolorFactors[0] * 224) +
-          "," +
-          Math.round(recolorFactors[1] * 224) +
-          "," +
-          Math.round(recolorFactors[2] * 224) +
-          ")";
+        context.fillStyle = "rgb(" + Math.round(recolorFactors[0] * 224) + "," + Math.round(recolorFactors[1] * 224) + "," + Math.round(recolorFactors[2] * 224) + ")";
         context.lineWidth = 15;
         if (isEachColorDark[colorID]) context.strokeStyle = "white";
         context.strokeText(title, 150, 1287);
@@ -1124,14 +853,7 @@ function initCardImageGenerator() {
 
         if (isEachColorDark[colorID]) context.fillStyle = "white";
         writeSingleLine(t, p ? 750 : 701, 1922, p ? 890 : 1190, 64);
-        if (p)
-          writeLineWithIconsReplacedWithSpaces(
-            p + " ",
-            153,
-            1940,
-            85 / 90,
-            "mySpecials",
-          );
+        if (p) writeLineWithIconsReplacedWithSpaces(p + " ", 153, 1940, 85 / 90, "mySpecials");
         writeDescription(d, 701, 1600, 960, 460, 40);
         context.restore();
       }
@@ -1141,13 +863,7 @@ function initCardImageGenerator() {
       context.translate(1403, 2151); //bottom right corner
       context.rotate(Math.PI);
       shadowDistance = -shadowDistance;
-      drawHalfCard(
-        heirloomLine,
-        "title2",
-        previewLine,
-        "description2",
-        normalColorCurrentIndices[1] > 0 ? 1 : 0,
-      );
+      drawHalfCard(heirloomLine, "title2", previewLine, "description2", normalColorCurrentIndices[1] > 0 ? 1 : 0);
       shadowDistance = -shadowDistance;
       context.textAlign = "left";
       writeIllustrationCredit(150, 2038, "white", "");
@@ -1171,54 +887,22 @@ function initCardImageGenerator() {
         writeSingleLine(heirloomLine, 701, 1799, 1040, 40, "myTitle");
       }
       if (isEachColorDark[1]) context.fillStyle = "white";
-      writeSingleLine(
-        document.getElementById("title").value,
-        701,
-        215,
-        previewLine ? 800 : 1180,
-        75,
-      );
+      writeSingleLine(document.getElementById("title").value, 701, 215, previewLine ? 800 : 1180, 75);
       if (typeLine.split(" - ").length >= 4) {
         let types2 = typeLine.split(" - ");
         let types1 = types2.splice(0, Math.ceil(types2.length / 2));
-        writeSingleLine(
-          types1.join(" - ") + " -",
-          priceLine ? 750 : 701,
-          1945 - 26,
-          priceLine ? 890 : 1180,
-          42,
-        );
-        writeSingleLine(
-          types2.join(" - "),
-          priceLine ? 750 : 701,
-          1945 + 26,
-          priceLine ? 890 : 1180,
-          42,
-        );
+        writeSingleLine(types1.join(" - ") + " -", priceLine ? 750 : 701, 1945 - 26, priceLine ? 890 : 1180, 42);
+        writeSingleLine(types2.join(" - "), priceLine ? 750 : 701, 1945 + 26, priceLine ? 890 : 1180, 42);
       } else {
-        writeSingleLine(
-          typeLine,
-          priceLine ? 730 : 701,
-          1945,
-          priceLine ? 800 : 900,
-          64,
-        );
+        writeSingleLine(typeLine, priceLine ? 730 : 701, 1945, priceLine ? 800 : 900, 64);
       }
-      if (priceLine)
-        writeLineWithIconsReplacedWithSpaces(
-          priceLine + " ",
-          153,
-          1947,
-          85 / 90,
-          "mySpecials",
-        ); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
+      if (priceLine) writeLineWithIconsReplacedWithSpaces(priceLine + " ", 153, 1947, 85 / 90, "mySpecials"); //adding a space confuses writeLineWithIconsReplacedWithSpaces into thinking this isn't a line that needs resizing
       if (previewLine) {
         writeSingleLine((previewLine += " "), 223, 210, 0, 0, "mySpecials");
         writeSingleLine(previewLine, 1203, 210, 0, 0, "mySpecials");
       }
       context.fillStyle = isEachColorDark[0] ? "white" : "black";
-      if (!heirloomLine)
-        writeDescription("description", 701, 1060, 960, 1500, 40);
+      if (!heirloomLine) writeDescription("description", 701, 1060, 960, 1500, 40);
       else writeDescription("description", 701, 1000, 960, 1400, 40);
       writeIllustrationCredit(165, 2045, "white", "");
       writeCreatorCredit(1225, 2045, "white", "");
@@ -1238,32 +922,19 @@ function initCardImageGenerator() {
       context.save();
       if (isEachColorDark[1]) context.fillStyle = "white";
       context.rotate(Math.PI / 2);
-      writeSingleLine(
-        document.getElementById("title").value,
-        700,
-        -1920,
-        500,
-        75,
-      );
+      writeSingleLine(document.getElementById("title").value, 700, -1920, 500, 75);
       context.restore();
       context.save();
       if (isEachColorDark[1]) context.fillStyle = "white";
       context.rotate((Math.PI * 3) / 2);
-      writeSingleLine(
-        document.getElementById("title").value,
-        -700,
-        230,
-        500,
-        75,
-      );
+      writeSingleLine(document.getElementById("title").value, -700, 230, 500, 75);
       context.restore();
     } else if (templateSize == 5) {
       //player mat
       drawPicture(464, 342, 928, 684);
 
       context.drawImage(getRecoloredImage(25, 0, 6), 0, 0); //MatBannerTop
-      if (document.getElementById("description").value.trim().length > 0)
-        context.drawImage(getRecoloredImage(26, 0, 6), 0, 0); //MatBannerBottom
+      if (document.getElementById("description").value.trim().length > 0) context.drawImage(getRecoloredImage(26, 0, 6), 0, 0); //MatBannerBottom
 
       context.textAlign = "center";
       context.textBaseline = "middle";
@@ -1284,9 +955,7 @@ function initCardImageGenerator() {
 
     updateURL();
 
-    document
-      .getElementById("load-indicator")
-      .setAttribute("style", "display:none;");
+    document.getElementById("load-indicator").setAttribute("style", "display:none;");
     canvases[0].parentNode.removeAttribute("data-status");
     return;
   }
@@ -1302,12 +971,8 @@ function initCardImageGenerator() {
     var col2 = document.getElementById("normalcolor2").options.selectedIndex;
     if (col2 > 0) {
       let col1_copy = copy(col1);
-      normalColorCurrentIndices[0] = document.getElementById(
-        "normalcolor1",
-      ).options.selectedIndex = col2 - 1;
-      normalColorCurrentIndices[1] = document.getElementById(
-        "normalcolor2",
-      ).options.selectedIndex = col1_copy + 1;
+      normalColorCurrentIndices[0] = document.getElementById("normalcolor1").options.selectedIndex = col2 - 1;
+      normalColorCurrentIndices[1] = document.getElementById("normalcolor2").options.selectedIndex = col1_copy + 1;
       recoloredImages = [];
       queueDraw(1);
     }
@@ -1316,72 +981,26 @@ function initCardImageGenerator() {
   function updateURL() {
     var queries = "?";
     for (var i = 0; i < simpleOnChangeInputFieldIDs.length; ++i) {
-      if (
-        simpleOnChangeInputCheckboxIDs.includes(simpleOnChangeInputFieldIDs[i])
-      ) {
-        queries +=
-          simpleOnChangeInputFieldIDs[i] +
-          "=" +
-          encodeURIComponent(
-            document.getElementById(simpleOnChangeInputFieldIDs[i]).checked,
-          ) +
-          "&";
+      if (simpleOnChangeInputCheckboxIDs.includes(simpleOnChangeInputFieldIDs[i])) {
+        queries += simpleOnChangeInputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeInputFieldIDs[i]).checked) + "&";
       } else {
-        queries +=
-          simpleOnChangeInputFieldIDs[i] +
-          "=" +
-          encodeURIComponent(
-            document.getElementById(simpleOnChangeInputFieldIDs[i]).value,
-          ) +
-          "&";
+        queries += simpleOnChangeInputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeInputFieldIDs[i]).value) + "&";
       }
-      if (
-        templateSize == 2 &&
-        i < simpleOnChangeButOnlyForSize2InputFieldIDs.length
-      )
-        queries +=
-          simpleOnChangeButOnlyForSize2InputFieldIDs[i] +
-          "=" +
-          encodeURIComponent(
-            document.getElementById(
-              simpleOnChangeButOnlyForSize2InputFieldIDs[i],
-            ).value,
-          ) +
-          "&";
+      if (templateSize == 2 && i < simpleOnChangeButOnlyForSize2InputFieldIDs.length) queries += simpleOnChangeButOnlyForSize2InputFieldIDs[i] + "=" + encodeURIComponent(document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value) + "&";
     }
-    queries +=
-      "picture=" +
-      encodeURIComponent(document.getElementById("picture").value) +
-      "&";
-    queries +=
-      "expansion=" +
-      encodeURIComponent(document.getElementById("expansion").value) +
-      "&";
-    queries +=
-      "custom-icon=" +
-      encodeURIComponent(document.getElementById("custom-icon").value);
+    queries += "picture=" + encodeURIComponent(document.getElementById("picture").value) + "&";
+    queries += "expansion=" + encodeURIComponent(document.getElementById("expansion").value) + "&";
+    queries += "custom-icon=" + encodeURIComponent(document.getElementById("custom-icon").value);
     for (var i = 0; i < normalColorDropdowns.length; ++i) {
-      switch (
-        normalColorCustomIndices[i] - normalColorDropdowns[i].selectedIndex
-      ) {
+      switch (normalColorCustomIndices[i] - normalColorDropdowns[i].selectedIndex) {
         case 0: //custom
-          for (var ch = 0; ch < 3; ++ch)
-            queries +=
-              "&c" + i + "." + ch + "=" + recolorInputs[i * 12 + ch].value;
+          for (var ch = 0; ch < 3; ++ch) queries += "&c" + i + "." + ch + "=" + recolorInputs[i * 12 + ch].value;
           break;
         case -1: //extra custom
           for (var ch = 0; ch < 12; ++ch) {
             var recolorInputsIndex = i * 12 + ch;
             if (recolorInputs.length <= recolorInputsIndex) break;
-            queries +=
-              "&c" +
-              i +
-              "." +
-              ((ch / 3) | 0) +
-              "." +
-              (ch % 3) +
-              "=" +
-              recolorInputs[i * 12 + ch].value;
+            queries += "&c" + i + "." + ((ch / 3) | 0) + "." + (ch % 3) + "=" + recolorInputs[i * 12 + ch].value;
           }
           break;
         default: //preconfigured
@@ -1480,39 +1099,16 @@ function initCardImageGenerator() {
   }
 
   var simpleOnChangeInputCheckboxIDs = ["traveller", "trait"];
-  var simpleOnInputInputFieldIDs = [
-    "title",
-    "description",
-    "credit",
-    "creator",
-    "price",
-    "preview",
-    "type",
-    "type2",
-    "picture-x",
-    "picture-y",
-    "picture-zoom",
-    "descriptionFontSize",
-    "color2split",
-    "boldkeys",
-  ];
+  var simpleOnInputInputFieldIDs = ["title", "description", "credit", "creator", "price", "preview", "type", "type2", "picture-x", "picture-y", "picture-zoom", "descriptionFontSize", "color2split", "boldkeys"];
   var simpleOnChangeInputFieldIDs = ["expansionName"];
-  simpleOnChangeInputFieldIDs = simpleOnChangeInputFieldIDs.concat(
-    simpleOnInputInputFieldIDs,
-    simpleOnChangeInputCheckboxIDs,
-  );
+  simpleOnChangeInputFieldIDs = simpleOnChangeInputFieldIDs.concat(simpleOnInputInputFieldIDs, simpleOnChangeInputCheckboxIDs);
   var simpleOnChangeButOnlyForSize2InputFieldIDs = ["title2", "description2"];
   for (var i = 0; i < simpleOnChangeInputFieldIDs.length; ++i) {
-    document.getElementById(simpleOnChangeInputFieldIDs[i]).onchange =
-      queueDraw;
+    document.getElementById(simpleOnChangeInputFieldIDs[i]).onchange = queueDraw;
     if (simpleOnInputInputFieldIDs.includes(simpleOnChangeInputFieldIDs[i])) {
-      document.getElementById(simpleOnChangeInputFieldIDs[i]).oninput =
-        queueDraw;
+      document.getElementById(simpleOnChangeInputFieldIDs[i]).oninput = queueDraw;
     }
-    if (i < simpleOnChangeButOnlyForSize2InputFieldIDs.length)
-      document.getElementById(
-        simpleOnChangeButOnlyForSize2InputFieldIDs[i],
-      ).onchange = queueDraw;
+    if (i < simpleOnChangeButOnlyForSize2InputFieldIDs.length) document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).onchange = queueDraw;
   }
   var recolorInputs = document.getElementsByName("recolor");
   var alreadyNeededToDetermineCustomAccentColors = false;
@@ -1679,15 +1275,9 @@ function initCardImageGenerator() {
           this.nextElementSibling.nextElementSibling.removeAttribute("style");
           if (i === 0 && !alreadyNeededToDetermineCustomAccentColors) {
             alreadyNeededToDetermineCustomAccentColors = true;
-            for (var j = 6; j < 12; ++j)
-              recolorFactorList[0][j] = recolorInputs[j].value =
-                genericCustomAccentColors[templateSize & 1][j];
+            for (var j = 6; j < 12; ++j) recolorFactorList[0][j] = recolorInputs[j].value = genericCustomAccentColors[templateSize & 1][j];
           }
-        } else
-          this.nextElementSibling.nextElementSibling.setAttribute(
-            "style",
-            "display:none;",
-          );
+        } else this.nextElementSibling.nextElementSibling.setAttribute("style", "display:none;");
         queueDraw(1);
       };
     })(i);
@@ -1709,18 +1299,13 @@ function initCardImageGenerator() {
   for (var queryKey in query) {
     switch (queryKey) {
       case "color0":
-        normalColorCurrentIndices[0] = normalColorDropdowns[0].selectedIndex =
-          query[queryKey];
+        normalColorCurrentIndices[0] = normalColorDropdowns[0].selectedIndex = query[queryKey];
         break;
       case "color1":
-        normalColorCurrentIndices[1] = normalColorDropdowns[1].selectedIndex =
-          query[queryKey];
+        normalColorCurrentIndices[1] = normalColorDropdowns[1].selectedIndex = query[queryKey];
         break;
       case "size":
-        var buttonElement =
-          document.getElementsByName("size")[
-            (templateSize = parseInt(query[queryKey]))
-          ];
+        var buttonElement = document.getElementsByName("size")[(templateSize = parseInt(query[queryKey]))];
         document.body.classList.add(buttonElement.id);
         buttonElement.checked = true;
         break;
@@ -1739,32 +1324,18 @@ function initCardImageGenerator() {
         var matches = queryKey.match(/^c(\d)\.(\d)$/);
         if (matches) {
           var id = matches[1];
-          normalColorCurrentIndices[id] = normalColorDropdowns[
-            id
-          ].selectedIndex = normalColorCustomIndices[id];
+          normalColorCurrentIndices[id] = normalColorDropdowns[id].selectedIndex = normalColorCustomIndices[id];
           normalColorDropdowns[id].nextElementSibling.removeAttribute("style");
-          recolorFactorList[id][matches[2]] = recolorInputs[
-            12 * id + parseInt(matches[2])
-          ].value = parseFloat(query[queryKey]);
+          recolorFactorList[id][matches[2]] = recolorInputs[12 * id + parseInt(matches[2])].value = parseFloat(query[queryKey]);
         } else {
           matches = queryKey.match(/^c(\d)\.(\d)\.(\d)$/);
           if (matches) {
             alreadyNeededToDetermineCustomAccentColors = true;
             var id = matches[1];
-            normalColorCurrentIndices[id] = normalColorDropdowns[
-              id
-            ].selectedIndex = normalColorCustomIndices[id] + 1;
-            normalColorDropdowns[id].nextElementSibling.removeAttribute(
-              "style",
-            );
-            normalColorDropdowns[
-              id
-            ].nextElementSibling.nextElementSibling.removeAttribute("style");
-            recolorFactorList[id][
-              parseInt(matches[2]) * 3 + parseInt(matches[3])
-            ] = recolorInputs[
-              12 * id + 3 * parseInt(matches[2]) + parseInt(matches[3])
-            ].value = parseFloat(query[queryKey]);
+            normalColorCurrentIndices[id] = normalColorDropdowns[id].selectedIndex = normalColorCustomIndices[id] + 1;
+            normalColorDropdowns[id].nextElementSibling.removeAttribute("style");
+            normalColorDropdowns[id].nextElementSibling.nextElementSibling.removeAttribute("style");
+            recolorFactorList[id][parseInt(matches[2]) * 3 + parseInt(matches[3])] = recolorInputs[12 * id + 3 * parseInt(matches[2]) + parseInt(matches[3])].value = parseFloat(query[queryKey]);
           } else {
             var el = document.getElementById(queryKey);
             if (el) el.value = query[queryKey];
@@ -1772,19 +1343,7 @@ function initCardImageGenerator() {
         }
         break;
     }
-    for (var i = 0; i < simpleOnChangeButOnlyForSize2InputFieldIDs.length; ++i)
-      if (
-        !document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i])
-          .value
-      )
-        document.getElementById(
-          simpleOnChangeButOnlyForSize2InputFieldIDs[i],
-        ).value = document.getElementById(
-          simpleOnChangeButOnlyForSize2InputFieldIDs[i].substr(
-            0,
-            simpleOnChangeButOnlyForSize2InputFieldIDs[i].length - 1,
-          ),
-        ).value;
+    for (var i = 0; i < simpleOnChangeButOnlyForSize2InputFieldIDs.length; ++i) if (!document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value) document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i]).value = document.getElementById(simpleOnChangeButOnlyForSize2InputFieldIDs[i].substr(0, simpleOnChangeButOnlyForSize2InputFieldIDs[i].length - 1)).value;
   }
   //set the illustration's Source properly and also call queueDraw.
   const handleLocalImageRestore = async (fieldId, imageId, db) => {
@@ -1803,10 +1362,7 @@ function initCardImageGenerator() {
           }
         }
       } catch (e) {
-        console.error(
-          `Failed to load local image from IndexedDB for ${fieldId}:`,
-          e,
-        );
+        console.error(`Failed to load local image from IndexedDB for ${fieldId}:`, e);
         el.value = "";
         if (el.onchange) {
           el.onchange();
@@ -1829,23 +1385,14 @@ function initCardImageGenerator() {
     let cardTitle = document.getElementById("title").value.trim();
     let creator = document.getElementById("creator").value.trim();
     let pageDefaultTitle = "Dominion Card Image Generator";
-    document.title =
-      cardTitle.length > 0
-        ? pageDefaultTitle + " - " + cardTitle + " " + creator
-        : pageDefaultTitle;
+    document.title = cardTitle.length > 0 ? pageDefaultTitle + " - " + cardTitle + " " + creator : pageDefaultTitle;
   }
-  document
-    .getElementById("title")
-    .addEventListener("change", adjustPageTitle, false);
-  document
-    .getElementById("creator")
-    .addEventListener("change", adjustPageTitle, false);
+  document.getElementById("title").addEventListener("change", adjustPageTitle, false);
+  document.getElementById("creator").addEventListener("change", adjustPageTitle, false);
   adjustPageTitle();
 
   //redraw after color switch
-  document
-    .getElementById("color-switch-button")
-    .addEventListener("click", switchColors, false);
+  document.getElementById("color-switch-button").addEventListener("click", switchColors, false);
 
   //pass parameters to original version to enable easy comparison
   Array.from(document.getElementsByClassName("linkToOriginal")).forEach((el) =>
@@ -1858,6 +1405,101 @@ function initCardImageGenerator() {
       false,
     ),
   );
+
+  // Expose functions for PDF export
+  window.images = images;
+
+  window.triggerRedraw = function () {
+    queueDraw(1);
+  };
+
+  window.setImageSourceForExport = function (id, src) {
+    images[id].src = src || "";
+    if (src) {
+      images[id].crossOrigin = "Anonymous";
+    }
+    imagesLoaded = false;
+  };
+
+  window.setImageSource = function (id, src) {
+    images[id].src = src;
+    images[id].crossOrigin = "Anonymous";
+    imagesLoaded = false;
+    queueDraw(250);
+  };
+
+  window.clearImageSource = function (id) {
+    images[id] = new Image();
+    imagesLoaded = false;
+    queueDraw(250);
+  };
+
+  window.showLoadingState = function () {
+    const wrapper = canvases[0].parentNode;
+    wrapper.setAttribute("data-status", "Loading...");
+    // Show spinner
+    document.getElementById("load-indicator").removeAttribute("style");
+    // Clear all canvases
+    for (let i = 0; i < canvases.length; i++) {
+      const ctx = canvases[i].getContext("2d");
+      ctx.clearRect(0, 0, canvases[i].width, canvases[i].height);
+    }
+  };
+
+  window.applyQueryParams = function (queryString) {
+    const query = getQueryParams(queryString);
+    document.body.className = "";
+    for (var queryKey in query) {
+      switch (queryKey) {
+        case "color0":
+          normalColorCurrentIndices[0] = normalColorDropdowns[0].selectedIndex = query[queryKey];
+          break;
+        case "color1":
+          normalColorCurrentIndices[1] = normalColorDropdowns[1].selectedIndex = query[queryKey];
+          break;
+        case "size":
+          var buttonElement = document.getElementsByName("size")[(templateSize = parseInt(query[queryKey]))];
+          document.body.classList.add(buttonElement.id);
+          buttonElement.checked = true;
+          break;
+        case "traveller":
+          var checkboxElement = document.getElementById(queryKey);
+          checkboxElement.checked = query[queryKey] === "true";
+          break;
+        case "trait":
+          var checkboxElement = document.getElementById(queryKey);
+          checkboxElement.checked = query[queryKey] === "true";
+          if (checkboxElement.checked === true) {
+            document.body.classList.add(queryKey);
+          }
+          break;
+        default:
+          var matches = queryKey.match(/^c(\d)\.(\d)$/);
+          if (matches) {
+            var id = matches[1];
+            normalColorCurrentIndices[id] = normalColorDropdowns[id].selectedIndex = normalColorCustomIndices[id];
+            normalColorDropdowns[id].nextElementSibling.removeAttribute("style");
+            recolorFactorList[id][matches[2]] = recolorInputs[12 * id + parseInt(matches[2])].value = parseFloat(query[queryKey]);
+          } else {
+            matches = queryKey.match(/^c(\d)\.(\d)\.(\d)$/);
+            if (matches) {
+              var id = matches[1];
+              normalColorCurrentIndices[id] = normalColorDropdowns[id].selectedIndex = normalColorCustomIndices[id] + 1;
+              normalColorDropdowns[id].nextElementSibling.removeAttribute("style");
+              normalColorDropdowns[id].nextElementSibling.nextElementSibling.removeAttribute("style");
+              recolorFactorList[id][parseInt(matches[2]) * 3 + parseInt(matches[3])] = recolorInputs[12 * id + 3 * parseInt(matches[2]) + parseInt(matches[3])].value = parseFloat(query[queryKey]);
+            } else {
+              var el = document.getElementById(queryKey);
+              if (el) el.value = query[queryKey];
+            }
+          }
+          break;
+      }
+    }
+    recoloredImages = [];
+    imagesLoaded = false;
+    queueDraw(1);
+  };
 }
 
 function getQueryParams(qs) {
@@ -1914,13 +1556,9 @@ function downloadPicture() {
   var canvas = canvases[id];
 
   if (isTainted(canvas)) {
-    alert(
-      "Sorry, canvas is tainted! Please use the right-click-option to save your image.",
-    );
+    alert("Sorry, canvas is tainted! Please use the right-click-option to save your image.");
   } else {
-    var image = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
+    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
     var title = document.getElementById("title").value.trim();
     var creator = document.getElementById("creator").value.trim();
     var fileName = "";
@@ -1935,9 +1573,7 @@ function downloadPicture() {
     fileName = fileName.split(" ").join("_");
     fileName += ".png";
     link.setAttribute("download", fileName);
-    var url = (window.webkitURL || window.URL).createObjectURL(
-      dataURLtoBlob(image),
-    );
+    var url = (window.webkitURL || window.URL).createObjectURL(dataURLtoBlob(image));
     link.setAttribute("href", url);
   }
 }
@@ -2027,6 +1663,9 @@ class CardDatabase {
   }
 
   async saveLiveImage(id, data) {
+    if (!this.db) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(this.liveStoreName, "readwrite");
       const store = transaction.objectStore(this.liveStoreName);
@@ -2037,17 +1676,22 @@ class CardDatabase {
   }
 
   async getLiveImage(id) {
+    if (!this.db) {
+      return Promise.resolve(null);
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(this.liveStoreName, "readonly");
       const store = transaction.objectStore(this.liveStoreName);
       const request = store.get(id);
-      request.onsuccess = () =>
-        resolve(request.result ? request.result.data : null);
+      request.onsuccess = () => resolve(request.result ? request.result.data : null);
       request.onerror = () => reject(request.error);
     });
   }
 
   async deleteLiveImage(id) {
+    if (!this.db) {
+      return Promise.resolve();
+    }
     return new Promise((resolve, reject) => {
       const transaction = this.db.transaction(this.liveStoreName, "readwrite");
       const store = transaction.objectStore(this.liveStoreName);
@@ -2144,8 +1788,8 @@ function Favorites(name) {
     if (!canvas) return null;
 
     try {
-      // Create a smaller thumbnail
-      const maxSize = 800;
+      // Create a smaller thumbnail for display
+      const maxSize = 400;
       const scale = Math.min(maxSize / canvas.width, maxSize / canvas.height);
       const thumbCanvas = document.createElement("canvas");
       thumbCanvas.width = canvas.width * scale;
@@ -2219,12 +1863,7 @@ function Favorites(name) {
 
     // Use the existing pattern to find symbols with numbers
     // e.g. $3, ^, @2, %2
-    const pat = RegExp(
-      "([-+]?\\d+)?([" +
-        Object.keys(iconMap).join("") +
-        "])([\\d\\?]*[-+\\*]?)",
-      "g",
-    );
+    const pat = RegExp("([-+]?\\d+)?([" + Object.keys(iconMap).join("") + "])([\\d\\?]*[-+\\*]?)", "g");
 
     let match;
     while ((match = pat.exec(price)) !== null) {
@@ -2260,8 +1899,19 @@ function Favorites(name) {
   };
 
   this.export = async function () {
+    // Get visible item IDs from the list view (search already handles .hidden class)
+    const visibleRows = favList.querySelectorAll("tbody tr:not(.hidden)");
+    const visibleIds = new Set(Array.from(visibleRows).map((tr) => parseInt(tr.dataset.id)));
+
+    if (visibleIds.size === 0) {
+      alert("エクスポートするカードがありません。");
+      return;
+    }
+
     const allData = await db.getAll();
-    let jsonData = JSON.stringify(allData);
+    const filteredData = allData.filter((item) => visibleIds.has(item.id));
+
+    let jsonData = JSON.stringify(filteredData);
     download(jsonData, "dominion-card-generator-favorites.json", "text/plain");
 
     function download(content, fileName, contentType) {
@@ -2272,6 +1922,285 @@ function Favorites(name) {
       a.href = URL.createObjectURL(file);
       a.download = fileName;
       a.click();
+    }
+  };
+
+  this.exportPDF = async function () {
+    const pdfBtn = document.getElementById("pdf-export-btn");
+    if (pdfBtn) pdfBtn.disabled = true;
+
+    try {
+      // Check if jsPDF is loaded
+      let jsPDF;
+      if (window.jspdf && window.jspdf.jsPDF) {
+        jsPDF = window.jspdf.jsPDF;
+      } else if (window.jsPDF) {
+        jsPDF = window.jsPDF;
+      } else {
+        console.error("jsPDF not found. window.jspdf:", window.jspdf, "window.jsPDF:", window.jsPDF);
+        alert("PDFライブラリの読み込みに失敗しました。ページを再読み込みしてください。");
+        return;
+      }
+
+      // Get visible thumbnail cards (not hidden by search filter)
+      const thumbnailCards = favThumbnails.querySelectorAll(".thumbnail-card:not(.hidden)");
+      if (thumbnailCards.length === 0) {
+        alert("出力するカードがありません。");
+        return;
+      }
+
+      // Collect card IDs and their types
+      const cardIds = [];
+      for (const card of thumbnailCards) {
+        const id = parseInt(card.dataset.id);
+        const img = card.querySelector(".thumbnail-image");
+        if (id && img) {
+          const isLandscape = img.classList.contains("landscape");
+          const isMat = img.classList.contains("mat");
+          cardIds.push({ id, isLandscape, isMat });
+        }
+      }
+
+      if (cardIds.length === 0) {
+        alert("出力するカードがありません。");
+        return;
+      }
+
+      // Create progress indicator
+      const progressEl = document.createElement("div");
+      progressEl.className = "pdf-progress";
+      progressEl.innerHTML = `
+        <div class="pdf-progress-title">PDF出力中...</div>
+        <div class="pdf-progress-bar"><div class="pdf-progress-bar-fill" style="width: 0%"></div></div>
+        <div class="pdf-progress-text">0 / ${cardIds.length} カード</div>
+      `;
+      document.body.appendChild(progressEl);
+
+      const updateProgress = (current, total, status) => {
+        const percent = Math.round((current / total) * 100);
+        progressEl.querySelector(".pdf-progress-bar-fill").style.width = percent + "%";
+        progressEl.querySelector(".pdf-progress-text").textContent = status || `${current} / ${total} カード`;
+      };
+
+      // Create hidden iframe for background rendering
+      const iframe = document.createElement("iframe");
+      iframe.style.cssText = "position:fixed;left:-9999px;top:0;width:1600px;height:2400px;visibility:hidden;";
+      document.body.appendChild(iframe);
+
+      // Wait for iframe to load
+      await new Promise((resolve) => {
+        iframe.onload = resolve;
+        iframe.src = location.pathname;
+      });
+
+      // Helper function to render card in iframe
+      const renderCardInIframe = (cardData, cardInfo) => {
+        return new Promise((resolve) => {
+          const iframeWindow = iframe.contentWindow;
+          const iframeDoc = iframe.contentDocument;
+
+          // Wait for iframe's myFavorites to be ready
+          const waitForReady = () => {
+            if (iframeWindow.applyQueryParams && iframeWindow.myFavorites) {
+              // Load images into iframe's images array
+              const loadImagesInIframe = async () => {
+                const iframeImages = iframeWindow.images;
+                const customIconIndex = iframeImages.length - 1;
+
+                const loadImage = (id, src) => {
+                  return new Promise((res) => {
+                    const newImg = new Image();
+                    let resolved = false;
+                    const done = () => {
+                      if (!resolved) {
+                        resolved = true;
+                        iframeImages[id] = newImg;
+                        res();
+                      }
+                    };
+
+                    if (src) {
+                      newImg.onload = done;
+                      newImg.onerror = done;
+                      newImg.crossOrigin = "Anonymous";
+                      newImg.src = src;
+                      setTimeout(done, 2000);
+                    } else {
+                      done();
+                    }
+                  });
+                };
+
+                await Promise.all([loadImage(5, cardData.images?.illustration), loadImage(17, cardData.images?.expansion), loadImage(customIconIndex, cardData.images?.customIcon)]);
+
+                // Apply params and wait for render
+                iframeWindow.applyQueryParams(cardData.params);
+
+                // Wait for rendering
+                const waitForRender = () => {
+                  return new Promise((res) => {
+                    const check = () => {
+                      const canvasWrapper = iframeDoc.querySelector(".canvas-wrapper");
+                      if (canvasWrapper && !canvasWrapper.hasAttribute("data-status")) {
+                        setTimeout(res, 500);
+                      } else {
+                        setTimeout(check, 100);
+                      }
+                    };
+                    setTimeout(check, 200);
+                  });
+                };
+
+                await waitForRender();
+
+                // Capture canvas
+                const canvases = iframeDoc.getElementsByClassName("myCanvas");
+                let canvasIndex = 0;
+                if (cardInfo.isMat) canvasIndex = 2;
+                else if (cardInfo.isLandscape) canvasIndex = 1;
+
+                const canvas = canvases[canvasIndex];
+                if (canvas) {
+                  try {
+                    const dataUrl = canvas.toDataURL("image/png");
+                    resolve(dataUrl);
+                  } catch (e) {
+                    console.error("Failed to capture canvas:", e);
+                    resolve(null);
+                  }
+                } else {
+                  resolve(null);
+                }
+              };
+
+              loadImagesInIframe();
+            } else {
+              setTimeout(waitForReady, 100);
+            }
+          };
+          waitForReady();
+        });
+      };
+
+      // Render each card and collect images
+      const cardImages = [];
+      const totalCards = cardIds.length;
+
+      for (let i = 0; i < cardIds.length; i++) {
+        const cardInfo = cardIds[i];
+        const cardData = await db.get(cardInfo.id);
+
+        if (cardData) {
+          const dataUrl = await renderCardInIframe(cardData, cardInfo);
+          if (dataUrl) {
+            cardImages.push({
+              src: dataUrl,
+              isLandscape: cardInfo.isLandscape,
+              isMat: cardInfo.isMat,
+            });
+          }
+        }
+
+        updateProgress(i + 1, totalCards);
+      }
+
+      // Remove iframe
+      document.body.removeChild(iframe);
+
+      if (cardImages.length === 0) {
+        document.body.removeChild(progressEl);
+        alert("画像の取得に失敗しました。");
+        return;
+      }
+
+      updateProgress(totalCards, totalCards, "PDF生成中...");
+
+      // Create PDF (A4 size in mm: 210 x 297)
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+
+      // Card size in mm (59mm x 91mm for 9 cards per page in 3x3 grid)
+      const cardWidth = 59;
+      const cardHeight = 91;
+      const landscapeWidth = 91;
+      const landscapeHeight = 59;
+      // Mat scaled proportionally (doubled)
+      const scale = 59 / 1403;
+      const matWidth = Math.round(928 * scale * 2 * 10) / 10;
+      const matHeight = Math.round(684 * (91 / 2151) * 2 * 10) / 10;
+
+      // Minimal spacing for 9 cards per page (3x3)
+      const cols = 3;
+      const rows = 3;
+      const spacing = 2;
+      const marginX = (pageWidth - (cardWidth * cols + spacing * (cols - 1))) / 2;
+      const marginY = (pageHeight - (cardHeight * rows + spacing * (rows - 1))) / 2;
+
+      let col = 0;
+      let row = 0;
+
+      for (let i = 0; i < cardImages.length; i++) {
+        const cardData = cardImages[i];
+        let w, h;
+
+        if (cardData.isMat) {
+          w = matWidth;
+          h = matHeight;
+        } else if (cardData.isLandscape) {
+          w = landscapeWidth;
+          h = landscapeHeight;
+        } else {
+          w = cardWidth;
+          h = cardHeight;
+        }
+
+        // Calculate position
+        const x = marginX + col * (cardWidth + spacing);
+        const y = marginY + row * (cardHeight + spacing);
+
+        // Add image to PDF
+        try {
+          pdf.addImage(cardData.src, "PNG", x, y, w, h);
+        } catch (e) {
+          console.error("Failed to add image:", e);
+        }
+
+        // Move to next position
+        col++;
+        if (col >= cols) {
+          col = 0;
+          row++;
+          if (row >= rows) {
+            row = 0;
+            // Add new page if there are more cards
+            if (i < cardImages.length - 1) {
+              pdf.addPage();
+            }
+          }
+        }
+      }
+
+      // Remove progress indicator
+      document.body.removeChild(progressEl);
+
+      // Open PDF in new window
+      const pdfUrl = pdf.output("bloburl");
+      window.open(pdfUrl, "_blank");
+
+      if (pdfBtn) pdfBtn.disabled = false;
+    } catch (error) {
+      console.error("PDF export error:", error);
+      // Remove progress indicator if exists
+      const progressEl = document.querySelector(".pdf-progress");
+      if (progressEl) document.body.removeChild(progressEl);
+      if (pdfBtn) pdfBtn.disabled = false;
+      alert("PDF出力中にエラーが発生しました: " + error.message);
     }
   };
 
@@ -2328,13 +2257,18 @@ function Favorites(name) {
   };
   this.add = async function (params) {
     const q = getQueryParams(params);
+    // Only save images if the form field has a value
+    const pictureField = document.getElementById("picture").value.trim();
+    const expansionField = document.getElementById("expansion").value.trim();
+    const customIconField = document.getElementById("custom-icon").value.trim();
+
     const card = {
       params: params,
       title: q.title || "Untitled",
       images: {
-        illustration: await db.getLiveImage(5),
-        expansion: await db.getLiveImage(17),
-        customIcon: await db.getLiveImage(images.length - 1),
+        illustration: pictureField ? await db.getLiveImage(5) : null,
+        expansion: expansionField ? await db.getLiveImage(17) : null,
+        customIcon: customIconField ? await db.getLiveImage(images.length - 1) : null,
       },
       thumbnail: generateThumbnail(),
       size: q.size || "0",
@@ -2345,9 +2279,7 @@ function Favorites(name) {
   };
   this.addOrUpdate = async function () {
     const currentTitle = document.getElementById("title").value.trim();
-    const currentExpansion = document
-      .getElementById("expansionName")
-      .value.trim();
+    const currentExpansion = document.getElementById("expansionName").value.trim();
     const all = await db.getAll();
     let match = null;
 
@@ -2374,27 +2306,23 @@ function Favorites(name) {
     const newTitle = document.getElementById("title").value || "Untitled";
 
     if (existingCard && existingCard.title !== newTitle) {
-      if (
-        !confirm(
-          "カード名を 「" +
-            existingCard.title +
-            "」 から 「" +
-            newTitle +
-            "」 に変更して更新しますか？",
-        )
-      )
-        return;
+      if (!confirm("カード名を 「" + existingCard.title + "」 から 「" + newTitle + "」 に変更して更新しますか？")) return;
     }
 
     const q = getQueryParams(document.location.search);
+    // Only save images if the form field has a value
+    const pictureField = document.getElementById("picture").value.trim();
+    const expansionField = document.getElementById("expansion").value.trim();
+    const customIconField = document.getElementById("custom-icon").value.trim();
+
     const card = {
       id: id,
       params: document.location.search,
       title: newTitle,
       images: {
-        illustration: await db.getLiveImage(5),
-        expansion: await db.getLiveImage(17),
-        customIcon: await db.getLiveImage(images.length - 1),
+        illustration: pictureField ? await db.getLiveImage(5) : null,
+        expansion: expansionField ? await db.getLiveImage(17) : null,
+        customIcon: customIconField ? await db.getLiveImage(images.length - 1) : null,
       },
       thumbnail: generateThumbnail(),
       size: q.size || "0",
@@ -2407,20 +2335,52 @@ function Favorites(name) {
   this.load = async function (id) {
     const card = await db.get(id);
     if (card) {
+      // Show loading state and clear previous preview
+      window.showLoadingState();
+
       // Restore images to the live store for the main logic to pick up
-      if (card.images.illustration)
-        await db.saveLiveImage(5, card.images.illustration);
+      if (card.images.illustration) await db.saveLiveImage(5, card.images.illustration);
       else await db.deleteLiveImage(5);
 
-      if (card.images.expansion)
-        await db.saveLiveImage(17, card.images.expansion);
+      if (card.images.expansion) await db.saveLiveImage(17, card.images.expansion);
       else await db.deleteLiveImage(17);
 
-      if (card.images.customIcon)
-        await db.saveLiveImage(images.length - 1, card.images.customIcon);
+      if (card.images.customIcon) await db.saveLiveImage(images.length - 1, card.images.customIcon);
       else await db.deleteLiveImage(images.length - 1);
 
-      window.location.href = location.pathname + card.params;
+      // Update URL without navigation
+      history.pushState(null, "", location.pathname + card.params);
+
+      // Apply parameters to update form fields
+      window.applyQueryParams(card.params);
+
+      // Load images into the view
+      if (card.images.illustration) {
+        window.setImageSource(5, card.images.illustration);
+        document.getElementById("picture").value = "[local image]";
+      } else {
+        window.clearImageSource(5);
+        document.getElementById("picture").value = "";
+      }
+
+      if (card.images.expansion) {
+        window.setImageSource(17, card.images.expansion);
+        document.getElementById("expansion").value = "[local image]";
+      } else {
+        window.clearImageSource(17);
+        document.getElementById("expansion").value = "";
+      }
+
+      if (card.images.customIcon) {
+        window.setImageSource(images.length - 1, card.images.customIcon);
+        document.getElementById("custom-icon").value = "[local image]";
+      } else {
+        window.clearImageSource(images.length - 1);
+        document.getElementById("custom-icon").value = "";
+      }
+
+      // Close the favorites modal
+      this.close();
     }
   };
   this.sort = function () {
@@ -2454,19 +2414,7 @@ function Favorites(name) {
     let cards = favThumbnails.getElementsByClassName("thumbnail-card");
     for (let i = 0; i < cards.length; i++) {
       let card = cards[i];
-      let matchText = (
-        (card.dataset.title || "") +
-        " " +
-        (card.dataset.type || "") +
-        " " +
-        (card.dataset.expansion || "") +
-        " " +
-        (card.dataset.size || "") +
-        " " +
-        (card.dataset.price || "") +
-        " " +
-        card.textContent
-      ).toUpperCase();
+      let matchText = ((card.dataset.title || "") + " " + (card.dataset.type || "") + " " + (card.dataset.expansion || "") + " " + (card.dataset.size || "") + " " + (card.dataset.price || "") + " " + card.textContent).toUpperCase();
       let allMatch = keywords.every((k) => matchText.includes(k));
       if (allMatch) {
         card.classList.remove("hidden");
@@ -2559,6 +2507,7 @@ function Favorites(name) {
       let expansionName = (q.expansionName || "").trim();
 
       let tr = document.createElement("tr");
+      tr.dataset.id = item.id;
       tr.onclick = () => this.load(item.id);
       if (params === document.location.search) {
         tr.setAttribute("class", "active");
@@ -2681,6 +2630,7 @@ function Favorites(name) {
 
       const card = document.createElement("div");
       card.className = "thumbnail-card" + (isMat ? " mat" : "");
+      card.dataset.id = item.id;
       card.dataset.title = title;
       card.dataset.type = type;
       card.dataset.expansion = (q.expansionName || "").trim();
@@ -2702,8 +2652,7 @@ function Favorites(name) {
       } else {
         // No thumbnail: show expansion, title, and type
         const placeholder = document.createElement("div");
-        placeholder.className =
-          "thumbnail-loading" + (isLandscape ? " landscape" : "") + (isMat ? " mat" : "");
+        placeholder.className = "thumbnail-loading" + (isLandscape ? " landscape" : "") + (isMat ? " mat" : "");
 
         const expansionName = (q.expansionName || "").trim();
         if (expansionName) {
@@ -2793,6 +2742,20 @@ class FontHandler {
     this.defaultTextBold = document.getElementById("fontDefaultTextBold");
     this.dialog = document.getElementById("manage-fonts");
     document.getElementById("openFontSettings").classList.remove("hidden");
+
+    // Add live preview listeners
+    ["Title", "Specials", "Text", "TextBold"].forEach((id) => {
+      document.getElementById("fontInput" + id).addEventListener("input", () => {
+        const settings = {
+          title: document.getElementById("fontInputTitle").value,
+          specials: document.getElementById("fontInputSpecials").value,
+          text: document.getElementById("fontInputText").value,
+          textBold: document.getElementById("fontInputTextBold").value,
+        };
+        this.setFonts(settings.title, settings.specials, settings.text, settings.textBold);
+      });
+    });
+
     this.load();
   }
 
@@ -2822,26 +2785,18 @@ class FontHandler {
   }
 
   applySettings() {
-    this.setFonts(
-      this.settings.title,
-      this.settings.specials,
-      this.settings.text,
-      this.settings.textBold,
-    );
+    this.setFonts(this.settings.title, this.settings.specials, this.settings.text, this.settings.textBold);
   }
 
   load() {
     let hasAnyCustomSettings = false;
-    this.settings = localStorage.getItem("fontSettings")
-      ? JSON.parse(localStorage.getItem("fontSettings"))
-      : {};
+    this.settings = localStorage.getItem("fontSettings") ? JSON.parse(localStorage.getItem("fontSettings")) : {};
     if (this.settings.title) {
       document.getElementById("fontInputTitle").value = this.settings.title;
       hasAnyCustomSettings = true;
     }
     if (this.settings.specials) {
-      document.getElementById("fontInputSpecials").value =
-        this.settings.specials;
+      document.getElementById("fontInputSpecials").value = this.settings.specials;
       hasAnyCustomSettings = true;
     }
     if (this.settings.text) {
@@ -2849,8 +2804,7 @@ class FontHandler {
       hasAnyCustomSettings = true;
     }
     if (this.settings.textBold) {
-      document.getElementById("fontInputTextBold").value =
-        this.settings.textBold;
+      document.getElementById("fontInputTextBold").value = this.settings.textBold;
       hasAnyCustomSettings = true;
     }
 
@@ -2875,11 +2829,13 @@ class FontHandler {
   }
 
   reset() {
-    document.getElementById("fontInputTitle").value = "";
-    document.getElementById("fontInputSpecials").value = "";
-    document.getElementById("fontInputText").value = "";
-    document.getElementById("fontInputTextBold").value = "";
-    this.save();
+    if (confirm("フォント設定をリセットしてもよろしいですか？")) {
+      document.getElementById("fontInputTitle").value = "";
+      document.getElementById("fontInputSpecials").value = "";
+      document.getElementById("fontInputText").value = "";
+      document.getElementById("fontInputTextBold").value = "";
+      this.save();
+    }
   }
 
   setFonts(lclFontTitle, lclFontSpecials, lclFontText, lclFontTextBold) {
@@ -2924,15 +2880,7 @@ class FontHandler {
     if (fontWeight) {
       cssWeight = " font-weight: " + fontWeight + ";";
     }
-    return (
-      '@font-face { font-family: "' +
-      myName +
-      '"; src: local("' +
-      lclName +
-      '");' +
-      cssWeight +
-      " } "
-    );
+    return '@font-face { font-family: "' + myName + '"; src: local("' + lclName + '");' + cssWeight + " } ";
   }
 
   triggerChange() {

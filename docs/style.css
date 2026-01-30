@@ -251,6 +251,10 @@ body.size5 .canvas-wrapper {
   border-radius: 7px;
 }
 
+.form-group label {
+  font-family: myTitle;
+}
+
 .form-group-stack {
   display: flex;
   flex-direction: column;
@@ -359,6 +363,11 @@ button {
   padding: 0.5em 0.7em;
   cursor: pointer;
   border-radius: 5px;
+  font-family: myTitle;
+}
+
+th {
+  font-family: myTitle;
 }
 
 label.image-upload img,
@@ -479,6 +488,7 @@ textarea,
 select {
   color: var(--color-input-text);
   background: var(--color-input-background);
+  font-family: myText;
 }
 
 label {
@@ -704,6 +714,8 @@ button.update:focus {
   background-color: var(--color-background-confirm);
 }
 
+button.reset:hover,
+button.reset:focus,
 button.delete:hover,
 button.delete:focus,
 button.delete-all:hover,
@@ -731,6 +743,19 @@ button.delete-all:focus {
 
 #manage-fonts .popup-content input {
   margin: 0.5em 0;
+}
+
+#manage-fonts label[for="fontInputTitle"] {
+  font-family: myTitle;
+}
+
+#manage-fonts label[for="fontInputSpecials"] {
+  font-family: mySpecials;
+}
+
+#manage-fonts label[for="fontInputText"],
+#manage-fonts label[for="fontInputTextBold"] {
+  font-family: myText;
 }
 
 #manage-fonts #fontInputTitle {
@@ -876,11 +901,21 @@ button.delete-all:focus {
 
 /* Favorites View Toggle */
 .view-toggle {
-  min-width: 7em;
+  min-width: 2em;
 }
 
 .view-toggle .hidden {
   display: none;
+}
+
+#pdf-export-btn {
+  font-weight: bold;
+  min-width: 3em;
+}
+
+#pdf-export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Favorites Thumbnails View */
@@ -1318,6 +1353,46 @@ button.delete-all:focus {
     font-size: 0.8em;
     padding: 0.3em 0.5em;
   }
+}
+
+/* PDF Export Progress Indicator */
+.pdf-progress {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  background: var(--color-background3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 5px;
+  padding: 0.8em 1em;
+  box-shadow: 0 2px 8px var(--color-shadow1-transparent);
+  z-index: 10000;
+  min-width: 180px;
+}
+
+.pdf-progress-title {
+  font-size: 0.9em;
+  margin-bottom: 0.5em;
+  color: var(--color-text);
+}
+
+.pdf-progress-bar {
+  height: 6px;
+  background: var(--color-button1-background);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.4em;
+}
+
+.pdf-progress-bar-fill {
+  height: 100%;
+  background: var(--color-background-confirm);
+  transition: width 0.2s ease;
+}
+
+.pdf-progress-text {
+  font-size: 0.8em;
+  color: var(--color-text);
 }
 
 @font-face {
