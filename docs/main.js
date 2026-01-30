@@ -2174,36 +2174,22 @@ function Favorites(name) {
   };
 
   this.sortBy = function (column, event) {
-    if (event && event.shiftKey) {
-      // Multi-column sort: add or toggle this column
-      const existing = sortState.findIndex((s) => s.column === column);
-      if (existing >= 0) {
-        // Cycle through: asc -> desc -> remove
-        if (sortState[existing].direction === "asc") {
-          sortState[existing].direction = "desc";
-        } else {
-          // Remove this sort column
-          sortState.splice(existing, 1);
-        }
+    const existing = sortState.findIndex((s) => s.column === column);
+
+    if (existing >= 0) {
+      // Clicking on already sorted column: cycle asc -> desc -> remove
+      if (sortState[existing].direction === "asc") {
+        sortState[existing].direction = "desc";
       } else {
-        // Add new sort column
-        sortState.push({ column, direction: "asc" });
+        // Remove this sort column
+        sortState.splice(existing, 1);
       }
+    } else if (sortState.length > 0) {
+      // Already sorting by other column(s), add this column to multi-sort
+      sortState.push({ column, direction: "asc" });
     } else {
-      // Single column sort: replace all
-      const existing = sortState.find((s) => s.column === column);
-      if (existing && sortState.length === 1) {
-        // Cycle through: asc -> desc -> remove
-        if (sortState[0].direction === "asc") {
-          sortState[0].direction = "desc";
-        } else {
-          // Remove sort (back to unsorted)
-          sortState = [];
-        }
-      } else {
-        // New single sort
-        sortState = [{ column, direction: "asc" }];
-      }
+      // No sort active, start new single sort
+      sortState = [{ column, direction: "asc" }];
     }
     this.refresh();
   };
