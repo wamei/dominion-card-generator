@@ -116,6 +116,12 @@ a:focus {
   display: none !important;
 }
 
+.no-scroll {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 .myCanvas {
   position: absolute;
   transform-origin: top left;
@@ -1247,19 +1253,22 @@ button.delete-all:focus {
 
   /* Favorites popup */
   .popup {
-    top: 0.5em;
-    left: 0.5em;
-    height: calc(100% - 1em);
-    width: calc(100% - 1em);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
   }
 
   .popup .menu {
-    top: 0.5em;
-    left: 0.5em;
-    width: calc(100% - 1.5em);
+    top: 0;
+    left: 0;
+    width: 100%;
     padding: 0.5em;
     flex-wrap: wrap;
     gap: 0.25em;
+    border-radius: 0;
+    box-sizing: border-box;
   }
 
   .popup .menu .menu-spacer {
@@ -1293,9 +1302,9 @@ button.delete-all:focus {
   }
 
   #favorites-list.thumbnail-mode {
-    top: 6em;
-    left: 0.5em;
-    width: calc(100% - 1em);
+    top: 5.5em;
+    left: 0;
+    width: 100%;
   }
 
   #favorites-thumbnails {

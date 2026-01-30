@@ -2261,10 +2261,13 @@ function Favorites(name) {
     fav.classList.remove("hidden");
     if (window.innerWidth > 600) {
       document.getElementById("favorites-search").focus();
+    } else {
+      document.body.classList.add("no-scroll");
     }
   };
   this.close = function () {
     fav.classList.add("hidden");
+    document.body.classList.remove("no-scroll");
   };
   this.deleteAll = async function () {
     if (!confirm("お気に入りをすべて削除してもよろしいですか？")) return;
@@ -2802,11 +2805,14 @@ class FontHandler {
     this.dialog.classList.remove("hidden");
     if (window.innerWidth > 600) {
       document.getElementById("fontInputTitle").focus();
+    } else {
+      document.body.classList.add("no-scroll");
     }
   }
 
   close() {
     this.dialog.classList.add("hidden");
+    document.body.classList.remove("no-scroll");
   }
 
   save() {
