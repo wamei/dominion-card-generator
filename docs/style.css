@@ -517,6 +517,10 @@ input[type="number"] {
   margin-right: 3%;
 }
 
+#deckSize {
+  width: 100%;
+}
+
 input[type="range"] {
   cursor: pointer;
   padding: 0;
@@ -550,8 +554,8 @@ label.image-upload:focus,
 }
 
 #image-positioning .form-group .reset-position {
-  margin-top: 0.6em;
-  margin-bottom: 0;
+  margin-top: 0.4em;
+  margin-bottom: -0.2em;
 }
 
 #color-switch {

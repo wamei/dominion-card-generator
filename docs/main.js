@@ -1120,6 +1120,7 @@ function initCardImageGenerator() {
     "descriptionFontSize",
     "color2split",
     "boldkeys",
+    "deckSize",
   ];
   var simpleOnChangeInputFieldIDs = ["expansionName"];
   simpleOnChangeInputFieldIDs = simpleOnChangeInputFieldIDs.concat(simpleOnInputInputFieldIDs, simpleOnChangeInputCheckboxIDs);
@@ -1474,6 +1475,44 @@ function initCardImageGenerator() {
   window.applyQueryParams = function (queryString) {
     const query = getQueryParams(queryString);
     document.body.className = "";
+
+    // Reset fields not present in query params
+    const fieldsToReset = [
+      "title",
+      "description",
+      "credit",
+      "creator",
+      "price",
+      "preview",
+      "type",
+      "type2",
+      "picture-x",
+      "picture-y",
+      "picture-zoom",
+      "boldkeys",
+      "deckSize",
+      "expansionName",
+      "title2",
+      "description2",
+      "picture",
+      "expansion",
+      "custom-icon",
+    ];
+    for (const fieldId of fieldsToReset) {
+      if (!(fieldId in query)) {
+        const el = document.getElementById(fieldId);
+        if (el) {
+          if (fieldId === "picture-zoom") {
+            el.value = "1";
+          } else if (fieldId === "picture-x" || fieldId === "picture-y") {
+            el.value = "0";
+          } else {
+            el.value = "";
+          }
+        }
+      }
+    }
+
     for (var queryKey in query) {
       switch (queryKey) {
         case "color0":
@@ -2118,11 +2157,21 @@ function Favorites(name) {
         if (cardData) {
           const dataUrl = await renderCardInIframe(cardData, cardInfo);
           if (dataUrl) {
-            cardImages.push({
-              src: dataUrl,
-              isLandscape: cardInfo.isLandscape,
-              isMat: cardInfo.isMat,
-            });
+            // Get deck size for repetition (only for size 0 and 2)
+            const q = getQueryParams(cardData.params);
+            const size = q.size || "0";
+            let repeatCount = 1;
+            if (size === "0" || size === "2") {
+              repeatCount = parseInt(q.deckSize) || 10;
+            }
+
+            for (let r = 0; r < repeatCount; r++) {
+              cardImages.push({
+                src: dataUrl,
+                isLandscape: cardInfo.isLandscape,
+                isMat: cardInfo.isMat,
+              });
+            }
           }
         }
 

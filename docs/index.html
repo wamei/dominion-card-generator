@@ -239,7 +239,7 @@
               </ul>
             </div>
             <textarea
-              rows="10"
+              rows="8"
               id="description"
               placeholder="+1 カードを引く
 +2 アクション"
@@ -251,7 +251,7 @@
           </div>
           <div class="form-group second-column hideForPileMarker hideForMats">
             <label for="description2">テキスト</label>
-            <textarea rows="10" id="description2"></textarea>
+            <textarea rows="8" id="description2"></textarea>
           </div>
         </div>
 
@@ -440,6 +440,14 @@
             </div>
           </div>
         </div>
+
+        <div class="form-row">
+          <div class="form-group hideForLandscape hideForPileMarker hideForMats" id="deckSizeCell">
+            <label for="deckSize">サプライ枚数</label>
+            <input id="deckSize" placeholder="10" type="number" min="1" max="100" />
+          </div>
+        </div>
+
         <div id="reset">
           <a href="?" title="click to reset all fields" onclick="return confirm('入力内容をリセットしてもよろしいですか？');"
             ><button type="button" class="delete"><i class="fa-solid fa-rotate-left"></i>リセット</button></a
