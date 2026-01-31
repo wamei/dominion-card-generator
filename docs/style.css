@@ -2021,7 +2021,8 @@ button.delete-all:focus {
   }
 
   .tap-overlay.has-content {
-    display: none;
+    background-color: transparent;
+    border-color: transparent;
   }
 
   /* Preview areas - top corners */
