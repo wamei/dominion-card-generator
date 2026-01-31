@@ -174,6 +174,25 @@
             </div>
           </div>
         </div>
+        <div id="preview-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">プレビュー編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closePreviewEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closePreviewEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="preview-edit-content">
+              <div id="preview-edit-legend"></div>
+              <div class="form-group">
+                <label for="preview-edit-preview">プレビュー</label>
+                <input id="preview-edit-preview" type="text" placeholder="" />
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="cost-edit-modal" class="popup hidden">
           <div class="popup-header">
             <div class="menu">

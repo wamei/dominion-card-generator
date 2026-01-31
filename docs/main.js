@@ -1878,6 +1878,39 @@ function closeCreditEditModal(apply) {
   document.body.classList.remove("no-scroll");
 }
 
+// Preview Edit Modal for mobile
+function openPreviewEditModal() {
+  const modal = document.getElementById("preview-edit-modal");
+  const previewInput = document.getElementById("preview-edit-preview");
+  const legendContainer = document.getElementById("preview-edit-legend");
+
+  // Clone legend if not already done
+  if (!legendContainer.hasChildNodes()) {
+    const legend = document.getElementById("legend");
+    legendContainer.appendChild(legend.cloneNode(true));
+    legendContainer.firstChild.removeAttribute("id");
+  }
+
+  // Sync value from main form
+  previewInput.value = document.getElementById("preview").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closePreviewEditModal(apply) {
+  const modal = document.getElementById("preview-edit-modal");
+
+  if (apply) {
+    const previewInput = document.getElementById("preview-edit-preview");
+    document.getElementById("preview").value = previewInput.value;
+    document.getElementById("preview").dispatchEvent(new Event("change"));
+  }
+
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
 // Cost Edit Modal for mobile
 function openCostEditModal() {
   const modal = document.getElementById("cost-edit-modal");
@@ -1990,6 +2023,18 @@ function setupMobileCanvasTap() {
     // Bottom right corner (expansion area): Y > 80% and X > 80%
     if (relativeY > 0.8 && relativeX > 0.8) {
       openExpansionEditModal();
+      return;
+    }
+
+    // Top left corner (preview area): Y < 20% and X < 20%
+    if (relativeY < 0.2 && relativeX < 0.2) {
+      openPreviewEditModal();
+      return;
+    }
+
+    // Top right corner (preview area): Y < 20% and X > 80%
+    if (relativeY < 0.2 && relativeX > 0.8) {
+      openPreviewEditModal();
       return;
     }
 
