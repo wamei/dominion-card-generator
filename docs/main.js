@@ -1732,6 +1732,7 @@ function openTypeEditModal() {
   const color2Select = document.getElementById("type-edit-color2");
   const typeInput = document.getElementById("type-edit-type");
   const heirloomInput = document.getElementById("type-edit-heirloom");
+  const deckSizeInput = document.getElementById("type-edit-decksize");
   const mainColor1Select = document.getElementById("normalcolor1");
   const mainColor2Select = document.getElementById("normalcolor2");
 
@@ -1758,6 +1759,7 @@ function openTypeEditModal() {
   color2Select.selectedIndex = mainColor2Select.selectedIndex;
   typeInput.value = document.getElementById("type").value;
   heirloomInput.value = document.getElementById("type2").value;
+  deckSizeInput.value = document.getElementById("deckSize").value;
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
@@ -1772,6 +1774,7 @@ function closeTypeEditModal(apply) {
     const color2Select = document.getElementById("type-edit-color2");
     const typeInput = document.getElementById("type-edit-type");
     const heirloomInput = document.getElementById("type-edit-heirloom");
+    const deckSizeInput = document.getElementById("type-edit-decksize");
     const mainColor1Select = document.getElementById("normalcolor1");
     const mainColor2Select = document.getElementById("normalcolor2");
 
@@ -1790,6 +1793,9 @@ function closeTypeEditModal(apply) {
 
     document.getElementById("type2").value = heirloomInput.value;
     document.getElementById("type2").dispatchEvent(new Event("change"));
+
+    document.getElementById("deckSize").value = deckSizeInput.value;
+    document.getElementById("deckSize").dispatchEvent(new Event("change"));
   }
 
   modal.classList.add("hidden");
