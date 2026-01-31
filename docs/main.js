@@ -1600,6 +1600,21 @@ function getQueryParams(qs) {
   return params;
 }
 
+// Scroll lock helpers for mobile modals
+let savedScrollPosition = 0;
+
+function lockScroll() {
+  savedScrollPosition = window.scrollY;
+  document.body.style.top = `-${savedScrollPosition}px`;
+  document.body.classList.add("no-scroll");
+}
+
+function unlockScroll() {
+  document.body.classList.remove("no-scroll");
+  document.body.style.top = "";
+  window.scrollTo(0, savedScrollPosition);
+}
+
 // Text Edit Modal for mobile
 let textEditPendingCustomIconFile = null;
 
@@ -1629,7 +1644,7 @@ function openTextEditModal() {
   customIconInput.value = document.getElementById("custom-icon").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1659,7 +1674,7 @@ function closeTextEditModal(apply) {
 
   textEditPendingCustomIconFile = null;
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Picture Edit Modal for mobile
@@ -1684,7 +1699,7 @@ function openPictureEditModal() {
   zoomInput.value = document.getElementById("picture-zoom").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1716,7 +1731,7 @@ function closePictureEditModal(apply) {
 
   pictureEditPendingFile = null;
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 function resetPictureEditPosition() {
@@ -1762,7 +1777,7 @@ function openTypeEditModal() {
   deckSizeInput.value = document.getElementById("deckSize").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1799,7 +1814,7 @@ function closeTypeEditModal(apply) {
   }
 
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Title Edit Modal for mobile
@@ -1822,7 +1837,7 @@ function openTitleEditModal() {
   titleInput.value = document.getElementById("title").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1852,7 +1867,7 @@ function closeTitleEditModal(apply) {
 
   titleEditPendingExpansionIconFile = null;
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Credit Edit Modal for mobile
@@ -1866,7 +1881,7 @@ function openCreditEditModal() {
   versionInput.value = document.getElementById("creator").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1885,7 +1900,7 @@ function closeCreditEditModal(apply) {
   }
 
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Preview Edit Modal for mobile
@@ -1905,7 +1920,7 @@ function openPreviewEditModal() {
   previewInput.value = document.getElementById("preview").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1919,7 +1934,7 @@ function closePreviewEditModal(apply) {
   }
 
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Cost Edit Modal for mobile
@@ -1939,7 +1954,7 @@ function openCostEditModal() {
   priceInput.value = document.getElementById("price").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -1954,7 +1969,7 @@ function closeCostEditModal(apply) {
   }
 
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Expansion Edit Modal for mobile
@@ -1975,7 +1990,7 @@ function openExpansionEditModal() {
   iconInput.value = document.getElementById("expansion").value;
 
   modal.classList.remove("hidden");
-  document.body.classList.add("no-scroll");
+  lockScroll();
   document.activeElement.blur();
 }
 
@@ -2001,7 +2016,7 @@ function closeExpansionEditModal(apply) {
 
   expansionEditPendingIconFile = null;
   modal.classList.add("hidden");
-  document.body.classList.remove("no-scroll");
+  unlockScroll();
 }
 
 // Setup mobile canvas tap handler
