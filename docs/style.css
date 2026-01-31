@@ -1861,6 +1861,11 @@ button.delete-all:focus {
     pointer-events: none;
   }
 
+  /* Hide overlays when loading/status is displayed */
+  .canvas-wrapper[data-status] .tap-overlays {
+    display: none;
+  }
+
   .tap-overlay {
     position: absolute;
     box-sizing: border-box;
