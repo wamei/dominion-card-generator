@@ -1237,6 +1237,14 @@ button.delete-all:focus {
     font-size: 14px;
   }
 
+  /* Prevent iOS auto-zoom on input focus */
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+    touch-action: manipulation;
+  }
+
   .app-container {
     margin: 0.5em;
   }
@@ -1447,4 +1455,300 @@ button.delete-all:focus {
     local("Trajan"),
     local("Optimus Princeps"),
     url(https://fonts.gstatic.com/s/cinzel/v8/8vIJ7ww63mVu7gt79mT7PkRXMw.woff2) format("woff2");
+}
+
+/* Edit Modals */
+.popup .modal-title {
+  font-family: myTitle;
+  font-size: 1.1em;
+}
+
+#text-edit-modal .text-edit-content {
+  padding: 1em;
+}
+
+#text-edit-modal .form-group {
+  margin-top: 1em;
+}
+
+#text-edit-modal .form-group label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#text-edit-modal .form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+#text-edit-modal .input-with-upload {
+  display: flex;
+  gap: 0.5em;
+}
+
+#text-edit-modal .input-with-upload input[type="url"] {
+  flex: 1;
+}
+
+#text-edit-modal #text-edit-textarea {
+  width: 100%;
+  min-height: 200px;
+  font-family: myText;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#text-edit-legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 0;
+  margin: 0.75em 0 0 0;
+  padding: 0;
+  font-size: 0.9em;
+  list-style: none;
+  width: 100%;
+}
+
+#text-edit-legend li {
+  width: 50%;
+  box-sizing: border-box;
+  padding-right: 0.5em;
+}
+
+#text-edit-legend .def {
+  font-family: monospace;
+  background: var(--color-background4);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  display: inline-block;
+  min-width: 5em;
+  text-align: center;
+}
+
+/* Picture Edit Modal */
+#picture-edit-modal .picture-edit-content {
+  padding: 1em;
+}
+
+#picture-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#picture-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#picture-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#picture-edit-modal .input-with-upload {
+  display: flex;
+  gap: 0.5em;
+}
+
+#picture-edit-modal .input-with-upload input[type="url"] {
+  flex: 1;
+  font-size: 16px;
+}
+
+#picture-edit-modal .position-controls {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#picture-edit-modal .position-input {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+#picture-edit-modal .position-input label {
+  display: inline;
+  margin-bottom: 0;
+}
+
+#picture-edit-modal .position-input input {
+  width: 4em;
+  font-size: 16px;
+}
+
+#picture-edit-modal .reset-position {
+  margin-left: auto;
+}
+
+/* Type Edit Modal */
+#type-edit-modal .type-edit-content {
+  padding: 1em;
+}
+
+#type-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#type-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#type-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#type-edit-modal input,
+#type-edit-modal select {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* Title Edit Modal */
+#title-edit-modal .title-edit-content {
+  padding: 1em;
+}
+
+#title-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#title-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#title-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#title-edit-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+#title-edit-modal .input-with-upload {
+  display: flex;
+  gap: 0.5em;
+}
+
+#title-edit-modal .input-with-upload input[type="url"] {
+  flex: 1;
+}
+
+/* Cost Edit Modal */
+#cost-edit-modal .cost-edit-content {
+  padding: 1em;
+}
+
+#cost-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#cost-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#cost-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#cost-edit-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+#cost-edit-legend ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 0;
+  margin: 0 0 1em 0;
+  padding: 0;
+  font-size: 0.9em;
+  list-style: none;
+  width: 100%;
+}
+
+#cost-edit-legend li {
+  width: 50%;
+  box-sizing: border-box;
+  padding-right: 0.5em;
+}
+
+#cost-edit-legend .def {
+  font-family: monospace;
+  background: var(--color-background4);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  display: inline-block;
+  min-width: 5em;
+  text-align: center;
+}
+
+/* Expansion Edit Modal */
+#expansion-edit-modal .expansion-edit-content {
+  padding: 1em;
+}
+
+#expansion-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#expansion-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#expansion-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#expansion-edit-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+#expansion-edit-modal .input-with-upload {
+  display: flex;
+  gap: 0.5em;
+}
+
+#expansion-edit-modal .input-with-upload input[type="url"] {
+  flex: 1;
+}
+
+/* Credit Edit Modal */
+#credit-edit-modal .credit-edit-content {
+  padding: 1em;
+}
+
+#credit-edit-modal .form-group {
+  margin-bottom: 1em;
+}
+
+#credit-edit-modal .form-group:last-child {
+  margin-bottom: 0;
+}
+
+#credit-edit-modal label {
+  display: block;
+  margin-bottom: 0.25em;
+}
+
+#credit-edit-modal input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .canvas-wrapper {
+    cursor: pointer;
+  }
 }

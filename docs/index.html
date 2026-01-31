@@ -3,7 +3,7 @@
   <head>
     <title>Dominion Card Image Generator</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     <link
       rel="stylesheet"
@@ -83,6 +83,209 @@
           <canvas class="myCanvas" id="landscapeCanvas" width="2151" height="1403" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
           <canvas class="myCanvas" id="matCanvas" width="928" height="684" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
           <img id="load-indicator" src="assets/spinner.png" alt="Loading..." />
+        </div>
+        <div id="text-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">テキスト編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeTextEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeTextEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="text-edit-content">
+              <div id="text-edit-legend"></div>
+              <textarea id="text-edit-textarea" rows="12" placeholder="カードテキストを入力"></textarea>
+              <div class="form-group">
+                <label for="text-edit-boldkeys">追加の太字キーワード</label>
+                <input id="text-edit-boldkeys" placeholder="キーワード1;キーワード2; セミコロンで区切る" />
+              </div>
+              <div class="form-group">
+                <label for="text-edit-custom-icon">カスタムアイコン</label>
+                <div class="input-with-upload">
+                  <input id="text-edit-custom-icon" type="url" placeholder="http://example.com/icon.png" />
+                  <label class="image-upload" title="ローカル画像ファイルを使用する"
+                    ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="text-edit-custom-icon-upload" type="file" accept="image/*"
+                  /></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="type-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">種別編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeTypeEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeTypeEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="type-edit-content">
+              <div class="form-group">
+                <label for="type-edit-color1">メインカラー</label>
+                <select id="type-edit-color1"></select>
+              </div>
+              <div class="form-group">
+                <label for="type-edit-color2">サブカラー</label>
+                <select id="type-edit-color2"></select>
+              </div>
+              <div class="form-group">
+                <label for="type-edit-type">種別</label>
+                <input id="type-edit-type" placeholder="Action" />
+              </div>
+              <div class="form-group">
+                <label for="type-edit-heirloom">家宝</label>
+                <input id="type-edit-heirloom" placeholder="家宝: カード名" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="title-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">タイトル編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeTitleEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeTitleEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="title-edit-content">
+              <div class="form-group">
+                <label for="title-edit-expansion">拡張名</label>
+                <input id="title-edit-expansion" type="text" placeholder="基本" />
+              </div>
+              <div class="form-group">
+                <label for="title-edit-expansion-icon">拡張アイコン</label>
+                <div class="input-with-upload">
+                  <input id="title-edit-expansion-icon" type="url" placeholder="http://example.com/expansion.png" />
+                  <label class="image-upload" title="ローカル画像ファイルを使用する"
+                    ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="title-edit-expansion-icon-upload" type="file" accept="image/*"
+                  /></label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="title-edit-title">タイトル</label>
+                <input id="title-edit-title" type="text" placeholder="村" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="cost-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">コスト編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeCostEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeCostEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="cost-edit-content">
+              <div id="cost-edit-legend"></div>
+              <div class="form-group">
+                <label for="cost-edit-price">購入コスト</label>
+                <input id="cost-edit-price" type="text" placeholder="$3" />
+              </div>
+              <div class="form-group">
+                <label for="cost-edit-preview">プレビュー</label>
+                <input id="cost-edit-preview" type="text" placeholder="" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="expansion-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">拡張編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeExpansionEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeExpansionEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="expansion-edit-content">
+              <div class="form-group">
+                <label for="expansion-edit-name">拡張名</label>
+                <input id="expansion-edit-name" type="text" placeholder="基本" />
+              </div>
+              <div class="form-group">
+                <label for="expansion-edit-icon">拡張アイコン</label>
+                <div class="input-with-upload">
+                  <input id="expansion-edit-icon" type="url" placeholder="http://example.com/expansion.png" />
+                  <label class="image-upload" title="ローカル画像ファイルを使用する"
+                    ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="expansion-edit-icon-upload" type="file" accept="image/*"
+                  /></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="credit-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">クレジット編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closeCreditEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closeCreditEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="credit-edit-content">
+              <div class="form-group">
+                <label for="credit-edit-art">Art Credit</label>
+                <input id="credit-edit-art" type="text" placeholder="Illustration: Jane Doe" />
+              </div>
+              <div class="form-group">
+                <label for="credit-edit-version">Version & Creator Credit</label>
+                <input id="credit-edit-version" type="text" placeholder="v0.1 John Doe" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="picture-edit-modal" class="popup hidden">
+          <div class="popup-header">
+            <div class="menu">
+              <span class="modal-title">イラスト編集</span>
+              <span class="menu-spacer"></span>
+              <button type="button" class="confirm" onclick="closePictureEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
+              <button type="button" class="close" onclick="closePictureEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+          </div>
+          <div class="popup-body">
+            <div class="picture-edit-content">
+              <div class="form-group">
+                <label>イラストURL</label>
+                <div class="input-with-upload">
+                  <input id="picture-edit-url" type="url" placeholder="http://example.com/image.jpg" />
+                  <label class="image-upload" title="ローカル画像ファイルを使用する"
+                    ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="picture-edit-upload" type="file" accept="image/*"
+                  /></label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>位置調整</label>
+                <div class="position-controls">
+                  <div class="position-input">
+                    <label for="picture-edit-x">X:</label>
+                    <input id="picture-edit-x" type="number" min="-10" max="10" value="0" step="0.01" />
+                  </div>
+                  <div class="position-input">
+                    <label for="picture-edit-y">Y:</label>
+                    <input id="picture-edit-y" type="number" min="-10" max="10" value="0" step="0.01" />
+                  </div>
+                  <div class="position-input">
+                    <label for="picture-edit-zoom">Z:</label>
+                    <input id="picture-edit-zoom" type="number" min="0" max="3" value="1" step="0.1" />
+                  </div>
+                  <button type="button" class="reset-position" onclick="resetPictureEditPosition()">リセット</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="tools">
           <a id="download" target="_blank" title="画像ファイルとしてダウンロード" download="card.png"
@@ -235,7 +438,7 @@
               <label for="description">テキスト</label>
               <ul id="legend">
                 <li><span class="def">-</span>: 水平線</li>
-                <li><span class="def">[i]</span>: 斜め文字</li>
+                <li><span class="def">[i]</span>: 斜体</li>
               </ul>
             </div>
             <textarea

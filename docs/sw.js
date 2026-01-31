@@ -1,6 +1,6 @@
 // Names of the caches used in this version of the service worker.
 // Increase chache number when you update any of the local resources, which will in turn trigger the install event again.
-const PRECACHE_CORE = "precache-core-v31";
+const PRECACHE_CORE = "precache-core-v45";
 const PRECACHE_CARD = "precache-card-v6";
 const PRECACHE_LIBS = "precache-libs-v1";
 const RUNTIME = "runtime";
@@ -21,10 +21,7 @@ const PRECACHE_CORE_URLS = [
   "assets/spinner.png",
   OFFLINE_URL,
 ];
-const PRECACHE_LIBS_URLS = [
-  "https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js",
-  "https://unpkg.com/jszip@3/dist/jszip.min.js",
-];
+const PRECACHE_LIBS_URLS = ["https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js", "https://unpkg.com/jszip@3/dist/jszip.min.js"];
 const PRECACHE_CARD_URLS = [
   "card-resources/BaseCardBrown.png",
   "card-resources/BaseCardColorOne.png",
@@ -144,10 +141,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   // Skip query string URLs (redundant cache)
-  if (
-    event.request.url.startsWith("https://wamei.github.io/dominion-card-generator/?") ||
-    event.request.url.startsWith("https://wamei.github.io/dominion-card-generator/index.html?")
-  ) {
+  if (event.request.url.startsWith("https://wamei.github.io/dominion-card-generator/?") || event.request.url.startsWith("https://wamei.github.io/dominion-card-generator/index.html?")) {
     return;
   }
 

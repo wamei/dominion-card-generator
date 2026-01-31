@@ -1178,17 +1178,22 @@ function initCardImageGenerator() {
 
     if (url != "[local image]") {
       myFavorites.getDB().deleteLiveImage(id);
-      if (url.length > 0 && useCORS) {
-        loadImgAsBase64(
-          url,
-          (dataURL) => {
-            setImageSource(id, dataURL);
-          },
-          maxWidth,
-          maxHeight,
-        );
-      } else {
-        setImageSource(id, url);
+      if (url.length > 0) {
+        // Data URLs can be used directly
+        if (url.startsWith("data:")) {
+          setImageSource(id, url);
+        } else if (useCORS) {
+          loadImgAsBase64(
+            url,
+            (dataURL) => {
+              setImageSource(id, dataURL);
+            },
+            maxWidth,
+            maxHeight,
+          );
+        } else {
+          setImageSource(id, url);
+        }
       }
     }
   }
@@ -1460,6 +1465,10 @@ function initCardImageGenerator() {
     queueDraw(250);
   };
 
+  window.onUploadImage = function (id, file) {
+    onUploadImage(id, file);
+  };
+
   window.showLoadingState = function () {
     const wrapper = canvases[0].parentNode;
     wrapper.setAttribute("data-status", "Loading...");
@@ -1579,6 +1588,477 @@ function getQueryParams(qs) {
   }
 
   return params;
+}
+
+// Text Edit Modal for mobile
+let textEditPendingCustomIconFile = null;
+
+// Setup text edit custom icon upload handler once
+document.addEventListener("DOMContentLoaded", function () {
+  const uploadInput = document.getElementById("text-edit-custom-icon-upload");
+  if (uploadInput) {
+    uploadInput.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        textEditPendingCustomIconFile = this.files[0];
+        document.getElementById("text-edit-custom-icon").value = "[local image]";
+      }
+    });
+  }
+});
+
+function openTextEditModal() {
+  const modal = document.getElementById("text-edit-modal");
+  const textarea = document.getElementById("text-edit-textarea");
+  const descriptionField = document.getElementById("description");
+  const legendContainer = document.getElementById("text-edit-legend");
+  const boldkeysInput = document.getElementById("text-edit-boldkeys");
+  const customIconInput = document.getElementById("text-edit-custom-icon");
+  const customIconUpload = document.getElementById("text-edit-custom-icon-upload");
+
+  // Clone legend if not already done
+  if (!legendContainer.hasChildNodes()) {
+    const legend = document.getElementById("legend");
+    legendContainer.appendChild(legend.cloneNode(true));
+    legendContainer.firstChild.removeAttribute("id");
+  }
+
+  // Reset pending file
+  textEditPendingCustomIconFile = null;
+  customIconUpload.value = "";
+
+  // Sync values from main form
+  textarea.value = descriptionField.value;
+  boldkeysInput.value = document.getElementById("boldkeys").value;
+  customIconInput.value = document.getElementById("custom-icon").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+  textarea.focus();
+}
+
+function closeTextEditModal(apply) {
+  const modal = document.getElementById("text-edit-modal");
+  const textarea = document.getElementById("text-edit-textarea");
+  const descriptionField = document.getElementById("description");
+  const boldkeysInput = document.getElementById("text-edit-boldkeys");
+  const customIconInput = document.getElementById("text-edit-custom-icon");
+
+  if (apply) {
+    descriptionField.value = textarea.value;
+    descriptionField.dispatchEvent(new Event("input"));
+
+    document.getElementById("boldkeys").value = boldkeysInput.value;
+    document.getElementById("boldkeys").dispatchEvent(new Event("change"));
+
+    // Handle custom icon - either uploaded file or URL
+    if (textEditPendingCustomIconFile) {
+      document.getElementById("custom-icon").value = "[local image]";
+      window.onUploadImage(images.length - 1, textEditPendingCustomIconFile);
+    } else if (customIconInput.value !== document.getElementById("custom-icon").value) {
+      document.getElementById("custom-icon").value = customIconInput.value;
+      document.getElementById("custom-icon").dispatchEvent(new Event("change"));
+    }
+  }
+
+  textEditPendingCustomIconFile = null;
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Picture Edit Modal for mobile
+let pictureEditPendingFile = null;
+
+// Setup picture edit upload handler once
+document.addEventListener("DOMContentLoaded", function () {
+  const uploadInput = document.getElementById("picture-edit-upload");
+  if (uploadInput) {
+    uploadInput.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        pictureEditPendingFile = this.files[0];
+        document.getElementById("picture-edit-url").value = "[local image]";
+      }
+    });
+  }
+});
+
+function openPictureEditModal() {
+  const modal = document.getElementById("picture-edit-modal");
+  const urlInput = document.getElementById("picture-edit-url");
+  const xInput = document.getElementById("picture-edit-x");
+  const yInput = document.getElementById("picture-edit-y");
+  const zoomInput = document.getElementById("picture-edit-zoom");
+  const uploadInput = document.getElementById("picture-edit-upload");
+
+  // Reset pending file and upload input
+  pictureEditPendingFile = null;
+  uploadInput.value = "";
+
+  // Sync values from main form
+  urlInput.value = document.getElementById("picture").value;
+  xInput.value = document.getElementById("picture-x").value;
+  yInput.value = document.getElementById("picture-y").value;
+  zoomInput.value = document.getElementById("picture-zoom").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closePictureEditModal(apply) {
+  const modal = document.getElementById("picture-edit-modal");
+
+  if (apply) {
+    const urlInput = document.getElementById("picture-edit-url");
+    const xInput = document.getElementById("picture-edit-x");
+    const yInput = document.getElementById("picture-edit-y");
+    const zoomInput = document.getElementById("picture-edit-zoom");
+
+    // Handle picture - either uploaded file or URL
+    if (pictureEditPendingFile) {
+      document.getElementById("picture").value = "[local image]";
+      document.getElementById("picture-upload").value = "";
+      window.onUploadImage(5, pictureEditPendingFile);
+    } else if (urlInput.value !== document.getElementById("picture").value) {
+      const pictureEl = document.getElementById("picture");
+      pictureEl.value = urlInput.value;
+      pictureEl.dispatchEvent(new Event("change"));
+    }
+
+    document.getElementById("picture-x").value = xInput.value;
+    document.getElementById("picture-y").value = yInput.value;
+    document.getElementById("picture-zoom").value = zoomInput.value;
+    document.getElementById("picture-zoom").dispatchEvent(new Event("change"));
+  }
+
+  pictureEditPendingFile = null;
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+function resetPictureEditPosition() {
+  document.getElementById("picture-edit-x").value = 0;
+  document.getElementById("picture-edit-y").value = 0;
+  document.getElementById("picture-edit-zoom").value = 1;
+}
+
+// Type Edit Modal for mobile
+function openTypeEditModal() {
+  const modal = document.getElementById("type-edit-modal");
+  const color1Select = document.getElementById("type-edit-color1");
+  const color2Select = document.getElementById("type-edit-color2");
+  const typeInput = document.getElementById("type-edit-type");
+  const heirloomInput = document.getElementById("type-edit-heirloom");
+  const mainColor1Select = document.getElementById("normalcolor1");
+  const mainColor2Select = document.getElementById("normalcolor2");
+
+  // Clone color options if not already done
+  if (color1Select.options.length === 0) {
+    for (let i = 0; i < mainColor1Select.options.length; i++) {
+      const option = document.createElement("option");
+      option.textContent = mainColor1Select.options[i].textContent;
+      option.value = i;
+      color1Select.appendChild(option);
+    }
+  }
+  if (color2Select.options.length === 0) {
+    for (let i = 0; i < mainColor2Select.options.length; i++) {
+      const option = document.createElement("option");
+      option.textContent = mainColor2Select.options[i].textContent;
+      option.value = i;
+      color2Select.appendChild(option);
+    }
+  }
+
+  // Sync values from main form
+  color1Select.selectedIndex = mainColor1Select.selectedIndex;
+  color2Select.selectedIndex = mainColor2Select.selectedIndex;
+  typeInput.value = document.getElementById("type").value;
+  heirloomInput.value = document.getElementById("type2").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closeTypeEditModal(apply) {
+  const modal = document.getElementById("type-edit-modal");
+
+  if (apply) {
+    const color1Select = document.getElementById("type-edit-color1");
+    const color2Select = document.getElementById("type-edit-color2");
+    const typeInput = document.getElementById("type-edit-type");
+    const heirloomInput = document.getElementById("type-edit-heirloom");
+    const mainColor1Select = document.getElementById("normalcolor1");
+    const mainColor2Select = document.getElementById("normalcolor2");
+
+    // Apply colors if changed
+    if (mainColor1Select.selectedIndex !== color1Select.selectedIndex) {
+      mainColor1Select.selectedIndex = color1Select.selectedIndex;
+      mainColor1Select.dispatchEvent(new Event("change"));
+    }
+    if (mainColor2Select.selectedIndex !== color2Select.selectedIndex) {
+      mainColor2Select.selectedIndex = color2Select.selectedIndex;
+      mainColor2Select.dispatchEvent(new Event("change"));
+    }
+
+    document.getElementById("type").value = typeInput.value;
+    document.getElementById("type").dispatchEvent(new Event("change"));
+
+    document.getElementById("type2").value = heirloomInput.value;
+    document.getElementById("type2").dispatchEvent(new Event("change"));
+  }
+
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Title Edit Modal for mobile
+let titleEditPendingExpansionIconFile = null;
+
+// Setup title edit expansion icon upload handler once
+document.addEventListener("DOMContentLoaded", function () {
+  const uploadInput = document.getElementById("title-edit-expansion-icon-upload");
+  if (uploadInput) {
+    uploadInput.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        titleEditPendingExpansionIconFile = this.files[0];
+        document.getElementById("title-edit-expansion-icon").value = "[local image]";
+      }
+    });
+  }
+});
+
+function openTitleEditModal() {
+  const modal = document.getElementById("title-edit-modal");
+  const expansionInput = document.getElementById("title-edit-expansion");
+  const expansionIconInput = document.getElementById("title-edit-expansion-icon");
+  const expansionIconUpload = document.getElementById("title-edit-expansion-icon-upload");
+  const titleInput = document.getElementById("title-edit-title");
+
+  // Reset pending file
+  titleEditPendingExpansionIconFile = null;
+  expansionIconUpload.value = "";
+
+  // Sync values from main form
+  expansionInput.value = document.getElementById("expansionName").value;
+  expansionIconInput.value = document.getElementById("expansion").value;
+  titleInput.value = document.getElementById("title").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closeTitleEditModal(apply) {
+  const modal = document.getElementById("title-edit-modal");
+
+  if (apply) {
+    const expansionInput = document.getElementById("title-edit-expansion");
+    const expansionIconInput = document.getElementById("title-edit-expansion-icon");
+    const titleInput = document.getElementById("title-edit-title");
+
+    document.getElementById("expansionName").value = expansionInput.value;
+    document.getElementById("expansionName").dispatchEvent(new Event("change"));
+
+    // Handle expansion icon - either uploaded file or URL
+    if (titleEditPendingExpansionIconFile) {
+      document.getElementById("expansion").value = "[local image]";
+      window.onUploadImage(17, titleEditPendingExpansionIconFile);
+    } else if (expansionIconInput.value !== document.getElementById("expansion").value) {
+      document.getElementById("expansion").value = expansionIconInput.value;
+      document.getElementById("expansion").dispatchEvent(new Event("change"));
+    }
+
+    document.getElementById("title").value = titleInput.value;
+    document.getElementById("title").dispatchEvent(new Event("change"));
+  }
+
+  titleEditPendingExpansionIconFile = null;
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Credit Edit Modal for mobile
+function openCreditEditModal() {
+  const modal = document.getElementById("credit-edit-modal");
+  const artInput = document.getElementById("credit-edit-art");
+  const versionInput = document.getElementById("credit-edit-version");
+
+  // Sync values from main form
+  artInput.value = document.getElementById("credit").value;
+  versionInput.value = document.getElementById("creator").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closeCreditEditModal(apply) {
+  const modal = document.getElementById("credit-edit-modal");
+
+  if (apply) {
+    const artInput = document.getElementById("credit-edit-art");
+    const versionInput = document.getElementById("credit-edit-version");
+
+    document.getElementById("credit").value = artInput.value;
+    document.getElementById("credit").dispatchEvent(new Event("change"));
+
+    document.getElementById("creator").value = versionInput.value;
+    document.getElementById("creator").dispatchEvent(new Event("change"));
+  }
+
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Cost Edit Modal for mobile
+function openCostEditModal() {
+  const modal = document.getElementById("cost-edit-modal");
+  const priceInput = document.getElementById("cost-edit-price");
+  const previewInput = document.getElementById("cost-edit-preview");
+  const legendContainer = document.getElementById("cost-edit-legend");
+
+  // Clone legend if not already done
+  if (!legendContainer.hasChildNodes()) {
+    const legend = document.getElementById("legend");
+    legendContainer.appendChild(legend.cloneNode(true));
+    legendContainer.firstChild.removeAttribute("id");
+  }
+
+  // Sync values from main form
+  priceInput.value = document.getElementById("price").value;
+  previewInput.value = document.getElementById("preview").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closeCostEditModal(apply) {
+  const modal = document.getElementById("cost-edit-modal");
+
+  if (apply) {
+    const priceInput = document.getElementById("cost-edit-price");
+    const previewInput = document.getElementById("cost-edit-preview");
+
+    document.getElementById("price").value = priceInput.value;
+    document.getElementById("price").dispatchEvent(new Event("change"));
+
+    document.getElementById("preview").value = previewInput.value;
+    document.getElementById("preview").dispatchEvent(new Event("change"));
+  }
+
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Expansion Edit Modal for mobile
+let expansionEditPendingIconFile = null;
+
+// Setup expansion edit icon upload handler once
+document.addEventListener("DOMContentLoaded", function () {
+  const uploadInput = document.getElementById("expansion-edit-icon-upload");
+  if (uploadInput) {
+    uploadInput.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        expansionEditPendingIconFile = this.files[0];
+        document.getElementById("expansion-edit-icon").value = "[local image]";
+      }
+    });
+  }
+});
+
+function openExpansionEditModal() {
+  const modal = document.getElementById("expansion-edit-modal");
+  const nameInput = document.getElementById("expansion-edit-name");
+  const iconInput = document.getElementById("expansion-edit-icon");
+  const iconUpload = document.getElementById("expansion-edit-icon-upload");
+
+  // Reset pending file
+  expansionEditPendingIconFile = null;
+  iconUpload.value = "";
+
+  // Sync values from main form
+  nameInput.value = document.getElementById("expansionName").value;
+  iconInput.value = document.getElementById("expansion").value;
+
+  modal.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closeExpansionEditModal(apply) {
+  const modal = document.getElementById("expansion-edit-modal");
+
+  if (apply) {
+    const nameInput = document.getElementById("expansion-edit-name");
+    const iconInput = document.getElementById("expansion-edit-icon");
+
+    document.getElementById("expansionName").value = nameInput.value;
+    document.getElementById("expansionName").dispatchEvent(new Event("change"));
+
+    // Handle expansion icon - either uploaded file or URL
+    if (expansionEditPendingIconFile) {
+      document.getElementById("expansion").value = "[local image]";
+      window.onUploadImage(17, expansionEditPendingIconFile);
+    } else if (iconInput.value !== document.getElementById("expansion").value) {
+      document.getElementById("expansion").value = iconInput.value;
+      document.getElementById("expansion").dispatchEvent(new Event("change"));
+    }
+  }
+
+  expansionEditPendingIconFile = null;
+  modal.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
+}
+
+// Setup mobile canvas tap handler
+function setupMobileCanvasTap() {
+  if (window.innerWidth > 600) return;
+
+  const canvasWrapper = document.querySelector(".canvas-wrapper");
+  canvasWrapper.addEventListener("click", function (e) {
+    // Only on mobile
+    if (window.innerWidth > 600) return;
+
+    // Get tap position relative to canvas
+    const canvas = canvasWrapper.querySelector("canvas");
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const relativeX = x / rect.width;
+    const relativeY = y / rect.height;
+
+    // Bottom left corner (cost area): Y > 80% and X < 20%
+    if (relativeY > 0.8 && relativeX < 0.2) {
+      openCostEditModal();
+      return;
+    }
+
+    // Bottom right corner (expansion area): Y > 80% and X > 80%
+    if (relativeY > 0.8 && relativeX > 0.8) {
+      openExpansionEditModal();
+      return;
+    }
+
+    // Top ~20%: title area
+    // 20-50%: illustration area
+    // 50-85%: text area
+    // 85-95%: type area
+    // Bottom ~5%: credit area
+    if (relativeY < 0.2) {
+      openTitleEditModal();
+    } else if (relativeY < 0.5) {
+      openPictureEditModal();
+    } else if (relativeY < 0.85) {
+      openTextEditModal();
+    } else if (relativeY < 0.95) {
+      openTypeEditModal();
+    } else {
+      openCreditEditModal();
+    }
+  });
+}
+
+// Initialize mobile tap handler when DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupMobileCanvasTap);
+} else {
+  setupMobileCanvasTap();
 }
 
 // function to download the finished card
@@ -2393,11 +2873,7 @@ function Favorites(name) {
                   });
                 };
 
-                await Promise.all([
-                  loadImage(5, cardData.images?.illustration),
-                  loadImage(17, cardData.images?.expansion),
-                  loadImage(customIconIndex, cardData.images?.customIcon),
-                ]);
+                await Promise.all([loadImage(5, cardData.images?.illustration), loadImage(17, cardData.images?.expansion), loadImage(customIconIndex, cardData.images?.customIcon)]);
 
                 // Apply params and wait for render
                 iframeWindow.applyQueryParams(cardData.params);
