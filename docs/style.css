@@ -1334,7 +1334,7 @@ button.delete-all:focus {
     gap: 0.25em;
   }
 
-  /* Modal slide animations */
+  /* Modal slide animations - open */
   @keyframes slideFromBottom {
     from {
       transform: translateY(100%);
@@ -1359,6 +1359,34 @@ button.delete-all:focus {
     }
     to {
       opacity: 1;
+    }
+  }
+
+  /* Modal slide animations - close */
+  @keyframes slideToBottom {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes slideToTop {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
     }
   }
 
@@ -1418,10 +1446,33 @@ button.delete-all:focus {
     animation: slideFromTop 0.25s ease-out;
   }
 
+  /* Edit modals - closing animation */
+  .edit-modal.closing {
+    animation: fadeOut 0.2s ease-out forwards;
+  }
+
+  .edit-modal.closing .popup-body {
+    animation: slideToBottom 0.2s ease-out forwards;
+  }
+
+  /* Top modals - closing animation */
+  #text-edit-modal.closing .popup-body,
+  #type-edit-modal.closing .popup-body,
+  #cost-edit-modal.closing .popup-body,
+  #expansion-edit-modal.closing .popup-body,
+  #credit-edit-modal.closing .popup-body {
+    animation: slideToTop 0.2s ease-out forwards;
+  }
+
   /* Favorites and Font modals - slide from bottom */
   #manage-favorites,
   #manage-fonts {
     animation: slideFromBottom 0.25s ease-out;
+  }
+
+  #manage-favorites.closing,
+  #manage-fonts.closing {
+    animation: slideToBottom 0.2s ease-out forwards;
   }
 
   .popup .menu .menu-spacer {

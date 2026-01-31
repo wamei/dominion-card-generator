@@ -1629,6 +1629,27 @@ function unlockScroll() {
   window.scrollTo(0, savedScrollPosition);
 }
 
+// Close modal with animation helper
+function closeModalWithAnimation(modal, callback) {
+  if (window.innerWidth <= 600) {
+    modal.classList.add("closing");
+    modal.addEventListener(
+      "animationend",
+      () => {
+        modal.classList.remove("closing");
+        modal.classList.add("hidden");
+        unlockScroll();
+        if (callback) callback();
+      },
+      { once: true }
+    );
+  } else {
+    modal.classList.add("hidden");
+    unlockScroll();
+    if (callback) callback();
+  }
+}
+
 // Text Edit Modal for mobile
 let textEditPendingCustomIconFile = null;
 
@@ -1687,8 +1708,7 @@ function closeTextEditModal(apply) {
   }
 
   textEditPendingCustomIconFile = null;
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Picture Edit Modal for mobile
@@ -1744,8 +1764,7 @@ function closePictureEditModal(apply) {
   }
 
   pictureEditPendingFile = null;
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 function resetPictureEditPosition() {
@@ -1832,8 +1851,7 @@ function closeTypeEditModal(apply) {
     document.getElementById("deckSize").dispatchEvent(new Event("change"));
   }
 
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Title Edit Modal for mobile
@@ -1858,8 +1876,7 @@ function closeTitleEditModal(apply) {
     document.getElementById("title").dispatchEvent(new Event("change"));
   }
 
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Credit Edit Modal for mobile
@@ -1891,8 +1908,7 @@ function closeCreditEditModal(apply) {
     document.getElementById("creator").dispatchEvent(new Event("change"));
   }
 
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Preview Edit Modal for mobile
@@ -1925,8 +1941,7 @@ function closePreviewEditModal(apply) {
     document.getElementById("preview").dispatchEvent(new Event("change"));
   }
 
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Cost Edit Modal for mobile
@@ -1960,8 +1975,7 @@ function closeCostEditModal(apply) {
     document.getElementById("price").dispatchEvent(new Event("change"));
   }
 
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Expansion Edit Modal for mobile
@@ -2007,8 +2021,7 @@ function closeExpansionEditModal(apply) {
   }
 
   expansionEditPendingIconFile = null;
-  modal.classList.add("hidden");
-  unlockScroll();
+  closeModalWithAnimation(modal);
 }
 
 // Setup all mobile modal upload handlers
@@ -3315,8 +3328,21 @@ function Favorites(name) {
     }
   };
   this.close = function () {
-    fav.classList.add("hidden");
-    document.body.classList.remove("no-scroll");
+    if (window.innerWidth <= 600) {
+      fav.classList.add("closing");
+      fav.addEventListener(
+        "animationend",
+        () => {
+          fav.classList.remove("closing");
+          fav.classList.add("hidden");
+          document.body.classList.remove("no-scroll");
+        },
+        { once: true }
+      );
+    } else {
+      fav.classList.add("hidden");
+      document.body.classList.remove("no-scroll");
+    }
   };
   this.deleteAll = async function () {
     if (!confirm("お気に入りをすべて削除してもよろしいですか？")) return;
@@ -3859,8 +3885,21 @@ class FontHandler {
   }
 
   close() {
-    this.dialog.classList.add("hidden");
-    document.body.classList.remove("no-scroll");
+    if (window.innerWidth <= 600) {
+      this.dialog.classList.add("closing");
+      this.dialog.addEventListener(
+        "animationend",
+        () => {
+          this.dialog.classList.remove("closing");
+          this.dialog.classList.add("hidden");
+          document.body.classList.remove("no-scroll");
+        },
+        { once: true }
+      );
+    } else {
+      this.dialog.classList.add("hidden");
+      document.body.classList.remove("no-scroll");
+    }
   }
 
   save() {
