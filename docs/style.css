@@ -224,6 +224,14 @@ body.size4 #matCanvas {
   font-size: 1.2em;
   margin: 0;
 }
+.canvas-title a {
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.canvas-title a:visited {
+  color: var(--color-text);
+}
 
 .canvas-wrapper {
   position: relative;
