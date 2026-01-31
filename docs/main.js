@@ -1630,7 +1630,7 @@ function openTextEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
-  textarea.focus();
+  document.activeElement.blur();
 }
 
 function closeTextEditModal(apply) {
@@ -1685,6 +1685,7 @@ function openPictureEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closePictureEditModal(apply) {
@@ -1760,6 +1761,7 @@ function openTypeEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closeTypeEditModal(apply) {
@@ -1815,6 +1817,7 @@ function openTitleEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closeTitleEditModal(apply) {
@@ -1858,6 +1861,7 @@ function openCreditEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closeCreditEditModal(apply) {
@@ -1896,6 +1900,7 @@ function openPreviewEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closePreviewEditModal(apply) {
@@ -1931,6 +1936,7 @@ function openCostEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closeCostEditModal(apply) {
@@ -1970,6 +1976,7 @@ function openExpansionEditModal() {
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
+  document.activeElement.blur();
 }
 
 function closeExpansionEditModal(apply) {
