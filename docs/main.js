@@ -1194,6 +1194,11 @@ function initCardImageGenerator() {
         } else {
           setImageSource(id, url);
         }
+      } else {
+        // Clear image when URL is empty
+        images[id] = new Image();
+        imagesLoaded = false;
+        queueDraw(250);
       }
     }
   }
@@ -1507,6 +1512,7 @@ function initCardImageGenerator() {
       "expansion",
       "custom-icon",
     ];
+    const imageFields = ["picture", "expansion", "custom-icon"];
     for (const fieldId of fieldsToReset) {
       if (!(fieldId in query)) {
         const el = document.getElementById(fieldId);
@@ -1517,6 +1523,10 @@ function initCardImageGenerator() {
             el.value = "0";
           } else {
             el.value = "";
+          }
+          // Trigger change event for image fields to clear images
+          if (imageFields.includes(fieldId)) {
+            el.dispatchEvent(new Event("change"));
           }
         }
       }
