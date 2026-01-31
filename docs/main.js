@@ -1579,6 +1579,14 @@ function initCardImageGenerator() {
           break;
       }
     }
+
+    // Set default size if not specified
+    if (!("size" in query)) {
+      templateSize = 0;
+      document.body.classList.add("size0");
+      document.getElementById("size0").checked = true;
+    }
+
     recoloredImages = [];
     imagesLoaded = false;
     queueDraw(1);

@@ -1224,6 +1224,33 @@ button.delete-all:focus {
     transform: none;
   }
 
+  /* Ensure only the correct canvas is visible on mobile */
+  #landscapeCanvas,
+  #matCanvas {
+    display: none;
+  }
+
+  body.size0 #portraitCanvas,
+  body.size2 #portraitCanvas,
+  body.size3 #portraitCanvas {
+    display: block;
+  }
+
+  body.size1 #portraitCanvas,
+  body.size4 #portraitCanvas,
+  body.size5 #portraitCanvas {
+    display: none;
+  }
+
+  body.size1 #landscapeCanvas,
+  body.size4 #landscapeCanvas {
+    display: block;
+  }
+
+  body.size5 #matCanvas {
+    display: block;
+  }
+
   .form-section {
     width: 100%;
   }
