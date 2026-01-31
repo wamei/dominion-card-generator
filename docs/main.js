@@ -1590,6 +1590,11 @@ function initCardImageGenerator() {
     recoloredImages = [];
     imagesLoaded = false;
     queueDraw(1);
+
+    // Update tap overlay states after form values are set
+    if (typeof updateTapOverlayStates === "function") {
+      updateTapOverlayStates();
+    }
   };
 }
 
@@ -1826,22 +1831,11 @@ function closeTypeEditModal(apply) {
 }
 
 // Title Edit Modal for mobile
-let titleEditPendingExpansionIconFile = null;
-
 function openTitleEditModal() {
   const modal = document.getElementById("title-edit-modal");
-  const expansionInput = document.getElementById("title-edit-expansion");
-  const expansionIconInput = document.getElementById("title-edit-expansion-icon");
-  const expansionIconUpload = document.getElementById("title-edit-expansion-icon-upload");
   const titleInput = document.getElementById("title-edit-title");
 
-  // Reset pending file
-  titleEditPendingExpansionIconFile = null;
-  expansionIconUpload.value = "";
-
   // Sync values from main form
-  expansionInput.value = document.getElementById("expansionName").value;
-  expansionIconInput.value = document.getElementById("expansion").value;
   titleInput.value = document.getElementById("title").value;
 
   modal.classList.remove("hidden");
@@ -1853,27 +1847,11 @@ function closeTitleEditModal(apply) {
   const modal = document.getElementById("title-edit-modal");
 
   if (apply) {
-    const expansionInput = document.getElementById("title-edit-expansion");
-    const expansionIconInput = document.getElementById("title-edit-expansion-icon");
     const titleInput = document.getElementById("title-edit-title");
-
-    document.getElementById("expansionName").value = expansionInput.value;
-    document.getElementById("expansionName").dispatchEvent(new Event("change"));
-
-    // Handle expansion icon - either uploaded file or URL
-    if (titleEditPendingExpansionIconFile) {
-      document.getElementById("expansion").value = "[local image]";
-      window.onUploadImage(17, titleEditPendingExpansionIconFile);
-    } else if (expansionIconInput.value !== document.getElementById("expansion").value) {
-      document.getElementById("expansion").value = expansionIconInput.value;
-      document.getElementById("expansion").dispatchEvent(new Event("change"));
-    }
-
     document.getElementById("title").value = titleInput.value;
     document.getElementById("title").dispatchEvent(new Event("change"));
   }
 
-  titleEditPendingExpansionIconFile = null;
   modal.classList.add("hidden");
   unlockScroll();
 }
@@ -2027,72 +2005,6 @@ function closeExpansionEditModal(apply) {
   unlockScroll();
 }
 
-// Setup mobile canvas tap handler
-function setupMobileCanvasTap() {
-  if (window.innerWidth > 600) return;
-
-  const canvasWrapper = document.querySelector(".canvas-wrapper");
-  canvasWrapper.addEventListener("click", function (e) {
-    // Only on mobile
-    if (window.innerWidth > 600) return;
-
-    // Get tap position relative to canvas
-    const canvas = canvasWrapper.querySelector("canvas:not([style*='display: none'])");
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const relativeX = x / rect.width;
-    const relativeY = y / rect.height;
-
-    // Ignore taps outside the visible canvas area
-    if (relativeX < 0 || relativeX > 1 || relativeY < 0 || relativeY > 1) {
-      return;
-    }
-
-    // Bottom left corner (cost area): Y > 80% and X < 20%
-    if (relativeY > 0.8 && relativeX < 0.2) {
-      openCostEditModal();
-      return;
-    }
-
-    // Bottom right corner (expansion area): Y > 80% and X > 80%
-    if (relativeY > 0.8 && relativeX > 0.8) {
-      openExpansionEditModal();
-      return;
-    }
-
-    // Top left corner (preview area): Y < 20% and X < 20%
-    if (relativeY < 0.2 && relativeX < 0.2) {
-      openPreviewEditModal();
-      return;
-    }
-
-    // Top right corner (preview area): Y < 20% and X > 80%
-    if (relativeY < 0.2 && relativeX > 0.8) {
-      openPreviewEditModal();
-      return;
-    }
-
-    // Top ~20%: title area
-    // 20-50%: illustration area
-    // 50-85%: text area
-    // 85-95%: type area
-    // Bottom ~5%: credit area
-    if (relativeY < 0.2) {
-      openTitleEditModal();
-    } else if (relativeY < 0.5) {
-      openPictureEditModal();
-    } else if (relativeY < 0.85) {
-      openTextEditModal();
-    } else if (relativeY < 0.95) {
-      openTypeEditModal();
-    } else {
-      openCreditEditModal();
-    }
-  });
-}
-
 // Setup all mobile modal upload handlers
 function setupMobileModalUploadHandlers() {
   // Text edit custom icon upload
@@ -2117,17 +2029,6 @@ function setupMobileModalUploadHandlers() {
     });
   }
 
-  // Title edit expansion icon upload
-  const titleEditUpload = document.getElementById("title-edit-expansion-icon-upload");
-  if (titleEditUpload) {
-    titleEditUpload.addEventListener("change", function () {
-      if (this.files && this.files[0]) {
-        titleEditPendingExpansionIconFile = this.files[0];
-        document.getElementById("title-edit-expansion-icon").value = "[local image]";
-      }
-    });
-  }
-
   // Expansion edit icon upload
   const expansionEditUpload = document.getElementById("expansion-edit-icon-upload");
   if (expansionEditUpload) {
@@ -2140,10 +2041,93 @@ function setupMobileModalUploadHandlers() {
   }
 }
 
+// Update tap overlay empty states based on input values
+function updateTapOverlayStates() {
+  if (window.innerWidth > 600) return;
+
+  const overlays = {
+    preview: document.querySelectorAll('.tap-overlay[data-area="preview"]'),
+    title: document.querySelectorAll('.tap-overlay[data-area="title"]'),
+    picture: document.querySelectorAll('.tap-overlay[data-area="picture"]'),
+    text: document.querySelectorAll('.tap-overlay[data-area="text"]'),
+    type: document.querySelectorAll('.tap-overlay[data-area="type"]'),
+    cost: document.querySelectorAll('.tap-overlay[data-area="cost"]'),
+    expansion: document.querySelectorAll('.tap-overlay[data-area="expansion"]'),
+    credit: document.querySelectorAll('.tap-overlay[data-area="credit"]'),
+  };
+
+  const isEmpty = {
+    preview: !document.getElementById("preview")?.value,
+    title: !document.getElementById("title")?.value,
+    picture: !document.getElementById("picture")?.value,
+    text: !document.getElementById("description")?.value,
+    type: !document.getElementById("type")?.value,
+    cost: !document.getElementById("price")?.value,
+    expansion: !document.getElementById("expansion")?.value && !document.getElementById("expansionName")?.value,
+    credit: !document.getElementById("credit")?.value && !document.getElementById("creator")?.value,
+  };
+
+  for (const [area, elements] of Object.entries(overlays)) {
+    elements.forEach((el) => {
+      if (isEmpty[area]) {
+        el.classList.add("empty");
+      } else {
+        el.classList.remove("empty");
+      }
+
+      // Hide picture overlay completely when image is specified
+      if (area === "picture") {
+        if (isEmpty[area]) {
+          el.classList.remove("has-content");
+        } else {
+          el.classList.add("has-content");
+        }
+      }
+    });
+  }
+}
+
+// Setup tap overlay click handlers
+function setupTapOverlayHandlers() {
+  if (window.innerWidth > 600) return;
+
+  const handlers = {
+    preview: openPreviewEditModal,
+    title: openTitleEditModal,
+    picture: openPictureEditModal,
+    text: openTextEditModal,
+    type: openTypeEditModal,
+    cost: openCostEditModal,
+    expansion: openExpansionEditModal,
+    credit: openCreditEditModal,
+  };
+
+  document.querySelectorAll(".tap-overlay").forEach((overlay) => {
+    overlay.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const area = this.dataset.area;
+      if (handlers[area]) {
+        handlers[area]();
+      }
+    });
+  });
+}
+
 // Initialize mobile handlers when DOM is ready
 function initMobileHandlers() {
-  setupMobileCanvasTap();
   setupMobileModalUploadHandlers();
+  setupTapOverlayHandlers();
+  updateTapOverlayStates();
+
+  // Update overlay states when inputs change
+  const inputIds = ["preview", "title", "expansionName", "picture", "description", "type", "price", "expansion", "credit", "creator"];
+  inputIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", updateTapOverlayStates);
+      el.addEventListener("change", updateTapOverlayStates);
+    }
+  });
 }
 
 if (document.readyState === "loading") {
@@ -2151,6 +2135,11 @@ if (document.readyState === "loading") {
 } else {
   initMobileHandlers();
 }
+
+// Update overlay states after page fully loads (including query params processing)
+window.addEventListener("load", function () {
+  updateTapOverlayStates();
+});
 
 // function to download the finished card
 function downloadPicture() {

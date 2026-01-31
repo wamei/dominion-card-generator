@@ -85,6 +85,18 @@
           <canvas class="myCanvas" id="landscapeCanvas" width="2151" height="1403" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
           <canvas class="myCanvas" id="matCanvas" width="928" height="684" title="Right-Click this image for options to save it.">Your browser does not support the &lt;CANVAS&gt; tag.</canvas>
           <img id="load-indicator" src="assets/spinner.png" alt="Loading..." />
+          <!-- Mobile tap area overlays -->
+          <div class="tap-overlays">
+            <div class="tap-overlay tap-preview-left" data-area="preview"></div>
+            <div class="tap-overlay tap-preview-right" data-area="preview"></div>
+            <div class="tap-overlay tap-title" data-area="title"></div>
+            <div class="tap-overlay tap-picture" data-area="picture"></div>
+            <div class="tap-overlay tap-text" data-area="text"></div>
+            <div class="tap-overlay tap-type" data-area="type"></div>
+            <div class="tap-overlay tap-cost" data-area="cost"></div>
+            <div class="tap-overlay tap-expansion" data-area="expansion"></div>
+            <div class="tap-overlay tap-credit" data-area="credit"></div>
+          </div>
         </div>
         <div id="text-edit-modal" class="popup hidden">
           <div class="popup-header">
@@ -160,19 +172,6 @@
           </div>
           <div class="popup-body">
             <div class="title-edit-content">
-              <div class="form-group">
-                <label for="title-edit-expansion">拡張名</label>
-                <input id="title-edit-expansion" type="text" placeholder="基本" />
-              </div>
-              <div class="form-group">
-                <label for="title-edit-expansion-icon">拡張アイコン</label>
-                <div class="input-with-upload">
-                  <input id="title-edit-expansion-icon" type="url" placeholder="http://example.com/expansion.png" />
-                  <label class="image-upload" title="ローカル画像ファイルを使用する"
-                    ><i class="fa-solid fa-arrow-up-from-bracket"></i> <input id="title-edit-expansion-icon-upload" type="file" accept="image/*"
-                  /></label>
-                </div>
-              </div>
               <div class="form-group">
                 <label for="title-edit-title">タイトル</label>
                 <input id="title-edit-title" type="text" placeholder="村" />

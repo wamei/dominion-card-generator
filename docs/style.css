@@ -1845,8 +1845,107 @@ button.delete-all:focus {
   font-size: 16px;
 }
 
+/* Mobile tap overlays - hidden by default */
+.tap-overlays {
+  display: none;
+}
+
 @media (max-width: 600px) {
-  .canvas-wrapper {
+  .tap-overlays {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .tap-overlay {
+    position: absolute;
+    box-sizing: border-box;
+    pointer-events: auto;
+    border: 1px solid transparent;
     cursor: pointer;
+  }
+
+  .tap-overlay.empty {
+    background-color: rgba(100, 180, 255, 0.3);
+    border-color: rgba(100, 180, 255, 0.5);
+  }
+
+  .tap-overlay.has-content {
+    display: none;
+  }
+
+  /* Preview areas - top corners */
+  .tap-preview-left {
+    top: 5%;
+    left: 5%;
+    width: 18%;
+    height: 8%;
+  }
+
+  .tap-preview-right {
+    top: 5%;
+    right: 5%;
+    width: 18%;
+    height: 8%;
+  }
+
+  /* Title area - top center */
+  .tap-title {
+    top: 5%;
+    left: 25%;
+    width: 50%;
+    height: 8%;
+  }
+
+  /* Picture area - middle upper */
+  .tap-picture {
+    top: 15%;
+    left: 10%;
+    width: 80%;
+    height: 35%;
+  }
+
+  /* Text area - middle lower */
+  .tap-text {
+    top: 55%;
+    left: 10%;
+    width: 80%;
+    height: 29%;
+  }
+
+  /* Type area - above bottom */
+  .tap-type {
+    top: 86%;
+    left: 25%;
+    width: 50%;
+    height: 8%;
+  }
+
+  /* Cost area - bottom left */
+  .tap-cost {
+    top: 86%;
+    left: 5%;
+    width: 18%;
+    height: 8%;
+  }
+
+  /* Expansion area - bottom right */
+  .tap-expansion {
+    top: 86%;
+    right: 5%;
+    width: 18%;
+    height: 8%;
+  }
+
+  /* Credit area - very bottom */
+  .tap-credit {
+    top: 95%;
+    left: 10%;
+    width: 80%;
+    height: 3%;
   }
 }
