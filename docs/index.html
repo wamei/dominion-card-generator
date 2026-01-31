@@ -98,19 +98,14 @@
             <div class="tap-overlay tap-credit" data-area="credit"></div>
           </div>
         </div>
-        <div id="text-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">テキスト編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeTextEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeTextEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="text-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="text-edit-content">
+              <div class="form-group">
+                <label for="text-edit-textarea">カードテキスト</label>
+                <textarea id="text-edit-textarea" rows="8" placeholder="カードテキストを入力"></textarea>
+              </div>
               <div id="text-edit-legend"></div>
-              <textarea id="text-edit-textarea" rows="8" placeholder="カードテキストを入力"></textarea>
               <div class="form-group">
                 <label for="text-edit-boldkeys">追加の太字キーワード</label>
                 <input id="text-edit-boldkeys" placeholder="キーワード1;キーワード2; セミコロンで区切る" />
@@ -127,15 +122,7 @@
             </div>
           </div>
         </div>
-        <div id="type-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">種別編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeTypeEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeTypeEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="type-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="type-edit-content">
               <div class="form-group">
@@ -161,15 +148,7 @@
             </div>
           </div>
         </div>
-        <div id="title-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">タイトル編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeTitleEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeTitleEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="title-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="title-edit-content">
               <div class="form-group">
@@ -179,15 +158,7 @@
             </div>
           </div>
         </div>
-        <div id="preview-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">プレビュー編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closePreviewEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closePreviewEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="preview-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="preview-edit-content">
               <div id="preview-edit-legend"></div>
@@ -198,15 +169,7 @@
             </div>
           </div>
         </div>
-        <div id="cost-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">コスト編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeCostEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeCostEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="cost-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="cost-edit-content">
               <div id="cost-edit-legend"></div>
@@ -217,15 +180,7 @@
             </div>
           </div>
         </div>
-        <div id="expansion-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">拡張編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeExpansionEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeExpansionEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="expansion-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="expansion-edit-content">
               <div class="form-group">
@@ -244,15 +199,7 @@
             </div>
           </div>
         </div>
-        <div id="credit-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">クレジット編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closeCreditEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closeCreditEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="credit-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="credit-edit-content">
               <div class="form-group">
@@ -266,15 +213,7 @@
             </div>
           </div>
         </div>
-        <div id="picture-edit-modal" class="popup hidden">
-          <div class="popup-header">
-            <div class="menu">
-              <span class="modal-title">イラスト編集</span>
-              <span class="menu-spacer"></span>
-              <button type="button" class="confirm" onclick="closePictureEditModal(true)"><i class="fa-solid fa-check"></i>適用</button>
-              <button type="button" class="close" onclick="closePictureEditModal(false)"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          </div>
+        <div id="picture-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="picture-edit-content">
               <div class="form-group">

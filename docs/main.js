@@ -1751,6 +1751,11 @@ function resetPictureEditPosition() {
   document.getElementById("picture-edit-x").value = 0;
   document.getElementById("picture-edit-y").value = 0;
   document.getElementById("picture-edit-zoom").value = 1;
+  // Trigger real-time update
+  document.getElementById("picture-x").value = 0;
+  document.getElementById("picture-y").value = 0;
+  document.getElementById("picture-zoom").value = 1;
+  document.getElementById("picture-zoom").dispatchEvent(new Event("change"));
 }
 
 // Type Edit Modal for mobile
@@ -2113,10 +2118,198 @@ function setupTapOverlayHandlers() {
   });
 }
 
+// Setup real-time updates for modal inputs
+function setupModalRealtimeUpdates() {
+  // Text edit modal
+  const textEditTextarea = document.getElementById("text-edit-textarea");
+  if (textEditTextarea) {
+    textEditTextarea.addEventListener("input", () => {
+      document.getElementById("description").value = textEditTextarea.value;
+      document.getElementById("description").dispatchEvent(new Event("input"));
+    });
+  }
+
+  const textEditBoldkeys = document.getElementById("text-edit-boldkeys");
+  if (textEditBoldkeys) {
+    textEditBoldkeys.addEventListener("input", () => {
+      document.getElementById("boldkeys").value = textEditBoldkeys.value;
+      document.getElementById("boldkeys").dispatchEvent(new Event("change"));
+    });
+  }
+
+  const textEditCustomIcon = document.getElementById("text-edit-custom-icon");
+  if (textEditCustomIcon) {
+    textEditCustomIcon.addEventListener("change", () => {
+      if (textEditCustomIcon.value !== "[local image]") {
+        document.getElementById("custom-icon").value = textEditCustomIcon.value;
+        document.getElementById("custom-icon").dispatchEvent(new Event("change"));
+      }
+    });
+  }
+
+  // Picture edit modal
+  const pictureEditUrl = document.getElementById("picture-edit-url");
+  if (pictureEditUrl) {
+    pictureEditUrl.addEventListener("change", () => {
+      if (pictureEditUrl.value !== "[local image]") {
+        document.getElementById("picture").value = pictureEditUrl.value;
+        document.getElementById("picture").dispatchEvent(new Event("change"));
+        updateTapOverlayStates();
+      }
+    });
+  }
+
+  const pictureEditX = document.getElementById("picture-edit-x");
+  const pictureEditY = document.getElementById("picture-edit-y");
+  const pictureEditZoom = document.getElementById("picture-edit-zoom");
+  [pictureEditX, pictureEditY, pictureEditZoom].forEach((el) => {
+    if (el) {
+      el.addEventListener("input", () => {
+        document.getElementById("picture-x").value = pictureEditX.value;
+        document.getElementById("picture-y").value = pictureEditY.value;
+        document.getElementById("picture-zoom").value = pictureEditZoom.value;
+        document.getElementById("picture-zoom").dispatchEvent(new Event("change"));
+      });
+    }
+  });
+
+  // Type edit modal
+  const typeEditColor1 = document.getElementById("type-edit-color1");
+  if (typeEditColor1) {
+    typeEditColor1.addEventListener("change", () => {
+      const mainSelect = document.getElementById("normalcolor1");
+      mainSelect.selectedIndex = typeEditColor1.selectedIndex;
+      mainSelect.dispatchEvent(new Event("change"));
+    });
+  }
+
+  const typeEditColor2 = document.getElementById("type-edit-color2");
+  if (typeEditColor2) {
+    typeEditColor2.addEventListener("change", () => {
+      const mainSelect = document.getElementById("normalcolor2");
+      mainSelect.selectedIndex = typeEditColor2.selectedIndex;
+      mainSelect.dispatchEvent(new Event("change"));
+    });
+  }
+
+  const typeEditType = document.getElementById("type-edit-type");
+  if (typeEditType) {
+    typeEditType.addEventListener("input", () => {
+      document.getElementById("type").value = typeEditType.value;
+      document.getElementById("type").dispatchEvent(new Event("change"));
+    });
+  }
+
+  const typeEditHeirloom = document.getElementById("type-edit-heirloom");
+  if (typeEditHeirloom) {
+    typeEditHeirloom.addEventListener("input", () => {
+      document.getElementById("type2").value = typeEditHeirloom.value;
+      document.getElementById("type2").dispatchEvent(new Event("change"));
+    });
+  }
+
+  const typeEditDecksize = document.getElementById("type-edit-decksize");
+  if (typeEditDecksize) {
+    typeEditDecksize.addEventListener("input", () => {
+      document.getElementById("deckSize").value = typeEditDecksize.value;
+      document.getElementById("deckSize").dispatchEvent(new Event("change"));
+    });
+  }
+
+  // Title edit modal
+  const titleEditTitle = document.getElementById("title-edit-title");
+  if (titleEditTitle) {
+    titleEditTitle.addEventListener("input", () => {
+      document.getElementById("title").value = titleEditTitle.value;
+      document.getElementById("title").dispatchEvent(new Event("change"));
+    });
+  }
+
+  // Preview edit modal
+  const previewEditPreview = document.getElementById("preview-edit-preview");
+  if (previewEditPreview) {
+    previewEditPreview.addEventListener("input", () => {
+      document.getElementById("preview").value = previewEditPreview.value;
+      document.getElementById("preview").dispatchEvent(new Event("change"));
+    });
+  }
+
+  // Cost edit modal
+  const costEditPrice = document.getElementById("cost-edit-price");
+  if (costEditPrice) {
+    costEditPrice.addEventListener("input", () => {
+      document.getElementById("price").value = costEditPrice.value;
+      document.getElementById("price").dispatchEvent(new Event("change"));
+    });
+  }
+
+  // Expansion edit modal
+  const expansionEditName = document.getElementById("expansion-edit-name");
+  if (expansionEditName) {
+    expansionEditName.addEventListener("input", () => {
+      document.getElementById("expansionName").value = expansionEditName.value;
+      document.getElementById("expansionName").dispatchEvent(new Event("change"));
+    });
+  }
+
+  const expansionEditIcon = document.getElementById("expansion-edit-icon");
+  if (expansionEditIcon) {
+    expansionEditIcon.addEventListener("change", () => {
+      if (expansionEditIcon.value !== "[local image]") {
+        document.getElementById("expansion").value = expansionEditIcon.value;
+        document.getElementById("expansion").dispatchEvent(new Event("change"));
+      }
+    });
+  }
+
+  // Credit edit modal
+  const creditEditArt = document.getElementById("credit-edit-art");
+  if (creditEditArt) {
+    creditEditArt.addEventListener("input", () => {
+      document.getElementById("credit").value = creditEditArt.value;
+      document.getElementById("credit").dispatchEvent(new Event("change"));
+    });
+  }
+
+  const creditEditVersion = document.getElementById("credit-edit-version");
+  if (creditEditVersion) {
+    creditEditVersion.addEventListener("input", () => {
+      document.getElementById("creator").value = creditEditVersion.value;
+      document.getElementById("creator").dispatchEvent(new Event("change"));
+    });
+  }
+}
+
+// Setup click-outside-to-close for edit modals
+function setupEditModalBackdropClose() {
+  const modalCloseMap = {
+    "text-edit-modal": () => closeTextEditModal(false),
+    "type-edit-modal": () => closeTypeEditModal(false),
+    "title-edit-modal": () => closeTitleEditModal(false),
+    "preview-edit-modal": () => closePreviewEditModal(false),
+    "cost-edit-modal": () => closeCostEditModal(false),
+    "expansion-edit-modal": () => closeExpansionEditModal(false),
+    "credit-edit-modal": () => closeCreditEditModal(false),
+    "picture-edit-modal": () => closePictureEditModal(false),
+  };
+
+  document.querySelectorAll(".edit-modal").forEach((modal) => {
+    modal.addEventListener("click", (e) => {
+      // Close only when clicking the modal backdrop itself, not the content
+      if (e.target === modal) {
+        const closeFunc = modalCloseMap[modal.id];
+        if (closeFunc) closeFunc();
+      }
+    });
+  });
+}
+
 // Initialize mobile handlers when DOM is ready
 function initMobileHandlers() {
   setupMobileModalUploadHandlers();
   setupTapOverlayHandlers();
+  setupModalRealtimeUpdates();
+  setupEditModalBackdropClose();
   updateTapOverlayStates();
 
   // Update overlay states when inputs change
