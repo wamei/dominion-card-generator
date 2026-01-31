@@ -2031,8 +2031,9 @@ function setupMobileModalUploadHandlers() {
   if (textEditUpload) {
     textEditUpload.addEventListener("change", function () {
       if (this.files && this.files[0]) {
-        textEditPendingCustomIconFile = this.files[0];
         document.getElementById("text-edit-custom-icon").value = "[local image]";
+        document.getElementById("custom-icon").value = "[local image]";
+        window.onUploadImage(images.length - 1, this.files[0]);
       }
     });
   }
@@ -2042,8 +2043,10 @@ function setupMobileModalUploadHandlers() {
   if (pictureEditUpload) {
     pictureEditUpload.addEventListener("change", function () {
       if (this.files && this.files[0]) {
-        pictureEditPendingFile = this.files[0];
         document.getElementById("picture-edit-url").value = "[local image]";
+        document.getElementById("picture").value = "[local image]";
+        window.onUploadImage(5, this.files[0]);
+        updateTapOverlayStates();
       }
     });
   }
@@ -2053,8 +2056,9 @@ function setupMobileModalUploadHandlers() {
   if (expansionEditUpload) {
     expansionEditUpload.addEventListener("change", function () {
       if (this.files && this.files[0]) {
-        expansionEditPendingIconFile = this.files[0];
         document.getElementById("expansion-edit-icon").value = "[local image]";
+        document.getElementById("expansion").value = "[local image]";
+        window.onUploadImage(17, this.files[0]);
       }
     });
   }
@@ -2153,24 +2157,28 @@ function setupModalRealtimeUpdates() {
 
   const textEditCustomIcon = document.getElementById("text-edit-custom-icon");
   if (textEditCustomIcon) {
-    textEditCustomIcon.addEventListener("change", () => {
+    const updateCustomIcon = () => {
       if (textEditCustomIcon.value !== "[local image]") {
         document.getElementById("custom-icon").value = textEditCustomIcon.value;
         document.getElementById("custom-icon").dispatchEvent(new Event("change"));
       }
-    });
+    };
+    textEditCustomIcon.addEventListener("change", updateCustomIcon);
+    textEditCustomIcon.addEventListener("blur", updateCustomIcon);
   }
 
   // Picture edit modal
   const pictureEditUrl = document.getElementById("picture-edit-url");
   if (pictureEditUrl) {
-    pictureEditUrl.addEventListener("change", () => {
+    const updatePictureUrl = () => {
       if (pictureEditUrl.value !== "[local image]") {
         document.getElementById("picture").value = pictureEditUrl.value;
         document.getElementById("picture").dispatchEvent(new Event("change"));
         updateTapOverlayStates();
       }
-    });
+    };
+    pictureEditUrl.addEventListener("change", updatePictureUrl);
+    pictureEditUrl.addEventListener("blur", updatePictureUrl);
   }
 
   const pictureEditX = document.getElementById("picture-edit-x");
@@ -2268,12 +2276,14 @@ function setupModalRealtimeUpdates() {
 
   const expansionEditIcon = document.getElementById("expansion-edit-icon");
   if (expansionEditIcon) {
-    expansionEditIcon.addEventListener("change", () => {
+    const updateExpansionIcon = () => {
       if (expansionEditIcon.value !== "[local image]") {
         document.getElementById("expansion").value = expansionEditIcon.value;
         document.getElementById("expansion").dispatchEvent(new Event("change"));
       }
-    });
+    };
+    expansionEditIcon.addEventListener("change", updateExpansionIcon);
+    expansionEditIcon.addEventListener("blur", updateExpansionIcon);
   }
 
   // Credit edit modal
