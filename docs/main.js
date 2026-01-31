@@ -2029,12 +2029,18 @@ function setupMobileCanvasTap() {
     if (window.innerWidth > 600) return;
 
     // Get tap position relative to canvas
-    const canvas = canvasWrapper.querySelector("canvas");
+    const canvas = canvasWrapper.querySelector("canvas:not([style*='display: none'])");
+    if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const relativeX = x / rect.width;
     const relativeY = y / rect.height;
+
+    // Ignore taps outside the visible canvas area
+    if (relativeX < 0 || relativeX > 1 || relativeY < 0 || relativeY > 1) {
+      return;
+    }
 
     // Bottom left corner (cost area): Y > 80% and X < 20%
     if (relativeY > 0.8 && relativeX < 0.2) {
