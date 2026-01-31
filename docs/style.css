@@ -1237,6 +1237,11 @@ button.delete-all:focus {
     font-size: 14px;
   }
 
+  /* Hide form section on mobile - use tap modals instead */
+  .form-section {
+    display: none;
+  }
+
   /* Prevent iOS auto-zoom on input focus */
   input,
   textarea,
