@@ -1593,19 +1593,6 @@ function getQueryParams(qs) {
 // Text Edit Modal for mobile
 let textEditPendingCustomIconFile = null;
 
-// Setup text edit custom icon upload handler once
-document.addEventListener("DOMContentLoaded", function () {
-  const uploadInput = document.getElementById("text-edit-custom-icon-upload");
-  if (uploadInput) {
-    uploadInput.addEventListener("change", function () {
-      if (this.files && this.files[0]) {
-        textEditPendingCustomIconFile = this.files[0];
-        document.getElementById("text-edit-custom-icon").value = "[local image]";
-      }
-    });
-  }
-});
-
 function openTextEditModal() {
   const modal = document.getElementById("text-edit-modal");
   const textarea = document.getElementById("text-edit-textarea");
@@ -1667,19 +1654,6 @@ function closeTextEditModal(apply) {
 
 // Picture Edit Modal for mobile
 let pictureEditPendingFile = null;
-
-// Setup picture edit upload handler once
-document.addEventListener("DOMContentLoaded", function () {
-  const uploadInput = document.getElementById("picture-edit-upload");
-  if (uploadInput) {
-    uploadInput.addEventListener("change", function () {
-      if (this.files && this.files[0]) {
-        pictureEditPendingFile = this.files[0];
-        document.getElementById("picture-edit-url").value = "[local image]";
-      }
-    });
-  }
-});
 
 function openPictureEditModal() {
   const modal = document.getElementById("picture-edit-modal");
@@ -1813,19 +1787,6 @@ function closeTypeEditModal(apply) {
 // Title Edit Modal for mobile
 let titleEditPendingExpansionIconFile = null;
 
-// Setup title edit expansion icon upload handler once
-document.addEventListener("DOMContentLoaded", function () {
-  const uploadInput = document.getElementById("title-edit-expansion-icon-upload");
-  if (uploadInput) {
-    uploadInput.addEventListener("change", function () {
-      if (this.files && this.files[0]) {
-        titleEditPendingExpansionIconFile = this.files[0];
-        document.getElementById("title-edit-expansion-icon").value = "[local image]";
-      }
-    });
-  }
-});
-
 function openTitleEditModal() {
   const modal = document.getElementById("title-edit-modal");
   const expansionInput = document.getElementById("title-edit-expansion");
@@ -1950,19 +1911,6 @@ function closeCostEditModal(apply) {
 // Expansion Edit Modal for mobile
 let expansionEditPendingIconFile = null;
 
-// Setup expansion edit icon upload handler once
-document.addEventListener("DOMContentLoaded", function () {
-  const uploadInput = document.getElementById("expansion-edit-icon-upload");
-  if (uploadInput) {
-    uploadInput.addEventListener("change", function () {
-      if (this.files && this.files[0]) {
-        expansionEditPendingIconFile = this.files[0];
-        document.getElementById("expansion-edit-icon").value = "[local image]";
-      }
-    });
-  }
-});
-
 function openExpansionEditModal() {
   const modal = document.getElementById("expansion-edit-modal");
   const nameInput = document.getElementById("expansion-edit-name");
@@ -2054,11 +2002,63 @@ function setupMobileCanvasTap() {
   });
 }
 
-// Initialize mobile tap handler when DOM is ready
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupMobileCanvasTap);
-} else {
+// Setup all mobile modal upload handlers
+function setupMobileModalUploadHandlers() {
+  // Text edit custom icon upload
+  const textEditUpload = document.getElementById("text-edit-custom-icon-upload");
+  if (textEditUpload) {
+    textEditUpload.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        textEditPendingCustomIconFile = this.files[0];
+        document.getElementById("text-edit-custom-icon").value = "[local image]";
+      }
+    });
+  }
+
+  // Picture edit upload
+  const pictureEditUpload = document.getElementById("picture-edit-upload");
+  if (pictureEditUpload) {
+    pictureEditUpload.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        pictureEditPendingFile = this.files[0];
+        document.getElementById("picture-edit-url").value = "[local image]";
+      }
+    });
+  }
+
+  // Title edit expansion icon upload
+  const titleEditUpload = document.getElementById("title-edit-expansion-icon-upload");
+  if (titleEditUpload) {
+    titleEditUpload.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        titleEditPendingExpansionIconFile = this.files[0];
+        document.getElementById("title-edit-expansion-icon").value = "[local image]";
+      }
+    });
+  }
+
+  // Expansion edit icon upload
+  const expansionEditUpload = document.getElementById("expansion-edit-icon-upload");
+  if (expansionEditUpload) {
+    expansionEditUpload.addEventListener("change", function () {
+      if (this.files && this.files[0]) {
+        expansionEditPendingIconFile = this.files[0];
+        document.getElementById("expansion-edit-icon").value = "[local image]";
+      }
+    });
+  }
+}
+
+// Initialize mobile handlers when DOM is ready
+function initMobileHandlers() {
   setupMobileCanvasTap();
+  setupMobileModalUploadHandlers();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initMobileHandlers);
+} else {
+  initMobileHandlers();
 }
 
 // function to download the finished card
