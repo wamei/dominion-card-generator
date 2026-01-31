@@ -1926,7 +1926,6 @@ function closePreviewEditModal(apply) {
 function openCostEditModal() {
   const modal = document.getElementById("cost-edit-modal");
   const priceInput = document.getElementById("cost-edit-price");
-  const previewInput = document.getElementById("cost-edit-preview");
   const legendContainer = document.getElementById("cost-edit-legend");
 
   // Clone legend if not already done
@@ -1938,7 +1937,6 @@ function openCostEditModal() {
 
   // Sync values from main form
   priceInput.value = document.getElementById("price").value;
-  previewInput.value = document.getElementById("preview").value;
 
   modal.classList.remove("hidden");
   document.body.classList.add("no-scroll");
@@ -1950,13 +1948,9 @@ function closeCostEditModal(apply) {
 
   if (apply) {
     const priceInput = document.getElementById("cost-edit-price");
-    const previewInput = document.getElementById("cost-edit-preview");
 
     document.getElementById("price").value = priceInput.value;
     document.getElementById("price").dispatchEvent(new Event("change"));
-
-    document.getElementById("preview").value = previewInput.value;
-    document.getElementById("preview").dispatchEvent(new Event("change"));
   }
 
   modal.classList.add("hidden");
