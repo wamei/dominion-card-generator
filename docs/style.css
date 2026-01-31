@@ -1334,6 +1334,34 @@ button.delete-all:focus {
     gap: 0.25em;
   }
 
+  /* Modal slide animations */
+  @keyframes slideFromBottom {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideFromTop {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* Edit modals - full screen backdrop with content sheet */
   .edit-modal {
     top: 0;
@@ -1347,6 +1375,7 @@ button.delete-all:focus {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    animation: fadeIn 0.2s ease-out;
   }
 
   .edit-modal .popup-body {
@@ -1355,6 +1384,7 @@ button.delete-all:focus {
     overflow-y: auto;
     border-radius: 12px 12px 0 0;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    animation: slideFromBottom 0.25s ease-out;
   }
 
   /* below edit modal needs more space */
@@ -1385,6 +1415,13 @@ button.delete-all:focus {
   #credit-edit-modal .popup-body {
     border-radius: 0 0 12px 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: slideFromTop 0.25s ease-out;
+  }
+
+  /* Favorites and Font modals - slide from bottom */
+  #manage-favorites,
+  #manage-fonts {
+    animation: slideFromBottom 0.25s ease-out;
   }
 
   .popup .menu .menu-spacer {
