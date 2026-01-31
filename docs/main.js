@@ -5,7 +5,7 @@ let imagesLoaded = false;
 let useCORS = true; // flag to activate loading of external images via CORS helper function -> otherwise canvas is tainted and download button not working
 //const CORS_ANYWHERE_BASE_URL = 'https://dominion-card-generator-cors.herokuapp.com/';
 //const CORS_ANYWHERE_BASE_URL = 'https://thingproxy.freeboard.io/fetch/';
-const CORS_ANYWHERE_BASE_URL = "https://proxy.cors.sh/"; // from https://blog.grida.co/cors-anywhere-for-everyone-free-reliable-cors-proxy-service-73507192714e
+const CORS_ANYWHERE_BASE_URL = "https://images.weserv.nl/?url="; // image proxy service
 
 Array.prototype.remove = function () {
   var what,
@@ -1475,6 +1475,10 @@ function initCardImageGenerator() {
     onUploadImage(id, file);
   };
 
+  window.onChangeExternalImage = function (id, value, maxWidth, maxHeight) {
+    onChangeExternalImage(id, value, maxWidth, maxHeight);
+  };
+
   window.showLoadingState = function () {
     const wrapper = canvases[0].parentNode;
     wrapper.setAttribute("data-status", "Loading...");
@@ -2159,8 +2163,10 @@ function setupModalRealtimeUpdates() {
   if (textEditCustomIcon) {
     const updateCustomIcon = () => {
       if (textEditCustomIcon.value !== "[local image]") {
-        document.getElementById("custom-icon").value = textEditCustomIcon.value;
-        document.getElementById("custom-icon").dispatchEvent(new Event("change"));
+        const url = textEditCustomIcon.value.trim();
+        document.getElementById("custom-icon").value = url;
+        document.getElementById("custom-icon-upload").value = "";
+        window.onChangeExternalImage(images.length - 1, url);
       }
     };
     textEditCustomIcon.addEventListener("change", updateCustomIcon);
@@ -2172,8 +2178,10 @@ function setupModalRealtimeUpdates() {
   if (pictureEditUrl) {
     const updatePictureUrl = () => {
       if (pictureEditUrl.value !== "[local image]") {
-        document.getElementById("picture").value = pictureEditUrl.value;
-        document.getElementById("picture").dispatchEvent(new Event("change"));
+        const url = pictureEditUrl.value.trim();
+        document.getElementById("picture").value = url;
+        document.getElementById("picture-upload").value = "";
+        window.onChangeExternalImage(5, url);
         updateTapOverlayStates();
       }
     };
@@ -2278,8 +2286,10 @@ function setupModalRealtimeUpdates() {
   if (expansionEditIcon) {
     const updateExpansionIcon = () => {
       if (expansionEditIcon.value !== "[local image]") {
-        document.getElementById("expansion").value = expansionEditIcon.value;
-        document.getElementById("expansion").dispatchEvent(new Event("change"));
+        const url = expansionEditIcon.value.trim();
+        document.getElementById("expansion").value = url;
+        document.getElementById("expansion-upload").value = "";
+        window.onChangeExternalImage(17, url);
       }
     };
     expansionEditIcon.addEventListener("change", updateExpansionIcon);
