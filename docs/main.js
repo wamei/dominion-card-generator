@@ -1321,6 +1321,7 @@ function initCardImageGenerator() {
         document.body.className = this.id;
         document.body.classList.add("trait");
         document.getElementById("load-indicator").removeAttribute("style");
+        canvases[0].parentNode.setAttribute("data-status", "Loading...");
         queueDraw(250);
       };
     })(i);
