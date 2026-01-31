@@ -103,7 +103,12 @@
             <div class="text-edit-content">
               <div class="form-group">
                 <label for="text-edit-textarea">カードテキスト</label>
-                <textarea id="text-edit-textarea" rows="8" placeholder="カードテキストを入力"></textarea>
+                <textarea
+                  id="text-edit-textarea"
+                  rows="8"
+                  placeholder="+1 カードを引く
++2 アクション"
+                ></textarea>
               </div>
               <div id="text-edit-legend"></div>
               <div class="form-group">
@@ -135,7 +140,7 @@
               </div>
               <div class="form-group">
                 <label for="type-edit-type">種別</label>
-                <input id="type-edit-type" placeholder="Action" />
+                <input id="type-edit-type" placeholder="アクション" />
               </div>
               <div class="form-group">
                 <label for="type-edit-heirloom">家宝</label>
@@ -161,22 +166,22 @@
         <div id="preview-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="preview-edit-content">
-              <div id="preview-edit-legend"></div>
               <div class="form-group">
                 <label for="preview-edit-preview">プレビュー</label>
                 <input id="preview-edit-preview" type="text" placeholder="" />
               </div>
+              <div id="preview-edit-legend"></div>
             </div>
           </div>
         </div>
         <div id="cost-edit-modal" class="edit-modal popup hidden">
           <div class="popup-body">
             <div class="cost-edit-content">
-              <div id="cost-edit-legend"></div>
               <div class="form-group">
                 <label for="cost-edit-price">購入コスト</label>
                 <input id="cost-edit-price" type="text" placeholder="$3" />
               </div>
+              <div id="cost-edit-legend"></div>
             </div>
           </div>
         </div>

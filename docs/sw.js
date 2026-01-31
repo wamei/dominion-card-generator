@@ -1,6 +1,6 @@
 // Names of the caches used in this version of the service worker.
 // Increase chache number when you update any of the local resources, which will in turn trigger the install event again.
-const PRECACHE_CORE = "precache-core-v69";
+const PRECACHE_CORE = "precache-core-v71";
 const PRECACHE_CARD = "precache-card-v6";
 const PRECACHE_LIBS = "precache-libs-v1";
 const RUNTIME = "runtime";
