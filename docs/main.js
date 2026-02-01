@@ -1657,17 +1657,10 @@ function closeModalWithAnimation(modal, callback) {
 // Open modal with animation helper (resets animation for re-triggering)
 function openModalWithAnimation(modal) {
   if (window.innerWidth <= 600) {
-    // Force animation restart by removing and re-adding from DOM flow
-    modal.style.animation = "none";
+    // Force animation restart by temporarily adding a class
+    modal.classList.add("no-animate");
     modal.offsetHeight; // Trigger reflow
-    modal.style.animation = "";
-    // Also reset popup-body animation
-    const popupBody = modal.querySelector(".popup-body");
-    if (popupBody) {
-      popupBody.style.animation = "none";
-      popupBody.offsetHeight; // Trigger reflow
-      popupBody.style.animation = "";
-    }
+    modal.classList.remove("no-animate");
   }
   modal.classList.remove("hidden");
   lockScroll();
