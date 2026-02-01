@@ -1654,6 +1654,26 @@ function closeModalWithAnimation(modal, callback) {
   }
 }
 
+// Open modal with animation helper (resets animation for re-triggering)
+function openModalWithAnimation(modal) {
+  if (window.innerWidth <= 600) {
+    // Force animation restart by removing and re-adding from DOM flow
+    modal.style.animation = "none";
+    modal.offsetHeight; // Trigger reflow
+    modal.style.animation = "";
+    // Also reset popup-body animation
+    const popupBody = modal.querySelector(".popup-body");
+    if (popupBody) {
+      popupBody.style.animation = "none";
+      popupBody.offsetHeight; // Trigger reflow
+      popupBody.style.animation = "";
+    }
+  }
+  modal.classList.remove("hidden");
+  lockScroll();
+  document.activeElement.blur();
+}
+
 // Text Edit Modal for mobile
 let textEditPendingCustomIconFile = null;
 
@@ -1682,9 +1702,7 @@ function openTextEditModal() {
   boldkeysInput.value = document.getElementById("boldkeys").value;
   customIconInput.value = document.getElementById("custom-icon").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeTextEditModal(apply) {
@@ -1736,9 +1754,7 @@ function openPictureEditModal() {
   yInput.value = document.getElementById("picture-y").value;
   zoomInput.value = document.getElementById("picture-zoom").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closePictureEditModal(apply) {
@@ -1818,9 +1834,7 @@ function openTypeEditModal() {
   heirloomInput.value = document.getElementById("type2").value;
   deckSizeInput.value = document.getElementById("deckSize").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeTypeEditModal(apply) {
@@ -1866,9 +1880,7 @@ function openTitleEditModal() {
   // Sync values from main form
   titleInput.value = document.getElementById("title").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeTitleEditModal(apply) {
@@ -1893,9 +1905,7 @@ function openCreditEditModal() {
   artInput.value = document.getElementById("credit").value;
   versionInput.value = document.getElementById("creator").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeCreditEditModal(apply) {
@@ -1931,9 +1941,7 @@ function openPreviewEditModal() {
   // Sync value from main form
   previewInput.value = document.getElementById("preview").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closePreviewEditModal(apply) {
@@ -1964,9 +1972,7 @@ function openCostEditModal() {
   // Sync values from main form
   priceInput.value = document.getElementById("price").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeCostEditModal(apply) {
@@ -1999,9 +2005,7 @@ function openExpansionEditModal() {
   nameInput.value = document.getElementById("expansionName").value;
   iconInput.value = document.getElementById("expansion").value;
 
-  modal.classList.remove("hidden");
-  lockScroll();
-  document.activeElement.blur();
+  openModalWithAnimation(modal);
 }
 
 function closeExpansionEditModal(apply) {
