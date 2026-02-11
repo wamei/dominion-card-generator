@@ -1,5 +1,10 @@
 @font-face {
-    font-family: 'myText';
-    font-display: auto;
-    src: local("Times New Roman"), serif;
+  font-family: "myText";
+  font-display: auto;
+  font-weight: normal;
+  src: local("HiraMinProN-W3"),
+    local("Source Han Serif"),
+    local("源ノ明朝"),
+    local("Noto Serif JP"),
+    url("https://fonts.gstatic.com/s/notoserifjp/v28/xn7pYHs72GKoTvER4Gn3b5-Ckdc1P5-C0jcK.woff2") format("woff2");
 }

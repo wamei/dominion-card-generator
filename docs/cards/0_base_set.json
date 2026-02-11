@@ -1,0 +1,243 @@
+{
+  "updated_at": "2026-02-11T07:28:03.425Z",
+  "cards": [
+    {
+      "data": {
+        "title": "銅貨",
+        "description": "$1",
+        "type": "財宝",
+        "type2": "",
+        "price": "$0",
+        "preview": "$1",
+        "credit": "Illustration: Ryan Laukat",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 60,
+        "size": "3",
+        "color0": 1,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/6/62/CopperArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883424
+    },
+    {
+      "data": {
+        "title": "銀貨",
+        "description": "$2",
+        "type": "財宝",
+        "type2": "",
+        "price": "$3",
+        "preview": "$2",
+        "credit": "Illustration: Ryan Laukat",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 40,
+        "size": "3",
+        "color0": 1,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/3/30/SilverArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883425
+    },
+    {
+      "data": {
+        "title": "金貨",
+        "description": "$3",
+        "type": "財宝",
+        "type2": "",
+        "price": "$6",
+        "preview": "$3",
+        "credit": "Illustration: Ryan Laukat",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 30,
+        "size": "3",
+        "color0": 1,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/9/93/GoldArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883426
+    },
+    {
+      "data": {
+        "title": "屋敷",
+        "description": "1%",
+        "type": "勝利点",
+        "type2": "",
+        "price": "$2",
+        "preview": "",
+        "credit": "Illustration: Martin Hoffmann",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 12,
+        "size": "3",
+        "color0": 2,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/e/e3/EstateArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883427
+    },
+    {
+      "data": {
+        "title": "公領",
+        "description": "3%",
+        "type": "勝利点",
+        "type2": "",
+        "price": "$5",
+        "preview": "",
+        "credit": "Illustration: Martin Hoffmann",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 12,
+        "size": "3",
+        "color0": 2,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/3/30/DuchyArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883429
+    },
+    {
+      "data": {
+        "title": "属州",
+        "description": "6%",
+        "type": "勝利点",
+        "type2": "",
+        "price": "$8",
+        "preview": "",
+        "credit": "Illustration: Martin Hoffmann",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 12,
+        "size": "3",
+        "color0": 2,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/4/4c/ProvinceArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883430
+    },
+    {
+      "data": {
+        "title": "呪い",
+        "description": "-1%",
+        "type": "呪い",
+        "type2": "",
+        "price": "$0",
+        "preview": "",
+        "credit": "Illustration: Claus Stephan",
+        "creator": "© 2018 Rio Grande Games",
+        "expansionName": "基本",
+        "boldkeys": "",
+        "deckSize": 40,
+        "size": "3",
+        "color0": 6,
+        "color1": 0,
+        "traveller": "false",
+        "trait": "false",
+        "pictureX": "0",
+        "pictureY": "0",
+        "pictureZoom": "1",
+        "picture": "https://wiki.dominionstrategy.com/images/1/11/CurseArt.jpg",
+        "expansion": "https://wiki.dominionstrategy.com/images/b/b0/Dominion_icon.png",
+        "customIcon": "",
+        "edition": "",
+        "official": true
+      },
+      "images": {
+        "illustration": null,
+        "expansion": null,
+        "customIcon": null
+      },
+      "timestamp": 1770794883431
+    }
+  ]
+}

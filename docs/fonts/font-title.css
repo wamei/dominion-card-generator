@@ -1,11 +1,18 @@
+/* Fallback font for specific characters not in the main title font (e.g., 鹵 U+9E75) */
 @font-face {
-    font-family: 'myTitle';
-    font-display: auto;
-    src: local("Trajan Pro Bold"), local("TrajanPro-Bold"), local('Trajan Pro'),
-        url('https://fonts.cdnfonts.com/s/14928/TrajanPro-Bold.woff') format('woff'),
-        url('https://shemitz.net/static/dominion3/Trajan%20Pro%20Bold.ttf') format('truetype'),
-        url('https://dominion.games/fonts/TrajanPro-Bold.otf') format('opentype'),
-        local("Trajan"),
-        local("Optimus Princeps"),
-        url(https://fonts.gstatic.com/s/cinzel/v8/8vIJ7ww63mVu7gt79mT7PkRXMw.woff2) format('woff2');
+  font-family: "myTitle";
+  font-display: auto;
+  src: local("HiraMaruProN-W4"), local("Meiryo UI"), local("Yu Gothic");
+  unicode-range: U+5821, U+7B0F, U+8240, U+8654, U+9E75;
+}
+
+/* Main title font - excludes characters handled by fallback */
+@font-face {
+  font-family: "myTitle";
+  font-display: auto;
+  src:
+    local("MFW-PMaruFoProN-Bold"),
+    local("07LogoTypeGothic7"),
+    url("./07LogoTypeGothic7.woff2") format("woff2");
+  unicode-range: U+0000-5820, U+5822-7B0E, U+7B10-823F, U+8241-8653, U+8655-9E74, U+9E76-10FFFF;
 }

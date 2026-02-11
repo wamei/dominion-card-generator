@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "myCredit";
+  font-display: auto;
+  font-weight: normal;
+  src:
+    local("Instrument Serif"),
+    url(https://fonts.gstatic.com/s/instrumentserif/v5/jizBRFtNs2ka5fXjeivQ4LroWlx-6zUTjnTLgNs.woff2) format("woff2"),
+    local("HiraMinProN-W3"),
+    local("Source Han Serif"),
+    local("源ノ明朝"),
+    local("Noto Serif JP");
+}

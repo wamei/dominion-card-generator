@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "myText";
+  font-display: auto;
+  font-weight: bold;
+  src: local("HiraMinProN-W6"),
+    local("Source Han Serif Bold"),
+    local("源ノ明朝 Bold"),
+    local("Noto Serif JP Bold"),
+    url("https://fonts.gstatic.com/s/notoserifjp/v28/xn7xYHs72GKoTvER4Gn3b5-Caxeu4lHCt94MrlU.woff2") format("woff2");
+}
